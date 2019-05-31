@@ -1,0 +1,268 @@
+<app-header-admin pageTitle="Vishwa Bharathi High School" imageUrl="dashboard" helpType="homepage"></app-header-admin>
+<mat-tab-group class="tab-group">
+    <mat-tab label="Manage">
+      <mat-card></mat-card>
+    </mat-tab>
+    <mat-tab label="AboutUs">
+        <mat-card>
+       
+        </mat-card>
+    </mat-tab>
+    <mat-tab label="FAQ">
+        <mat-card>
+            <mat-card-title class="blueheading">How does this work?</mat-card-title>
+            <mat-card-content>
+                <mat-horizontal-stepper #stepper="matHorizontalStepper">
+                    <mat-step>
+                        <ng-template matStepLabel></ng-template>
+                        <label class="middle-headline">Step 1: </label>Login with Google, Facebook or your email ID. Or simply create an account.
+                    </mat-step>
+                    <mat-step>
+                        <ng-template matStepLabel></ng-template>
+                        <label class="middle-headline">Step 2: Pro Version Only: </label> create a new a unique Company Name
+                        <mat-icon svgIcon="business"></mat-icon> and a secret key.
+                        <mat-icon svgIcon="new"></mat-icon> Pro
+                        <mat-icon svgIcon="vpn"></mat-icon>
+                    </mat-step>
+                    <mat-step>
+                        <p class="bodytext">
+                            <label class="middle-headline">Step 3: </label>share this orgname and key with your employees.
+                        </p>
+                        <span class="label-error">
+                            * share your
+                            < orgname and Secret key> with any person, and person will have access to all your data.
+                                <br>
+                                <br> ** Only you can change your secret key (simple browse to settings
+                                <mat-icon svgIcon="account_circle"></mat-icon> page and write same orgname with a new key).
+                                <br>
+                                <br> *** Changing secret key will remove access to all your existing users who are using your
+                                orgname and secret key.
+                                <br>
+                                <br> **** If you change orgname, you will create a new org and will lose all data from last organization.
+                        </span>
+                    </mat-step>
+                    <mat-step>
+                        <p class="bodytext">
+                            <label class="middle-headline">Step 4: </label>Happy Tracking !!!
+                            <mat-icon svgIcon="place"></mat-icon>
+                            <br/>
+                            <img src="assets/img/tracker_2.png" width="424" height="126">
+                        </p>
+                    </mat-step>
+                </mat-horizontal-stepper>
+
+                <!--
+                <p class="bodytext"><label class="middle-headline"> {{ 'btnaboutuscrmfaq_2' | translate }} </label>
+                {{ 'btnaboutuscrmfaq_3' | translate }}<mat-icon svgIcon="business"></mat-icon>
+                {{ 'btnaboutuscrmfaq_4' | translate }}<br>
+                {{ 'btnaboutuscrmfaq_5' | translate }}
+                </p>
+                <p class="bodytext"><label class="middle-headline"> {{ 'btnaboutuscrmfaq_6' | translate }} </label>
+                {{ 'btnaboutuscrmfaq_7' | translate }}<mat-icon svgIcon="account_circle"></mat-icon> {{ 'btnaboutuscrmfaq_8' | translate }}
+                <br/>
+                <p class="bodytext"><label class="middle-headline"> {{ 'btnaboutuscrmfaq_9' | translate }} </label>{{ 'btnaboutuscrmfaq_10' | translate }}<mat-icon>place</mat-icon><br/>
+                <img src="assets/tracker_2.png" width="624" height="126">
+                <br/>
+                -->
+            </mat-card-content>
+            <mat-card-title class="blueheading">What is difference between Admin and Regular User account ?</mat-card-title>
+            <mat-card-content>
+                <p class="bodytext">Admin is the person, who can see all reports/activities for all the employees in same "COMPANY"
+                    <br/>User is the person, who can see only his/her own reports/activities.</p>
+            </mat-card-content>
+            <mat-card-title class="blueheading">What if I need my own eCRM version and independent database ?</mat-card-title>
+            <mat-card-content>
+                <p class="bodytext">Ofcourse, we understand your concern about data security and confidentiality. We can easliy customize and
+                    deploy our code to your dedicated servers (offline, online or hybrid). let's start with an email info@elishconsulting.com
+                </p>
+            </mat-card-content>
+        </mat-card>
+    </mat-tab>
+    <mat-tab label="Pro">
+        <mat-card>
+            <mat-card-content>
+                <mat-accordion class="example-headers-align">
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <mat-icon svgIcon="business"></mat-icon>
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                Community vs. Pro
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        Send an email to info@elishconsulting.com for Pro Account (enterprise version).
+                    </mat-expansion-panel>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Unlimited Transactions
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                <mat-icon class="label-go" svgIcon="radio_on"></mat-icon>
+                                <mat-icon class="label-go" svgIcon="radio_on"></mat-icon>
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        # of transactions per ERP.
+                    </mat-expansion-panel>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Limited App Customization
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                <mat-icon class="label-error" svgIcon="radio_off"></mat-icon>
+                                <mat-icon class="label-go" svgIcon="radio_on"></mat-icon>
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        Pro version is customized as per user(org) requirements and hosted into their personal cloud.
+                    </mat-expansion-panel>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Unlimited ImageUpload
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                <mat-icon class="label-error" svgIcon="radio_off"></mat-icon>
+                                <mat-icon class="label-go" svgIcon="radio_on"></mat-icon>
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        # of Image Upload per ERP.
+                    </mat-expansion-panel>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Unlimited On/Offline Sync
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                <mat-icon class="label-error" svgIcon="radio_off"></mat-icon>
+                                <mat-icon class="label-go" svgIcon="radio_on"></mat-icon>
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        Offline ERP version installation at user's premises or user's personal cloud installation and support.
+                    </mat-expansion-panel>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Unlimited Users (org)
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                <mat-icon class="label-error" svgIcon="radio_off"></mat-icon>
+                                <mat-icon class="label-go" svgIcon="radio_on"></mat-icon>
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        Community version will have only one admin and multiple user (all at same level). ie, all users will see same data for an
+                        organization.
+                        <br> Pro verison include facilities for Admin to create multiple users and roles per module depending
+                        on job responsibilities.
+                    </mat-expansion-panel>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Limited GPS Tracking
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                <mat-icon class="label-error" svgIcon="radio_off"></mat-icon>
+                                <mat-icon class="label-go" svgIcon="radio_on"></mat-icon>
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        Be default, community version trace location every 20 mins and keep only 3 days of history per asset/employee.
+                        <br> Pro version has no limit and may keep up to 3 months of historical data.
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </mat-card-content>
+        </mat-card>
+    </mat-tab>
+    <!--  visitor About us page
+    <mat-tab label="{{ 'btnhome' | translate }}">
+        <mat-card>
+            <mat-card-title></mat-card-title>
+            <mat-card-content>
+                <p class="middle-headline"> A Complete Solution for <strong>Visitor Management applications.</strong></p>
+                <p class="bodytext"> Elish Visitor Management is a complete ERP App to manage All Visitors information and Help Desk/Service Calls.</p>
+                <p class="middle-headline"> "Why Elish Visitor"</p>
+                <p class="bodytext"> Live FingerPrinting and Picture Storage</p>
+                <p class="bodytext"> One stop solution for all visitor management book keeping needs.</p>
+                <p class="middle-headline"><mat-icon svgIcon="star"></mat-icon> A complete Onelink ERP APP for Customer service, Visitor Information tracking.</p>
+                <p class="middle-headline"><mat-icon svgIcon="email"></mat-icon> One click live communications (FB, WhatsAPP, SMS, email etc) tools.</p>
+                <p class="bodytext"> A complete ERP App connecting Visitors, clients and Service Providers through modern advance communications channels.</p>
+                <p class="bodytext"> Ask freely with Personal Service advisers through ElishConsulting.com either online or offline.</p>
+            </mat-card-content>
+            <mat-card-content>
+                <div class="col-md-7">
+                    <p class="middle-headline" style="text-align: justify">
+                    A Complete Solution for all <strong>Visitors Record</strong> needs.
+                    </p>
+                    <p class="lead" style="text-align: justify">
+                        Elish Visitor ERP system, A complete solution for Managing Visitor records with lots of facilities which makes it a better portal.
+                        It is designed in such a way that helps everyone and establish a communication medium between users.
+                        A special feature of knowledge base makes it widely accessible over the world. 
+                        <br/>
+                    </p>
+                    <p class="lead" style="text-align: justify">
+                    The expert CRM service providers at Elish CRM provide a judicious mix of research and analysis to ensure the best quality CRM production, solutions and services to all the clients and users.
+                        <br/>
+                    </p>
+                    <p class="blueheading" style="text-align: justify">
+                         <mat-icon svgIcon="star"></mat-icon>
+                         Widely Categorize knowledge base.
+                    </p>
+                    <p style="text-align: justify">
+                        A complete knowledge base which covers lots of field and topic and provide a cursory reading to whom who are looking for something new.
+                   </p>
+                   <p class="blueheading" style="text-align: justify">
+                         <mat-icon svgIcon="search"></mat-icon>
+                        Search Providers Anywhere
+                    </p>
+                    <p style="text-align: justify">
+                        We provide a wide platform to search CRM Service Providers anywhere in india as per category and with location and provide a medium to communicate with them regarding any problem.
+                   </p>
+                   <p class="blueheading" style="text-align: justify">
+                         <mat-icon svgIcon="book"></mat-icon>
+                         Largest CRM network
+                    </p>
+                    <p style="text-align: justify">
+                        Ask freely with CRM advisers through ELish Consulting either online or offline.
+                   </p>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </mat-tab>
+    <mat-tab label="{{ 'btnfaq' | translate }}">
+        <mat-card>
+            <mat-card-title class="blueheading">How does this work?</mat-card-title>
+            <mat-card-content>
+                <p class="bodytext"><label class="small-headline"> Visitee: </label>
+                Visitee is the person in your organization, who visitors will come to visit.
+                </p>
+                <p class="bodytext"><label class="small-headline"> Visitor: </label>
+                Visitor is the person outside your organization, who will come to visit a "visitee" in your organization.
+                </p>
+                <p class="bodytext"><label class="small-headline"> Step 1: </label>
+                Please setup an Admin Account First. This Admin Account will manage all ERP Users.
+                </p>
+                <p class="bodytext"><label class="small-headline"> Step 2: </label>
+                For any new "Visitee", Admin will need to register this "Visitee" first.<br/>
+                If Visitee is not registered, Visitor will not able to see "Visitee"<br/>
+                <p class="bodytext"><label class="small-headline"> Step 3: </label>
+                If a "Visitee" is released or not part of your organization anymore, Admin will need to 
+                "Inactivate" Visitee in software.<br/>
+                "Inactivating"" a visitee does NOT mean that all records will be deleted,<br/>
+                "Inactivating" a visitee only means, Vistors will NOT see "visitee" anymore.<br/>
+                All Visitee and Vistors information is "always" stored in software and CAN NOT be deleted.
+                <p class="bodytext"><br/>
+                Please send an email to info@elishconsulting.com for any questions related to this software.</p>
+            </mat-card-content>
+        </mat-card>
+    </mat-tab>
+    -->
+    <mat-tab label="Terms">
+        <mat-card>
+            <mat-card-content>
+                <label class="bodylabel">Terms & Conditions</label>
+                <br/>
+                <p class="body-text"></p>
+            </mat-card-content>
+        </mat-card>
+    </mat-tab>
+</mat-tab-group>
