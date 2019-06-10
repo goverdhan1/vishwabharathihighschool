@@ -97,6 +97,11 @@ export class BackendService {
    .pipe(switchMap(res => this._afs.collection(this.getCollUrls('STUDENT'), ref => ref.where('SKEY', '==', res['phone'])).valueChanges()
    .pipe(switchMap(res => this._afs.collection(this.getCollUrls('FEE'), ref => ref.where('studentdocid', '==', res[0]['_id'])).valueChanges()))));
   }
+  getUserStudentAttendanceDoc() {
+    return this.getDoc('USERS', this.afAuth.auth.currentUser.uid)
+   .pipe(switchMap(res => this._afs.collection(this.getCollUrls('STUDENT'), ref => ref.where('SKEY', '==', res['phone'])).valueChanges()
+   .pipe(switchMap(res => this._afs.collection(this.getCollUrls('ATTENDANCE'), ref => ref.where('studentdocid', '==', res[0]['_id'])).valueChanges()))));
+  }
   getUserStudentMarksDoc() {
     return this.getDoc('USERS', this.afAuth.auth.currentUser.uid)
    .pipe(switchMap(res => this._afs.collection(this.getCollUrls('STUDENT'), ref => ref.where('SKEY', '==', res['phone'])).valueChanges()
@@ -119,9 +124,11 @@ export class BackendService {
     if (coll == "USERS") { _coll = "SMS_USERS"; }
     if (coll == "ENROLL_CD") { _coll = "SMS_CONFIG_ENROLL_CD"; }
     if (coll == "FEE_CD") { _coll = "SMS_CONFIG_FEE_CD"; }
+    if (coll == "ATTENDANCE_CD") { _coll = "SMS_CONFIG_ATTENDANCE_CD"; }
     if (coll == "MARKS_CD") { _coll = "SMS_CONFIG_MARKS_CD"; }
     if (coll == "STUDENT") { _coll = "SMS_STUDENTS"; }
     if (coll == "FEE") { _coll = "SMS_FEE"; }
+    if (coll == "ATTENDANCE") { _coll = "SMS_ATTENDANCE"; }
     if (coll == "MARKS") { _coll = "SMS_MARKS"; }
     if (coll == "EMPLOYEE") { _coll = "SMS_EMPLOYEE"; }
     if (coll == "SALARY_CD") { _coll = "SMS_SALARY_CD"; }

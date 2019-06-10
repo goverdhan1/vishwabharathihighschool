@@ -14,6 +14,7 @@ import { MarksComponent } from './manage/marks.component';
 import { MarksViewComponent } from './manage/marks-view.component';
 import { FeecodeComponent } from './setup/feecode.component';
 import { MarkscodeComponent } from './setup/markscode.component';
+import { AttendancecodeComponent} from './setup/attendancecode.component';
 import { EnrollmentComponent } from './setup/enrollment.component';
 import { EmployeeComponent } from './staff/employee.component';
 import { VoucherComponent } from './staff/voucher.component';
@@ -39,6 +40,7 @@ const routes: Routes = [
   { path: 'student-view', component: StudentViewComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
   { path: 'enrollment', component: EnrollmentComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
   { path: 'feecode', component: FeecodeComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
+  { path: 'attendancecode', component: AttendancecodeComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
   { path: 'fee', component: FeeComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
   { path: 'fee-view', component: FeeViewComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
   { path: 'fee/:id', component: FeeComponent, canActivate: [AuthGuardService, NavAuthGuardService] },

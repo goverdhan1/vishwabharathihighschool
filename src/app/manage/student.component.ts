@@ -31,6 +31,7 @@ export class StudentComponent implements OnInit, OnDestroy {
     displayedColumns = ['code', 'descr', '_id'];
     feeCDs$;
     marksCDs$;
+    attendanceCDs$;
     enrollmentCDs$;
     // file upload
     docId: string;
@@ -88,6 +89,21 @@ export class StudentComponent implements OnInit, OnDestroy {
         this.dataLoading = true;
         this.querySubscription = this._backendService.getDocs('FEE_CD').subscribe((res) => {
             this.feeCDs$ = res;
+        },
+            (error) => {
+                this.error = true;
+                this.errorMessage = error.message;
+                this.dataLoading = false;
+            },
+            () => {
+                this.dataLoading = false;
+            });
+    }
+
+    getAttendanceCDs() {
+        this.dataLoading = true;
+        this.querySubscription = this._backendService.getDocs('ATTENDANCe_CD').subscribe((res) => {
+            this.attendanceCDs$ = res;
         },
             (error) => {
                 this.error = true;

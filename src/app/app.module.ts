@@ -15,6 +15,7 @@ import { AboutusComponent } from './shared/aboutus.component';
 import { FeecodeComponent } from './setup/feecode.component';
 import { MarkscodeComponent } from './setup/markscode.component';
 import { EnrollmentComponent } from './setup/enrollment.component';
+import { AttendancecodeComponent } from './setup/attendancecode.component';
 import { StudentComponent } from './manage/student.component';
 import { FeeComponent } from './manage/fee.component';
 import { MarksComponent } from './manage/marks.component';
@@ -47,6 +48,7 @@ import { StudentViewComponent } from './manage/student-view.component';
 import { FeeViewComponent } from './manage/fee-view.component';
 import { MarksViewComponent } from './manage/marks-view.component';
 import { NotificationsComponent } from './shared/settings/notifications.component';
+
 
 @NgModule({
   declarations: [
@@ -84,7 +86,8 @@ TutorialsViewComponent,
 StudentViewComponent,
 FeeViewComponent,
 MarksViewComponent,
-NotificationsComponent
+NotificationsComponent,
+AttendancecodeComponent
   ],
   imports: [
     BrowserModule,

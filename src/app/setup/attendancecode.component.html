@@ -1,4 +1,4 @@
-<app-header-admin pageTitle="Fee Register" imageUrl="business" helpType="salarypage"></app-header-admin>
+<app-header-admin pageTitle="Attendance Code" imageUrl="business" helpType="salarypage"></app-header-admin>
 <mat-card [@fallIn]='state'>
   <mat-card-content>
     <div *ngIf="(toggleField=='searchMode') else (toggleField=='addMode')? showAddMode : ((toggleField=='editMode')? showEditMode : showResMode)">
@@ -8,8 +8,8 @@
           <button type="button" (click)="toggle('resMode');getData(searchFormData.value);" mat-raised-button [disabled]="(code.value == '' && descr.value == '')"
             color="primary">Search</button>
           <span class="med-spacer"></span>
-          <span matTooltip="Search Student and Create Fee Voucher">
-            <mat-icon color="primary" routerLink="/student" svgIcon="salary"></mat-icon>
+          <span matTooltip="Add New">
+            <mat-icon color="primary" (click)="toggle('addMode')" svgIcon="add"></mat-icon>
           </span>
           <span class="small-spacer"></span>
           <span matTooltip="Show Recent Results">
@@ -17,11 +17,11 @@
           </span>
         </mat-card-actions>
         <mat-form-field class="example-form">
-          <input matInput type="text" placeholder="Fee Voucher #" id="code" name="code" #code="ngModel" ngModel [disabled]="descr.value !== ''">
+          <input matInput type="text" placeholder="Fee Code" id="code" name="code" #code="ngModel" ngModel [disabled]="descr.value !== ''">
         </mat-form-field>
         <br>
         <mat-form-field class="example-form">
-          <input matInput type="text" placeholder="Description" id="descr" name="descr" #descr="ngModel" ngModel [disabled]="code.value !== ''">
+          <input matInput type="text" placeholder="Fee Code Descr" id="descr" name="descr" #descr="ngModel" ngModel [disabled]="code.value !== ''">
         </mat-form-field>
       </form>
     </div>
@@ -39,7 +39,7 @@
       <mat-progress-bar mode="indeterminate" *ngIf="dataLoading"></mat-progress-bar>
       <mat-error *ngIf="error">Error: {{ errorMessage }}</mat-error>
       <mat-card-actions align="start">
-        <button type="submit" mat-raised-button color="primary" [disabled]="!addDataForm.valid">Create Fee Voucher</button>
+        <button type="submit" mat-raised-button [disabled]="!addDataForm.valid" color="primary">Add</button>
         <button type="reset" (click)="this.addDataForm.reset();" mat-raised-button [disabled]="!addDataForm.valid" color="primary">Clear</button>
         <span class="med-spacer"></span>
         <span matTooltip="Search">
@@ -50,35 +50,20 @@
           <mat-icon color="primary" (click)="toggle('resMode');getData();" svgIcon="cached"></mat-icon>
         </span>
       </mat-card-actions>
-      <input type="hidden" formControlName="attendancedocid" required>
-      <input type="hidden" formControlName="studentcode" required>
-      <input type="hidden" formControlName="studentdescr" required>
-      <input type="hidden" formControlName="studentLAST_NAME" required>
-      <input type="hidden" formControlName="studentattendancecd" required>
-      <b>Student ID: </b> {{ this.addDataForm.value.studentcode }} 
-      <b>Name: </b> {{this.addDataForm.value.studentdescr}} {{this.addDataForm.value.studentLAST_NAME}}
-      <br/><br/>
       <mat-form-field>
-        <input matInput placeholder="Paid Date" type="date" formControlName="paiddate" required>
-      </mat-form-field>
-      <br/>
-      <mat-divider></mat-divider>
-      <br>
-      <mat-form-field>
-        <input matInput placeholder="Fee Voucher #" formControlName="code" required>
-        <mat-hint align="end">exm- v10001</mat-hint>
+        <input matInput placeholder="Fee Code" formControlName="code" required>
+        <mat-hint align="end">exm- O1G1AQ1</mat-hint>
       </mat-form-field>
       <mat-form-field>
-        <input matInput placeholder="Voucher Description" formControlName="descr" required>
-        <mat-hint align="end">exm- Non-Exempt Fee</mat-hint>
+        <input matInput placeholder="Fee Code Descr" formControlName="descr" required>
+        <mat-hint align="end">exm- Org 1 Grade 1 Q1</mat-hint>
       </mat-form-field>
       <mat-form-field>
         <input matInput placeholder="Base Fee" formControlName="bsalary" (keyup)="calculateTotal('addDataForm')" required pattern="^\d*\.?\d+$">
         <mat-hint align="end">exm- 0 if none</mat-hint>
       </mat-form-field>
       <mat-divider></mat-divider>
-      <br>
-      <br>
+      <br><br>
       <div formArrayName="line">
         <div *ngFor="let item of addDataForm.get('line').controls; let pointIndex=index" [formGroupName]="pointIndex">
           <mat-form-field>
@@ -95,9 +80,9 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="Fee Type" formControlName="payval" required>
-          </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="Fee Type" formControlName="payval" required>
+            </mat-form-field>
           <mat-form-field>
             <input matInput placeholder="Amount" (keyup)="calculateTotal('addDataForm')" formControlName="amount" required pattern="^\d*\.?\d+$">
           </mat-form-field>
@@ -114,7 +99,7 @@
 </ng-template>
 <!-- edit mode -->
 <ng-template #showEditMode>
-  <form [formGroup]="editDataForm" (ngSubmit)="updateData(editDataForm.value);" novalidate>
+    <form [formGroup]="editDataForm" (ngSubmit)="updateData(editDataForm.value);" novalidate>
     <input type="hidden" formControlName="_id" required>
     <mat-error *ngIf="savedChanges">
       Data is saved.
@@ -135,35 +120,20 @@
           <mat-icon color="primary" (click)="toggle('resMode');getData();" svgIcon="cached"></mat-icon>
         </span>
       </mat-card-actions>
-      <input type="hidden" formControlName="studentdocid" required>
-      <input type="hidden" formControlName="studentcode" required>
-      <input type="hidden" formControlName="studentdescr" required>
-      <input type="hidden" formControlName="studentLAST_NAME" required>
-      <input type="hidden" formControlName="studentfeecd" required>
-      <b>Student Name: </b> {{ this.addDataForm.value.studentcode }} {{this.addDataForm.value.studentLAST_NAME}}
-      <br/>
-      <br/>
       <mat-form-field>
-        <input matInput placeholder="Paid Date" type="date" formControlName="paiddate" required>
-      </mat-form-field>
-      <br/>
-      <mat-divider></mat-divider>
-      <br>
-      <mat-form-field>
-        <input matInput placeholder="Fee Voucher #" formControlName="code">
-        <mat-hint align="end">exm- v10001</mat-hint>
+        <input matInput placeholder="Fee Code" formControlName="code">
+        <mat-hint align="end">exm- O1G1AQ1</mat-hint>
       </mat-form-field>
       <mat-form-field>
-        <input matInput placeholder="Voucher Description" formControlName="descr">
-        <mat-hint align="end">exm- Non-Exempt Fee</mat-hint>
+        <input matInput placeholder="Fee Code Descr" formControlName="descr">
+        <mat-hint align="end">exm- Org 1 Grade 1 Q1</mat-hint>
       </mat-form-field>
       <mat-form-field>
         <input matInput placeholder="Base Fee" formControlName="bsalary" (keyup)="calculateTotal('editDataForm')" required pattern="^\d*\.?\d+$">
         <mat-hint align="end">exm- 0 if none</mat-hint>
       </mat-form-field>
       <mat-divider></mat-divider>
-      <br>
-      <br>
+      <br><br>
       <div formArrayName="line">
         <div *ngFor="let item of this.editDataForm.get('line').controls; let pointIndex=index" [formGroupName]="pointIndex">
           <mat-form-field>
@@ -180,9 +150,9 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="Fee Type" formControlName="payval" required>
-          </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="Fee Type" formControlName="payval" required>
+            </mat-form-field>
           <mat-form-field>
             <input matInput placeholder="Amount" (keyup)="calculateTotal('editDataForm')" formControlName="amount" required pattern="^\d*\.?\d+$">
           </mat-form-field>
@@ -194,7 +164,7 @@
       <mat-form-field>
         <input matInput readonly="" placeholder="Gross Amount" formControlName="gamount" pattern="^\d*\.?\d+$">
       </mat-form-field>
-
+        
     </div>
   </form>
 </ng-template>
@@ -204,8 +174,8 @@
     <span class="med-spacer"></span>
     <span class="med-spacer"></span>
     <span class="med-spacer"></span>
-    <span matTooltip="Search Employee and Create Salary Voucher">
-      <mat-icon color="primary" routerLink="/student" svgIcon="salary"></mat-icon>
+    <span matTooltip="Add New">
+      <mat-icon color="primary" (click)="toggle('addMode')" svgIcon="add"></mat-icon>
     </span>
     <span class="small-spacer"></span>
     <span matTooltip="Search All">
@@ -220,7 +190,7 @@
   <div class="example-container mat-elevation-z8">
     <mat-table [dataSource]="dataSource" matSort>
       <ng-container matColumnDef="code">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Fee Voucher #</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Fee Code</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.code}} </mat-cell>
       </ng-container>
 
@@ -228,22 +198,7 @@
         <mat-header-cell *matHeaderCellDef mat-sort-header>Descr</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.descr}} </mat-cell>
       </ng-container>
-      <ng-container matColumnDef="studentcode">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.studentcode}} </mat-cell>
-      </ng-container>
-      <ng-container matColumnDef="studentdescr">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>First Name</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.studentdescr}} </mat-cell>
-      </ng-container>
-      <ng-container matColumnDef="studentLAST_NAME">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.studentLAST_NAME}} </mat-cell>
-      </ng-container>
-      <ng-container matColumnDef="paiddate">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Date</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.paiddate}} </mat-cell>
-      </ng-container>
+
       <ng-container matColumnDef="_id">
         <mat-header-cell *matHeaderCellDef> action </mat-header-cell>
         <mat-cell *matCellDef="let row">

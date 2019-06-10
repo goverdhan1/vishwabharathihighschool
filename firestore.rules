@@ -1,0 +1,104 @@
+// service cloud.firestore {
+//   match /databases/{database}/documents {
+//     match /{document=**} {
+//       allow read, write;
+//     }
+//   }
+// }
+// SMS App Rules START
+service cloud.firestore {
+	match /SMS_ROLES/{document} {
+		allow read, write: if false;
+	}
+match /SMS_USERS/{document} {
+allow create: if exists(/databases/$(database)/documents/SMS_ROLES/$(request.resource.data.secretKey))
+&& get(/databases/$(database)/documents/SMS_ROLES/$(request.resource.data.secretKey)).data.role == request.resource.data.role;
+allow update: if exists(/databases/$(database)/documents/SMS_ROLES/$(request.resource.data.secretKey))
+&& get(/databases/$(database)/documents/SMS_ROLES/$(request.resource.data.secretKey)).data.role == request.resource.data.role
+&& isDocOwner();
+allow read: if isSignedIn() && isDocOwner();
+}
+match /SMS_CONFIG_ENROLL_CD/{document} {
+allow read, write, delete: if isSMSAdmin() || isSMSStaff() || isSMSTeacher();
+}
+match /SMS_CONFIG_FEE_CD/{document} {
+allow read, write, delete: if isSMSAdmin() || isSMSStaff() || isSMSTeacher();
+}
+match /SMS_CONFIG_MARKS_CD/{document} {
+allow read, write, delete: if isSMSAdmin() || isSMSStaff() || isSMSTeacher();
+}
+match /SMS_STUDENTS/{document} {
+allow read, write, delete: if isSMSAdmin() || isSMSStaff() || isSMSTeacher();
+}
+match /SMS_STUDENTS/{document}/notifications/{doc} {
+allow read: if isSignedIn();
+}
+match /SMS_FEE/{document} {
+allow read, write, delete: if isSMSAdmin() || isSMSStaff() || isSMSTeacher();
+}
+match /SMS_MARKS/{document} {
+allow read, write, delete: if isSMSAdmin() || isSMSStaff() || isSMSTeacher();
+}
+match /SMS_EMPLOYEE/{document} {
+allow read, write, delete: if isSMSAdmin() || isSMSStaff();
+}
+match /SMS_SALARY/{document} {
+allow read, write, delete: if isSMSAdmin() || isSMSStaff();
+}
+match /SMS_SALARY_CD/{document} {
+allow read, write, delete: if isSMSAdmin() || isSMSStaff();
+}
+match /SMS_VOUCHER/{document} {
+allow read, write, delete: if isSMSAdmin() || isSMSStaff();
+}
+match /SMS_EXPENSES/{document} {
+allow read, write, delete: if isSMSAdmin() || isSMSStaff();
+}
+match /SMS_ASSIGNMENT/{document} {
+allow read, delete: if isSMSAdmin() || isSMSStaff() || isSMSTeacher();
+allow write: if true;
+}
+match /SMS_CLASSES/{document} {
+allow read, write, delete: if isSMSAdmin() || isSMSStaff() || isSMSTeacher();
+}
+match /SMS_HOMEWORK/{document} {
+allow read, write, delete: if isSMSAdmin() || isSMSStaff() || isSMSTeacher();
+}
+match /SMS_TUTORIALS/{document} {
+allow read, write, delete: if isSMSAdmin() || isSMSStaff() || isSMSTeacher();
+}
+function isSMSAdmin() {
+return get(/databases/$(database)/documents/SMS_USERS/$(request.auth.uid)).data.role == 'admin';
+}
+function isSMSStaff() {
+return get(/databases/$(database)/documents/SMS_USERS/$(request.auth.uid)).data.role == 'staff';
+}
+function isSMSParent() {
+return get(/databases/$(database)/documents/SMS_USERS/$(request.auth.uid)).data.role == 'parent';
+}
+function isSMSTeacher() {
+return get(/databases/$(database)/documents/SMS_USERS/$(request.auth.uid)).data.role == 'teacher';
+}
+function isSMSStudent() {
+return get(/databases/$(database)/documents/SMS_USERS/$(request.auth.uid)).data.role == 'student';
+}
+function isDocOwner(){
+// assuming document has a field author which is uid
+// Only the authenticated user who authored the document can read or write
+return request.auth.uid == resource.data.author;
+// This above read query will fail
+// The query fails even if the current user actually is the author of every story document.
+// The reason for this behavior is that when Cloud Firestore applies your security rules, 
+// it evaluates the query against its potential result set,
+// not against the actual properties of documents in your database. 
+// If a query could potentially include documents that violate your security rules, 
+// the query will fail.
+// on your client app, make sure to include following
+// .where("author", "==", this.afAuth.auth.currentUser.uid)
+}
+function isSignedIn() {
+// check if user is signed in
+return request.auth.uid != null;
+}
+// SMS App Rules END
+}
