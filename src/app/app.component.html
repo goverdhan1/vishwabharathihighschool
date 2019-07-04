@@ -1,2 +1,14 @@
-<router-outlet></router-outlet>
-<app-footer></app-footer>
+<app-header-admin></app-header-admin>
+<mat-sidenav-container>
+  <mat-sidenav mode="side" opened>
+      <app-sidenav-list></app-sidenav-list>
+        <!--this is a place for us to add side-nav code-->
+      </mat-sidenav>
+      <mat-sidenav-content>
+        <!--in here all the content must reside. We will add a navigation header as well-->
+       <main>
+          <router-outlet></router-outlet>
+       </main>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+    <app-footer></app-footer>

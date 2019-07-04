@@ -1,4 +1,4 @@
-<app-header-admin pageTitle="Tutorials" imageUrl="book" helpType="salarypage"></app-header-admin>
+<!-- <app-header-admin pageTitle="Tutorials" imageUrl="book" helpType="salarypage"></app-header-admin> -->
 <mat-card [@fallIn]='state'>
     <mat-card-content>
         <div *ngIf="(toggleField=='searchMode') else (toggleField=='addMode')? showAddMode : ((toggleField=='editMode')? showEditMode : showResMode)">

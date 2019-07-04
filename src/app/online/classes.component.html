@@ -1,20 +1,17 @@
-<app-header-admin pageTitle="Classes" imageUrl="book" helpType="salarypage"></app-header-admin>
+<!-- <app-header-admin pageTitle="Classes" imageUrl="book" helpType="salarypage"></app-header-admin> -->
 <mat-card [@fallIn]='state'>
     <mat-card-content>
         <div *ngIf="(toggleField=='searchMode') else (toggleField=='addMode')? showAddMode : ((toggleField=='editMode')? showEditMode : showResMode)">
             <!-- searchmode -->
             <form #searchFormData="ngForm" class="example-form">
-                <mat-card-actions align="start">
-                    <button type="button" (click)="toggle('resMode');getData(searchFormData.value);" mat-raised-button [disabled]="(code.value == '' && descr.value == '')"
-                        color="primary">Search</button>
-                    <span class="med-spacer"></span>
-                    <span matTooltip="Add New">
-                        <mat-icon color="primary" (click)="toggle('addMode')" svgIcon="add"></mat-icon>
-                    </span>
+                <mat-card-actions align="end">
+                    <button type="button" color="primary" (click)="toggle('addMode')" mat-raised-button matTooltip="Add New">
+                            <mat-icon color="white" svgIcon="add"></mat-icon>
+                        Add New</button> 
                     <span class="small-spacer"></span>
-                    <span matTooltip="Show Recent Results">
-                        <mat-icon color="primary" (click)="toggle('resMode');getData();" svgIcon="cached"></mat-icon>
-                    </span>
+                    <button type="button" color="primary" (click)="toggle('resMode');getData();" mat-raised-button matTooltip="Show Recent Results">
+                            <mat-icon color="white" svgIcon="cached"></mat-icon>
+                            Show Recent Results</button> 
                 </mat-card-actions>
                 <mat-form-field class="example-form">
                     <input matInput type="text" placeholder="Classes Code" id="code" name="code" #code="ngModel" ngModel [disabled]="descr.value !== ''">
@@ -23,6 +20,10 @@
                 <mat-form-field class="example-form">
                     <input matInput type="text" placeholder="Classes Code Descr" id="descr" name="descr" #descr="ngModel" ngModel [disabled]="code.value !== ''">
                 </mat-form-field>
+                <mat-card-actions align="end">
+                        <button type="button" (click)="toggle('resMode');getData(searchFormData.value);" mat-raised-button [disabled]="(code.value == '' && descr.value == '')"
+                        color="primary">Search</button>
+                </mat-card-actions>
             </form>
         </div>
     </mat-card-content>
@@ -38,40 +39,42 @@
         <div *ngIf="!savedChanges">
             <mat-progress-bar mode="indeterminate" *ngIf="dataLoading"></mat-progress-bar>
             <mat-error *ngIf="error">Error: {{ errorMessage }}</mat-error>
-            <mat-card-actions align="start">
-                <button type="submit" mat-raised-button [disabled]="!addDataForm.valid" color="primary">Add</button>
-                <button type="reset" (click)="this.addDataForm.reset();" mat-raised-button [disabled]="!addDataForm.valid" color="primary">Clear</button>
-                <span class="med-spacer"></span>
-                <span matTooltip="Search">
-                    <mat-icon color="primary" (click)="toggle('searchMode')" svgIcon="search"></mat-icon>
-                </span>
+            <mat-card-actions align="end">
+                <button matTooltip="Search" type="button" color="primary" mat-raised-button (click)="toggle('searchMode')">
+                    <mat-icon color="white" svgIcon="search"></mat-icon> Search
+                </button>
                 <span class="small-spacer"></span>
-                <span matTooltip="Show Recent Results">
-                    <mat-icon color="primary" (click)="toggle('resMode');getData();" svgIcon="cached"></mat-icon>
-                </span>
+                <button matTooltip="Show Recent Results" mat-raised-button color="primary" (click)="toggle('resMode');getData();" type="button">
+                    <mat-icon color="white" svgIcon="cached"></mat-icon> Show Recent Results
+                </button>
             </mat-card-actions>
-            <mat-form-field>
+            <mat-form-field class="example-form">
                 <input matInput placeholder="Classes Code" name="code" id="code" #code="ngModel" ngModel required>
                 <mat-hint align="end">exm- S1G1AP1</mat-hint>
             </mat-form-field>
             <br>
-            <mat-form-field>
+            <mat-form-field class="example-form">
                 <br>
                 <input matInput placeholder="Classes Code Descr" name="descr" id="descr" #descr="ngModel" ngModel required>
                 <mat-hint align="end">exm- Sem1-Grade 1A-Prelim1</mat-hint>
             </mat-form-field>
             <br>
-            <mat-form-field>
+            <!-- <mat-form-field class="example-form">
                 <mat-select placeholder="Enrollment Code" name="ENROLLMENT_CODE" id="ENROLLMENT_CODE" ngModel required>
                     <mat-option *ngFor="let code of enrollmentCDs$" [value]="code._id">
                         {{ code.code }} - {{ code.descr }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-            <br>
-            <mat-form-field>
+            <br> -->
+            <mat-form-field class="example-form">
                 <textarea matInput placeholder="Comments" name="comments" id="comments" ngModel></textarea>
             </mat-form-field>
+            <mat-card-actions align='end'>
+                    <button type="submit" mat-raised-button [disabled]="!addDataForm.valid" color="primary">Add</button>
+                    <button type="reset" (click)="this.addDataForm.reset();" mat-raised-button [disabled]="!addDataForm.valid" color="primary">Clear</button>
+    
+            </mat-card-actions>
         </div>
     </form>
 </ng-template>
@@ -87,28 +90,27 @@
         <div *ngIf="!savedChanges">
             <mat-progress-bar mode="indeterminate" *ngIf="dataLoading"></mat-progress-bar>
             <mat-error *ngIf="error">Error: {{ errorMessage }}</mat-error>
-            <mat-card-actions align="start">
-                <button type="submit" mat-raised-button [disabled]="!this.editDataForm.valid || this.editDataForm.pristine" color="primary">Update</button>
-                <span class="med-spacer"></span>
-                <span matTooltip="Search">
-                    <mat-icon color="primary" (click)="toggle('searchMode')" svgIcon="search"></mat-icon>
-                </span>
+            <mat-card-actions align="end">
+                
+                <button matTooltip="Search" mat-raised-button color="primary" (click)="toggle('searchMode')" type="button">
+                        <mat-icon color="white" svgIcon="search"></mat-icon>Search
+                </button>
                 <span class="small-spacer"></span>
-                <span matTooltip="Shwo Recent Results">
-                    <mat-icon color="primary" (click)="toggle('resMode');getData();" svgIcon="cached"></mat-icon>
-                </span>
+                <button type="button" color="primary" mat-raised-button (click)="toggle('resMode');getData();" matTooltip="Show Recent Results">
+                    <mat-icon color="white" svgIcon="cached"></mat-icon> Show Recent Results
+                </button>
             </mat-card-actions>
-            <mat-form-field>
+            <mat-form-field class="example-form">
                 <input matInput placeholder="Classes Code" name="code" id="code" [ngModel]="(data$ | async)?.code" required>
                 <mat-hint align="end">exm- S1G1AP1</mat-hint>
             </mat-form-field>
             <br>
-            <mat-form-field>
+            <mat-form-field class="example-form">
                 <input matInput placeholder="Classes Code Descr" name="descr" id="descr" [ngModel]="(data$ | async)?.descr" required>
                 <mat-hint align="end">exm- Sem1-Grade 1A-Prelim1</mat-hint>
             </mat-form-field>
             <br>
-            <mat-form-field>
+            <!-- <mat-form-field class="example-form">
                 <mat-select placeholder="Enrollment Code" name="ENROLLMENT_CODE" id="ENROLLMENT_CODE" [ngModel]="(data$ | async)?.ENROLLMENT_CODE"
                     required>
                     <mat-option *ngFor="let code of enrollmentCDs$" [value]="code._id">
@@ -116,8 +118,8 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-            <br>
-            <mat-form-field>
+            <br> -->
+            <mat-form-field class="example-form">
                 <textarea matInput placeholder="Comments" name="comments" id="comments" [ngModel]="(data$ | async)?.comments"></textarea>
             </mat-form-field>
             <br>
@@ -143,23 +145,25 @@
                 <app-fileupload fileUrl="CLASSES" docId="{{docId}}"></app-fileupload>
             </div>
             <br>
+
             <button type="button" mat-raised-button (click)="showFileUpload=!showFileUpload" color="primary">Upload File</button>
+            <mat-card-actions align="end">
+            <button type="submit" mat-raised-button  [disabled]="!this.editDataForm.valid || this.editDataForm.pristine" color="primary">Update</button>
+        </mat-card-actions>
+
         </div>
     </form>
 </ng-template>
 <!-- Results mode -->
 <ng-template #showResMode>
-    <mat-card-actions align="start">
-        <span class="med-spacer"></span>
-        <span class="med-spacer"></span>
-        <span class="med-spacer"></span>
-        <span matTooltip="Add New">
-            <mat-icon color="primary" (click)="toggle('addMode')" svgIcon="add"></mat-icon>
-        </span>
+    <mat-card-actions align="end">
+        <button matTooltip="Add New" color="primary" (click)="toggle('addMode')" type="button" mat-raised-button>
+            <mat-icon color="white" svgIcon="add"></mat-icon> Add New
+        </button>
         <span class="small-spacer"></span>
-        <span matTooltip="Search All">
-            <mat-icon color="primary" (click)="toggle('searchMode')" svgIcon="search"></mat-icon>
-        </span>
+        <button matTooltip="Search All" color="primary" (click)="toggle('searchMode')" mat-raised-button type="button">
+            <mat-icon  svgIcon="search"></mat-icon> Search All
+        </button>
     </mat-card-actions>
     <br/>
     <div class="example-header">

@@ -31,8 +31,10 @@ export class EnrollmentComponent implements OnInit, OnDestroy {
     constructor(private _backendService: BackendService) { }
 
     ngOnInit() {
-        this.toggleField = "searchMode";
+        this.toggleField = "showResMode";
+        this.getData();
         this.dataSource = new MatTableDataSource(this.members);
+        
     }
 
     toggle(filter?) {

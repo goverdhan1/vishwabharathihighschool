@@ -48,6 +48,7 @@ import { StudentViewComponent } from './manage/student-view.component';
 import { FeeViewComponent } from './manage/fee-view.component';
 import { MarksViewComponent } from './manage/marks-view.component';
 import { NotificationsComponent } from './shared/settings/notifications.component';
+import { SidenavListComponent } from './shared/sidenav-list/sidenav-list.component';
 
 
 @NgModule({
@@ -87,7 +88,8 @@ StudentViewComponent,
 FeeViewComponent,
 MarksViewComponent,
 NotificationsComponent,
-AttendancecodeComponent
+AttendancecodeComponent,
+SidenavListComponent
   ],
   imports: [
     BrowserModule,

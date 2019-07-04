@@ -1,0 +1,126 @@
+<mat-nav-list class="sidenav">
+  <mat-list>
+    <a mat-list-item routerLink="/aboutus">
+      <mat-icon>home</mat-icon> <span class="nav-caption">Home</span>
+    </a>
+  </mat-list>
+  <mat-list #studentMenu
+    *ngIf="(userRole == 'student' || userRole == 'parent' || userRole == 'guest' || userRole == 'admin')">
+    <mat-list-item>
+      <mat-icon>bookmark</mat-icon> <span class="nav-caption">View</span>
+    </mat-list-item>
+    <div style="padding-left: 10px;">
+      <a mat-list-item routerLink="/student-view">
+        <mat-icon>profile</mat-icon> <span class="nav-caption">Profile</span>
+      </a>
+      <a mat-list-item routerLink="/marks-view">
+        <mat-icon>marks</mat-icon> <span class="nav-caption">Marks/Scores</span>
+      </a>
+      <a mat-list-item routerLink="/fee-veiw">
+        <mat-icon>fee</mat-icon> <span class="nav-caption">Fee</span>
+      </a>
+    </div>
+  </mat-list>
+  <mat-list #onlineMenu
+    *ngIf="(userRole == 'student' || userRole == 'parent' || userRole == 'guest' || userRole == 'admin')">
+    <mat-list-item>
+      <mat-icon>bookmark</mat-icon> <span class="nav-caption">Online</span>
+    </mat-list-item>
+    <div style="padding-left: 10px;">
+      <a mat-list-item routerLink="/homework-view">
+        <mat-icon></mat-icon> <span class="nav-caption">Homework</span>
+      </a>
+      <a mat-list-item routerLink="/tutorials-view">
+        <mat-icon></mat-icon> <span class="nav-caption">Tutorials</span>
+        </a>
+      <a mat-list-item routerLink="/classes-view">
+        <mat-icon></mat-icon> <span class="nav-caption">Classes</span>
+        </a>
+      <a mat-list-item routerLink="/assignments-view">
+        <mat-icon></mat-icon> <span class="nav-caption">Examinations/Tests</span>
+        </a>
+    </div>
+  </mat-list>
+  <mat-list #manageStudent *ngIf="(userRole == 'admin' || userRole == 'teacher')">
+    <mat-list-item>
+      <mat-icon>star</mat-icon> <span class="nav-caption">Manange Student</span>
+    </mat-list-item>
+    <div style="padding-left: 10px;">
+      <a mat-list-item routerLink="/student">
+        <mat-icon></mat-icon> <span class="nav-caption">Students</span>
+        </a>
+      <!--<a mat-list-item routerLink="/voucher">
+        <mat-icon></mat-icon> <span class="nav-caption">Attendance</span>
+        </a>-->
+      <a mat-list-item routerLink="/student">
+        <mat-icon></mat-icon> <span class="nav-caption">Marks/Scores</span>
+        </a>
+      <a mat-list-item routerLink="/student">
+        <mat-icon></mat-icon> <span class="nav-caption">Fee</span>
+        </a>
+    </div>
+  </mat-list>
+  <mat-list #teacherMenu *ngIf="(userRole == 'admin' || userRole == 'teacher')">
+    <mat-list-item>
+      <mat-icon>star</mat-icon> <span class="nav-caption">Teacher</span>
+    </mat-list-item>
+    <div style="padding-left: 10px;">
+      <a mat-list-item routerLink="/homework">
+        <mat-icon></mat-icon> <span class="nav-caption">Setup Homework</span>
+        
+      
+      </a>
+      <a mat-list-item routerLink="/tutorials">
+        <mat-icon></mat-icon> <span class="nav-caption">Setup Tutorials</span>
+        </a>
+      <a mat-list-item routerLink="/assignments">
+        <mat-icon></mat-icon> <span class="nav-caption">Setup Examinations/Tests</span>
+        </a>
+    </div>
+  </mat-list>
+  <mat-list #staffMenu *ngIf="(userRole == 'admin' || userRole == 'staff')">
+    <mat-list-item>
+          <mat-icon>star</mat-icon> <span class="nav-caption">Staff</span>
+    </mat-list-item>
+    <div style="padding-left: 10px;">
+      <a mat-list-item routerLink="/employee">
+        <mat-icon></mat-icon> <span class="nav-caption">Employee</span>
+        </a>
+      <a mat-list-item routerLink="/salary">
+        <mat-icon></mat-icon> <span class="nav-caption">Salary</span>
+        </a>
+      <a mat-list-item routerLink="/voucher">
+        <mat-icon></mat-icon> <span class="nav-caption">Voucher</span>
+        </a>
+      <a mat-list-item routerLink="/expenses">
+        <mat-icon></mat-icon> <span class="nav-caption">Expenses</span>
+        </a>
+      <a mat-list-item routerLink="/salarycode">
+        <mat-icon></mat-icon> <span class="nav-caption">Setup Sal CD</span>
+        </a>
+    </div>
+  </mat-list>
+  <mat-list #setupMenu *ngIf="(userRole == 'admin' || userRole == 'staff')">
+    <mat-list-item>
+      <mat-icon>star</mat-icon> <span class="nav-caption">Setup</span>
+    </mat-list-item>
+    <div style="padding-left: 10px;">
+      <a mat-list-item routerLink="/enrollment">
+        <mat-icon></mat-icon> <span class="nav-caption">Enrollment</span>
+        </a>
+        <a mat-list-item routerLink="/classes">
+          <mat-icon></mat-icon> <span class="nav-caption">Classes</span>
+          </a>
+    
+      <a mat-list-item routerLink="/feecode">
+        <mat-icon></mat-icon> <span class="nav-caption">Fee Code</span>
+        </a>
+      <a mat-list-item routerLink="/markscode">
+        <mat-icon></mat-icon> <span class="nav-caption">Marks Code</span>
+        </a>
+      <a mat-list-item routerLink="/attendancecode">
+        <mat-icon></mat-icon> <span class="nav-caption">Attendance Code</span>
+        </a>
+    </div>
+  </mat-list>
+</mat-nav-list>

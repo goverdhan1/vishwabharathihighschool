@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { BackendService } from '../services/backend.service';
 
@@ -11,6 +11,8 @@ export class HeaderAdminComponent implements OnInit {
   @Input() imageUrl: string;
   @Input() pageTitle: string;
   @Input() helpType: string;
+  @Output() public sidenavToggle = new EventEmitter();
+
   emailSent = false;
   selectedValue;
   formShowing = false;
@@ -55,4 +57,9 @@ export class HeaderAdminComponent implements OnInit {
       }
     )
   }
+
+  public onToggleSidenav = () => {
+    this.sidenavToggle.emit();
+  }
+
 }

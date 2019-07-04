@@ -28,6 +28,7 @@ import {
         MatGridListModule,
         MatBadgeModule,
         MatExpansionModule,
+        MatSidenavModule,
         MatRadioModule
         } from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
@@ -66,6 +67,7 @@ import {MatIconRegistry} from '@angular/material';
         MatGridListModule,
         MatBadgeModule,
         MatExpansionModule,
+        MatSidenavModule,
         MatRadioModule
         ],
     exports: [
@@ -95,6 +97,7 @@ import {MatIconRegistry} from '@angular/material';
         MatGridListModule,
         MatBadgeModule,
         MatExpansionModule,
+        MatSidenavModule,
         MatRadioModule
         ],
     declarations: []

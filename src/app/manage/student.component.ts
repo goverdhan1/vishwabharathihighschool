@@ -43,11 +43,12 @@ export class StudentComponent implements OnInit, OnDestroy {
     constructor(private _backendService: BackendService) { }
 
     ngOnInit() {
-        this.toggleField = "searchMode";
+        this.toggleField = "resMode";
         this.dataSource = new MatTableDataSource(this.members);
         this.getMarksCDs();
         this.getEnrollmentCDs();
         this.getFeeCDs();
+        this.getData();
     }
 
     toggle(filter?) {

@@ -1,61 +1,7 @@
 <mat-toolbar color="primary">
-  <button mat-mini-fab color="warn" [matMenuTriggerFor]="rootAdminMenu">
-    <mat-icon>vertical_split</mat-icon>
-  </button>
-  <mat-menu #rootAdminMenu="matMenu">
-    <button mat-menu-item routerLink="/aboutus">
-      <mat-icon color="black">dashboard</mat-icon>Home</button>
-    <button mat-menu-item [matMenuTriggerFor]="studentMenu" *ngIf="(userRole == 'student' || userRole == 'parent' || userRole == 'guest' || userRole == 'admin')">
-      <mat-icon color="warn">bookmark</mat-icon>View</button>
-    <button mat-menu-item [matMenuTriggerFor]="onlineMenu" *ngIf="(userRole == 'student' || userRole == 'parent' || userRole == 'guest' || userRole == 'admin')">
-      <mat-icon color="warn">web</mat-icon>Online</button>
-    <button mat-menu-item [matMenuTriggerFor]="manageStudent" *ngIf="(userRole == 'admin' || userRole == 'teacher')">
-      <mat-icon color="warn">star</mat-icon>Manage</button>
-    <button mat-menu-item [matMenuTriggerFor]="teacherMenu" *ngIf="(userRole == 'admin' || userRole == 'teacher')">
-        <mat-icon color="warn">book</mat-icon>Teacher</button>
-    <button mat-menu-item [matMenuTriggerFor]="staffMenu" *ngIf="(userRole == 'admin' || userRole == 'staff')">
-      <mat-icon color="warn">attach_money</mat-icon>Staff</button>
-    <button mat-menu-item [matMenuTriggerFor]="setupMenu" *ngIf="(userRole == 'admin' || userRole == 'staff')">
-      <mat-icon color="warn">code</mat-icon>Setup</button>
-    <button mat-menu-item [matMenuTriggerFor]="contactMenu">
-      <mat-icon color="disabled">phone</mat-icon>Contact</button>
-  </mat-menu>
-  <mat-menu #studentMenu="matMenu">
-    <button mat-menu-item routerLink="/student-view">Profile</button>
-    <button mat-menu-item routerLink="/marks-view">Marks/Scores</button>
-    <button mat-menu-item routerLink="/fee-view">Fee</button>
-  </mat-menu>
-  <mat-menu #manageStudent="matMenu">
-    <button mat-menu-item routerLink="/student">Students</button>
-    <!--<button mat-menu-item routerLink="/voucher">Attendance</button>-->
-    <button mat-menu-item routerLink="/student">Marks/Scores</button>
-    <button mat-menu-item routerLink="/student">Fee</button>
-  </mat-menu>
-  <mat-menu #setupMenu="matMenu">
-    <button mat-menu-item routerLink="/enrollment">Enrollment</button>
-    <button mat-menu-item routerLink="/feecode">Fee Code</button>
-    <button mat-menu-item routerLink="/markscode">Marks Code</button>
-    <button mat-menu-item routerLink="/attendancecode">Attendance Code</button>
-  </mat-menu>
-  <mat-menu #onlineMenu="matMenu">
-    <button mat-menu-item routerLink="/homework-view">Homework</button>
-    <button mat-menu-item routerLink="/tutorials-view">Tutorials</button>
-    <button mat-menu-item routerLink="/classes-view">Classes</button>
-    <button mat-menu-item routerLink="/assignments-view">Examinations/Tests</button>
-  </mat-menu>
-  <mat-menu #teacherMenu="matMenu">
-    <button mat-menu-item routerLink="/homework">Setup Homework</button>
-    <button mat-menu-item routerLink="/tutorials">Setup Tutorials</button>
-    <button mat-menu-item routerLink="/classes">Setup Classes</button>
-    <button mat-menu-item routerLink="/assignments">Setup Examinations/Tests</button>
-  </mat-menu>
-  <mat-menu #staffMenu="matMenu">
-    <button mat-menu-item routerLink="/employee">Employee</button>
-    <button mat-menu-item routerLink="/salary">Salary</button>
-    <button mat-menu-item routerLink="/voucher">Voucher</button>
-    <button mat-menu-item routerLink="/expenses">Expenses</button>
-    <button mat-menu-item routerLink="/salarycode">Setup Sal CD</button>
-  </mat-menu>
+  <span style="display:none">
+    Vishawa Bharathi High School
+  </span>
   <mat-icon class="example-icon">{{ imageUrl }}</mat-icon>
   <span matTooltip="About us">{{ pageTitle }}</span>
   <span class="example-spacer"></span>
