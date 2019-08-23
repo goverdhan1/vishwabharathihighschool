@@ -13,7 +13,7 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './attendance.component.html',
   styleUrls: ['./attendance.component.css'],
   animations: [moveIn(), fallIn()],
-  host: { '[@moveIn]': '' }
+  host: { '[@moveIn]': ''}
 })
 
 export class AttendanceComponent implements OnInit, OnDestroy {
@@ -23,11 +23,11 @@ export class AttendanceComponent implements OnInit, OnDestroy {
   myDocData;
   data$;
   toggleField: string;
-  state: string = '';
+  state = '';
   savedChanges = false;
-  error: boolean = false;
-  errorMessage: String = "";
-  dataLoading: boolean = false;
+  error = false;
+  errorMessage = '';
+  dataLoading = false;
   private querySubscription;
 
   pCDs = ['Paid Amount', 'Discount'];
@@ -36,20 +36,20 @@ export class AttendanceComponent implements OnInit, OnDestroy {
   addDataForm: FormGroup;
   editDataForm: FormGroup;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: false}) sort: MatSort;
   displayedColumns = ['code', 'descr', 'studentcode', 'studentdescr', 'studentLAST_NAME', '_id'];
 
 
   constructor(private _backendService: BackendService, private _fb: FormBuilder, private _router: ActivatedRoute) { }
 
   ngOnInit() {
-    let id = this._router.snapshot.paramMap.get('id');
-    if(id !="") { this.getStudent(id); }
-    this.toggleField = (!id) ? "searchMode" : "addMode";
-    //this.toggleField = "searchMode";
+    const id = this._router.snapshot.paramMap.get('id');
+    if(id != '') { this.getStudent(id); }
+    this.toggleField = (!id) ? 'searchMode' : 'addMode';
+    //this.toggleField = 'searchMode';
     this.error = false;
-    this.errorMessage = "";
+    this.errorMessage = '';
     this.dataSource = new MatTableDataSource(this.members);
     this.addDataForm = this._fb.group({
       studentdocid: ['', Validators.required],
@@ -57,18 +57,17 @@ export class AttendanceComponent implements OnInit, OnDestroy {
       studentdescr: ['', Validators.required],
       studentLAST_NAME: ['', Validators.required],
       studentattendancecd: ['', Validators.required],
-      paiddate: ['', Validators.required],
-      code: ['', Validators.required],
-      descr: ['', Validators.required],
-      bsalary: ['', Validators.required],
+      // paiddate: ['', Validators.required],
+      // code: ['', Validators.required],
+      // descr: ['', Validators.required],
+      // bsalary: ['', Validators.required],
       // line: this._fb.array([this._fb.group({
       //   frequency: ['', Validators.required],
       //   ptype: ['', Validators.required],
       //   payval: ['', Validators.required],
-      //   amount: ['', [Validators.pattern("^[0-9]*$")]]
+      //   amount: ['', [Validators.pattern('^[0-9]*$')]]
       // })]),
-      line: this._fb.array([]),
-      gamount: ''
+      days: this._fb.array([])
     });
     this.editDataForm = this._fb.group({
       _id: ['', Validators.required],
@@ -77,31 +76,25 @@ export class AttendanceComponent implements OnInit, OnDestroy {
       studentdescr: ['', Validators.required],
       studentLAST_NAME: ['', Validators.required],
       studentattendancecd: ['', Validators.required],
-      paiddate: ['', Validators.required],
-      code: ['', Validators.required],
-      descr: ['', Validators.required],
-      bsalary: ['', Validators.required],
-      line: this._fb.array([]),
-      gamount: ''
+      // paiddate: ['', Validators.required],
+      // code: ['', Validators.required],
+      // descr: ['', Validators.required],
+      // bsalary: ['', Validators.required],
+      days: this._fb.array([])
     });
   }
 
   LINES(formName) {
-     return this[formName].get('line') as FormArray;
+     return this[formName].get('days') as FormArray;
   }
   addLINES(formName) {
     this.LINES(formName).push(this._fb.group({
-      frequency: ['', Validators.required],
-      ptype: ['', Validators.required],
-      payval: ['', Validators.required],
-      amount: ['', [Validators.pattern("^[0-9]*$")]]
+      day: ['', Validators.required],
+      date: ['', Validators.required],
+      status: ['', Validators.required]
     }));
-    this.calculateTotal(formName);
   }
-  deleteLINES(index, formName) {
-    this.LINES(formName).removeAt(index);
-    this.calculateTotal(formName);
-  }
+
   calculateTotal(formName) {
     this.total_amount = 0;
     for (let i = 0; i <= this[formName].value.line.length; i++) {
@@ -113,13 +106,16 @@ export class AttendanceComponent implements OnInit, OnDestroy {
         }
       }
     }
-    this.total_amount += parseFloat(this[formName].controls['bsalary'].value);
-    this[formName].controls['gamount'].setValue(this.total_amount.toFixed(2));
+//    this.total_amount += parseFloat(this[formName].controls['bsalary'].value);
+//    this[formName].controls['gamount'].setValue(this.total_amount.toFixed(2));
   }
 
   toggle(filter?) {
-    if (!filter) { filter = "searchMode" }
-    else { filter = filter; }
+    if (!filter) {
+      filter = 'searchMode';
+    } else {
+      filter = filter;
+    }
     this.toggleField = filter;
     this.dataLoading = false;
   }
@@ -143,11 +139,11 @@ export class AttendanceComponent implements OnInit, OnDestroy {
 
   setData(formData) {
     this.dataLoading = true;
-    this.querySubscription = this._backendService.setDoc('FEE', formData).then(res => {
+    this.querySubscription = this._backendService.setDoc('ATTENDANCE', formData).then(res => {
       if (res) {
         this.savedChanges = true;
         this.error = false;
-        this.errorMessage = "";
+        this.errorMessage = '';
         this.dataLoading = false;
       }
     }
@@ -163,11 +159,11 @@ export class AttendanceComponent implements OnInit, OnDestroy {
 
   updateData(formData) {
     this.dataLoading = true;
-    this.querySubscription = this._backendService.updateDoc('FEE', formData._id, formData).then(res => {
+    this.querySubscription = this._backendService.updateDoc('ATTENDANCE', formData._id, formData).then(res => {
       if (res) {
         this.savedChanges = true;
         this.error = false;
-        this.errorMessage = "";
+        this.errorMessage = '';
         this.dataLoading = false;
       }
     }
@@ -192,20 +188,14 @@ export class AttendanceComponent implements OnInit, OnDestroy {
           studentdescr: ['', Validators.required],
           studentLAST_NAME: ['', Validators.required],
           studentattendancecd: ['', Validators.required],
-          paiddate: ['', Validators.required],
-          code: ['', Validators.required],
-          descr: ['', Validators.required],
-          bsalary: ['', Validators.required],
-          line: this._fb.array([]
-          ),
-          gamount: ''
+          days: this._fb.array([]
+          )
         });
         this.editDataForm.patchValue(this.data$);
 
-        for (let i = 0; i < this.data$["line"].length; i++) {
-          this.LINES('editDataForm').push(this._fb.group(this.data$["line"][i]));
+        for (let i = 0; i < this.data$['days'].length; i++) {
+          this.LINES('editDataForm').push(this._fb.group(this.data$['days'][i]));
         }
-        this.calculateTotal(('editDataForm'));
         this.toggle('editMode');
         this.dataLoading = false;
       }
@@ -221,12 +211,12 @@ export class AttendanceComponent implements OnInit, OnDestroy {
   }
 
   deleteDoc(docId) {
-    if (confirm("Are you sure want to delete this record ?")) {
+    if (confirm('Are you sure want to delete this record ?')) {
       this.dataLoading = true;
-      this._backendService.deleteDoc('FEE', docId).then(res => {
+      this._backendService.deleteDoc('ATTENDANCE', docId).then(res => {
         if (res) {
           this.error = false;
-          this.errorMessage = "";
+          this.errorMessage = '';
           this.dataLoading = false;
         }
       }
@@ -244,20 +234,20 @@ export class AttendanceComponent implements OnInit, OnDestroy {
   getStudent(id) {
     // this.dataLoading = true;
     this.querySubscription = this._backendService.getDoc('STUDENT', id).subscribe((res) => {
-        this.addDataForm.controls["studentdocid"].patchValue(res["_id"]);
-        this.addDataForm.controls["studentcode"].patchValue(res["code"]);
-        this.addDataForm.controls["studentdescr"].patchValue(res["descr"]);
-        this.addDataForm.controls["studentLAST_NAME"].patchValue(res["LAST_NAME"]);
-        this.addDataForm.controls["studentattendancecd"].patchValue(res["ATTENDANCE_CODE"]);
+        this.addDataForm.controls['studentdocid'].patchValue(res['_id']);
+        this.addDataForm.controls['studentcode'].patchValue(res['code']);
+        this.addDataForm.controls['studentdescr'].patchValue(res['descr']);
+        this.addDataForm.controls['studentLAST_NAME'].patchValue(res['LAST_NAME']);
+        this.addDataForm.controls['studentattendancecd'].patchValue(res['ATTENDANCE_CODE']);
 
-        this._backendService.getDoc("ATTENDANCE_CD", res["ATTENDANCE_CODE"]).subscribe((res2) => {
-            if (res2["code"] !== "") {
+        this._backendService.getDoc('ATTENDANCE_CD', res['ATTENDANCE_CODE']).subscribe((res2) => {
+            if (res2['code'] !== '') {
                 this.data$ = res2;
                 this.addDataForm.patchValue(this.data$);
-                this.addDataForm.controls["code"].patchValue("");
+                this.addDataForm.controls['code'].patchValue('');
 
-                for (let i = 0; i < this.data$["line"].length; i++) {
-                    this.LINES('addDataForm').push(this._fb.group(this.data$["line"][i]));
+                for (let i = 0; i < this.data$['days'].length; i++) {
+                    this.LINES('addDataForm').push(this._fb.group(this.data$['days'][i]));
                 }
                 this.calculateTotal(('addDataForm'));
             }

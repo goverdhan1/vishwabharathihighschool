@@ -10,6 +10,11 @@ import { StudentComponent } from './manage/student.component';
 import { StudentViewComponent } from './manage/student-view.component';
 import { FeeComponent } from './manage/fee.component';
 import { FeeViewComponent } from './manage/fee-view.component';
+
+import { AttendanceComponent } from './manage/attendance.component';
+import { AttendanceViewComponent } from './manage/attendance-view.component';
+
+
 import { MarksComponent } from './manage/marks.component';
 import { MarksViewComponent } from './manage/marks-view.component';
 import { FeecodeComponent } from './setup/feecode.component';
@@ -39,11 +44,18 @@ const routes: Routes = [
   { path: 'student', component: StudentComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
   { path: 'student-view', component: StudentViewComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
   { path: 'enrollment', component: EnrollmentComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
+  
   { path: 'feecode', component: FeecodeComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
   { path: 'attendancecode', component: AttendancecodeComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
+  
   { path: 'fee', component: FeeComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
   { path: 'fee-view', component: FeeViewComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
   { path: 'fee/:id', component: FeeComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
+
+  { path: 'attendance', component: AttendanceComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
+  { path: 'attendance-view', component: AttendanceViewComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
+  { path: 'attendance/:id', component: AttendanceComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
+
   { path: 'marks', component: MarksComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
   { path: 'marks-view', component: MarksViewComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
   { path: 'marks/:id', component: MarksComponent, canActivate: [AuthGuardService, NavAuthGuardService] },

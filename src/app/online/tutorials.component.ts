@@ -31,8 +31,8 @@ export class TutorialsComponent implements OnInit, OnDestroy {
     docUrl: Observable<string | null>;
     fileName: string;
 
-    @ViewChild(MatPaginator) paginator: MatPaginator;
-    @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+    @ViewChild(MatSort, {static: false}) sort: MatSort;
     displayedColumns = ['code', 'descr', '_id'];
     enrollmentCDs$;
 

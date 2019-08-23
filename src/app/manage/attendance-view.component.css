@@ -1,0 +1,70 @@
+.example-container {
+  height: 400px;
+}
+
+.mat-card-actions{
+  display: flex;
+}
+
+.fill-space{
+  flex: 1 1 auto;
+}
+
+.mat-table {
+  overflow: auto;
+}
+
+.mat-header-cell,
+.mat-cell {
+  min-width: 55px !important;
+  padding: 0 3px !important;
+  text-align: center !important;
+}
+
+.mat-header-cell.fixed-column, 
+.mat-cell.fixed-column{
+  max-width: 100px;
+  width: 100px;
+}
+
+.editable{
+  width: 60px !important;
+  height: 100%;
+  display: inline-block !important;
+}
+
+.mat-header-row, 
+.mat-row {
+  width: 100%;
+  min-height: 25px !important;
+  height: 25px;
+}
+
+.mat-table-sticky {
+  border-right: 1px solid #e0e0e0;
+}
+
+.mat-select{
+    width: 50px !important;
+}
+
+.hide-column{
+  display: none !important;
+}
+
+.present{
+  background: blue;
+}
+.absent{
+  background: red;
+}
+.leave{
+  background: pink;
+}
+.late{
+  background: yellow;
+
+}
+.holiday{
+  background: orange;
+}

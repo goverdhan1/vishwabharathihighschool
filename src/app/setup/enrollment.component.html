@@ -59,7 +59,21 @@
           <mat-hint align="end">eg Org1Sess1Grade1ASubj1</mat-hint>
         </mat-form-field>
         <br>
-        <mat-form-field class="example-form">
+
+        <mat-form-field>
+            <input matInput [matDatepicker]="schoolStartDate" placeholder="School Start Date" ngModel name="schoolStartDate" id="schoolStartDate" required readonly>
+            <mat-datepicker-toggle matSuffix [for]="schoolStartDate"></mat-datepicker-toggle>
+            <mat-datepicker #schoolStartDate></mat-datepicker>
+        </mat-form-field>
+          <span class="small-spacer"></span>
+          <mat-form-field>
+              <input matInput [matDatepicker]="schoolEndDate" placeholder="School End Date" ngModel name="schoolEndDate" id="schoolEndDate" required readonly>
+              <mat-datepicker-toggle matSuffix [for]="schoolEndDate"></mat-datepicker-toggle>
+              <mat-datepicker #schoolEndDate></mat-datepicker>
+          </mat-form-field>
+  
+
+        <!-- <mat-form-field class="example-form">
           <textarea  matInput placeholder="Organization Name" name="org" id="org" ngModel></textarea>
           <mat-hint align="end">eg Organization ABC</mat-hint>
         </mat-form-field>
@@ -68,7 +82,7 @@
           <textarea  matInput placeholder="Session 2019-2020" name="session" id="session" ngModel></textarea>
           <mat-hint align="end">eg 2020-2021</mat-hint>
         </mat-form-field>
-        <br>
+        <br> -->
         <!-- <mat-form-field class="example-form">
           <textarea  matInput placeholder="Grade" name="grade" id="grade" ngModel></textarea>
           <mat-hint align="end">eg Grade 1A</mat-hint>
@@ -117,7 +131,19 @@
           <mat-hint align="end">eg Org1Sess1Grade1ASubj1</mat-hint>
         </mat-form-field>
         <br>
-        <mat-form-field class="example-form">
+        <!-- {{(data$ | async)?.schoolStartDate.seconds * 1000 | date:'MM/dd/yyyy'}} -->
+        <mat-form-field>
+            <input matInput [matDatepicker]="schoolStartDate" readonly placeholder="School Start Date" [ngModel]="startDate" name="schoolStartDate" id="schoolStartDate" required>
+            <mat-datepicker-toggle matSuffix [for]="schoolStartDate"></mat-datepicker-toggle>
+            <mat-datepicker #schoolStartDate></mat-datepicker>
+          </mat-form-field>
+          <span class="small-spacer"></span>
+          <mat-form-field>
+              <input matInput [matDatepicker]="schoolEndDate" readonly placeholder="School End Date" [ngModel]="endDate" name="schoolEndDate" id="schoolEndDate" required>
+              <mat-datepicker-toggle matSuffix [for]="schoolEndDate"></mat-datepicker-toggle>
+              <mat-datepicker #schoolEndDate></mat-datepicker>
+            </mat-form-field>
+        <!-- <mat-form-field class="example-form">
           <textarea  matInput placeholder="Organization Name" name="org" id="org" [ngModel]="(data$ | async)?.org"></textarea>
           <mat-hint align="end">eg Organization ABC</mat-hint>
         </mat-form-field>
@@ -125,7 +151,7 @@
         <mat-form-field class="example-form">
           <textarea  matInput placeholder="Session 2019-2020" name="session" id="session" [ngModel]="(data$ | async)?.session"></textarea>
           <mat-hint align="end">eg 2020-2021</mat-hint>
-        </mat-form-field>
+        </mat-form-field> -->
         <br>
         <!-- <mat-form-field class="example-form">
           <textarea  matInput placeholder="Grade" name="grade" id="grade" [ngModel]="(data$ | async)?.grade"></textarea>

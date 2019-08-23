@@ -1,0 +1,56 @@
+.flex-nowrap{
+    flex-wrap: nowrap;
+    width: 200px !important;
+}
+
+.mat-card-actions{
+  display: flex;
+}
+
+.fill-space{
+  flex: 1 1 auto;
+}
+
+
+.mat-table {
+    overflow: auto;
+  }
+  
+  .mat-header-row, 
+  .mat-row {
+    width: 100%;
+    min-height: 35px !important;
+    border-bottom: 1px solid #cccccc;
+    background: #fff;
+  }
+  
+  .mat-header-cell,
+  .mat-cell {
+    padding: 0 3px !important;
+    min-width: 120px !important;
+
+  }
+  
+  .mat-header-cell.fixed-column, 
+  .mat-cell.fixed-column{
+    max-width: 60px;
+    min-width: 60px !important;
+  }
+  
+  .mat-table-sticky {
+    border-right: 1px solid #e0e0e0;
+  }
+
+  .current-month{
+    background-color: blue;
+  }
+
+  .fee-paid{
+    background-color: green;
+  }
+  .fee-due{
+    background-color: red;
+  }
+  .fee-partial-paid{
+    background-color: pink;
+  }

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { BackendService } from '../services/backend.service';
+import { async } from '@angular/core/testing';
 
 @Component({
     selector: 'app-enrollment',
@@ -16,6 +17,7 @@ export class EnrollmentComponent implements OnInit, OnDestroy {
     members: any[];
     dataSource: MatTableDataSource<any>;
     data$;
+    data1$;
     toggleField: string;
     state: string = '';
     savedChanges = false;
@@ -23,9 +25,11 @@ export class EnrollmentComponent implements OnInit, OnDestroy {
     errorMessage: String = "";
     dataLoading: boolean = false;
     private querySubscription;
+    startDate;
+    endDate;
 
-    @ViewChild(MatPaginator) paginator: MatPaginator;
-    @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+    @ViewChild(MatSort, {static: false}) sort: MatSort;
     displayedColumns = ['code', 'descr', '_id'];
 
     constructor(private _backendService: BackendService) { }
@@ -45,7 +49,7 @@ export class EnrollmentComponent implements OnInit, OnDestroy {
     }
     getData(formData?) {
         this.dataLoading = true;
-        this.querySubscription = this._backendService.getDocs('ENROLL_CD',formData).subscribe((res) => {
+        this.querySubscription = this._backendService.getDocs('ENROLL_CD', formData).subscribe((res) => {
             this.dataSource = new MatTableDataSource(res);
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
@@ -62,11 +66,11 @@ export class EnrollmentComponent implements OnInit, OnDestroy {
 
     setData(formData) {
         this.dataLoading = true;
-        this.querySubscription = this._backendService.setDoc('ENROLL_CD',formData).then(res => {
+        this.querySubscription = this._backendService.setDoc('ENROLL_CD', formData).then(res => {
             if (res) {
                 this.savedChanges = true;
                 this.error = false;
-                this.errorMessage = "";
+                this.errorMessage = '';
                 this.dataLoading = false;
             }
         }
@@ -82,11 +86,11 @@ export class EnrollmentComponent implements OnInit, OnDestroy {
 
     updateData(formData) {
         this.dataLoading = true;
-        this.querySubscription = this._backendService.updateDoc('ENROLL_CD',formData._id,formData).then(res => {
+        this.querySubscription = this._backendService.updateDoc('ENROLL_CD', formData._id, formData).then(res => {
             if (res) {
                 this.savedChanges = true;
                 this.error = false;
-                this.errorMessage = "";
+                this.errorMessage = '';
                 this.dataLoading = false;
             }
         }
@@ -102,7 +106,14 @@ export class EnrollmentComponent implements OnInit, OnDestroy {
 
     getDoc(docId) {
         this.dataLoading = true;
-        this.data$ = this._backendService.getDoc('ENROLL_CD',docId);
+        this.data$ = this._backendService.getDoc('ENROLL_CD', docId);
+        this.data1$ = this._backendService.getDoc('ENROLL_CD', docId).subscribe((res: any) => {
+            if(res) {
+                this.startDate = new Date(res.schoolStartDate.seconds * 1000);
+                this.endDate = new Date(res.schoolEndDate.seconds * 1000);
+                console.log(this.startDate, this.endDate);
+            }
+        })
         this.toggle('editMode');
         this.dataLoading = false;
     }
@@ -110,10 +121,10 @@ export class EnrollmentComponent implements OnInit, OnDestroy {
     deleteDoc(docId) {
         if (confirm("Are you sure want to delete this record ?")) {
             this.dataLoading = true;
-            this._backendService.deleteDoc('ENROLL_CD',docId).then(res => {
+            this._backendService.deleteDoc('ENROLL_CD', docId).then(res => {
                 if (res) {
                     this.error = false;
-                    this.errorMessage = "";
+                    this.errorMessage = '';
                     this.dataLoading = false;
                 }
             }

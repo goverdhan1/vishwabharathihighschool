@@ -19,6 +19,7 @@ import { AttendancecodeComponent } from './setup/attendancecode.component';
 import { StudentComponent } from './manage/student.component';
 import { FeeComponent } from './manage/fee.component';
 import { MarksComponent } from './manage/marks.component';
+
 // Angular Firebase settings
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
@@ -36,6 +37,7 @@ import { HomeworkComponent } from './online/homework.component';
 import { TutorialsComponent } from './online/tutorials.component';
 import { ClassesComponent } from './online/classes.component';
 import { AssignmentsComponent } from './online/assignments.component';
+
 // file upload
 import { FileUploadComponent } from './shared/dropzone/fileupload.component';
 import { DropZoneDirective } from './shared/dropzone/dropzone.directive';
@@ -46,14 +48,26 @@ import { HomeworkViewComponent } from './online/homework-view.component';
 import { TutorialsViewComponent } from './online/tutorials-view.component';
 import { StudentViewComponent } from './manage/student-view.component';
 import { FeeViewComponent } from './manage/fee-view.component';
+import { AttendanceViewComponent } from './manage/attendance-view.component';
 import { MarksViewComponent } from './manage/marks-view.component';
 import { NotificationsComponent } from './shared/settings/notifications.component';
 import { SidenavListComponent } from './shared/sidenav-list/sidenav-list.component';
+import { ReplacePipe } from './pipes/replace.pipe';
+import { FeeUpdateDialogComponent } from './manage/fee-update-dialog/fee-update-dialog.component';
 
+import { EditableComponent } from './editable/editable.component';
+import { ViewModeDirective } from './editable/view-mode.directive';
+import { EditModeDirective } from './editable/edit-mode.directive';
+import { EditableOnEnterDirective } from './editable/edit-on-enter.directive';
+import { EditableDirective } from './directives/editable.directive';
+
+
+// import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 
 @NgModule({
   declarations: [
     AppComponent,
+    ReplacePipe,
     FooterComponent,
     HelpdeskComponent,
     LoginComponent,
@@ -61,6 +75,7 @@ import { SidenavListComponent } from './shared/sidenav-list/sidenav-list.compone
     SettingsComponent,
     AboutusComponent,
     FeecodeComponent,
+    AttendanceViewComponent,
     MarkscodeComponent,
     StudentComponent,
     EnrollmentComponent,
@@ -79,17 +94,23 @@ import { SidenavListComponent } from './shared/sidenav-list/sidenav-list.compone
     AssignmentsComponent,
     FileUploadComponent,
     DropZoneDirective,
-FileSizePipe,
-AssignmentsViewComponent,
-ClassesViewComponent,
-HomeworkViewComponent,
-TutorialsViewComponent,
-StudentViewComponent,
-FeeViewComponent,
-MarksViewComponent,
-NotificationsComponent,
-AttendancecodeComponent,
-SidenavListComponent
+    FileSizePipe,
+    AssignmentsViewComponent,
+    ClassesViewComponent,
+    HomeworkViewComponent,
+    TutorialsViewComponent,
+    StudentViewComponent,
+    FeeViewComponent,
+    MarksViewComponent,
+    NotificationsComponent,
+    AttendancecodeComponent,
+    SidenavListComponent,
+    FeeUpdateDialogComponent,
+    EditableComponent,
+    ViewModeDirective,
+    EditModeDirective,
+    EditableOnEnterDirective,
+    EditableDirective
   ],
   imports: [
     BrowserModule,
@@ -103,7 +124,10 @@ SidenavListComponent
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
     AngularFireStorageModule // imports firebase/storage only needed for storage features
   ],
+  entryComponents: [FeeUpdateDialogComponent],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+// platformBrowserDynamic().bootstrapModule(AppModule);

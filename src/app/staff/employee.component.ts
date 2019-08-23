@@ -26,8 +26,8 @@ export class EmployeeComponent implements OnInit, OnDestroy {
   dataLoading: boolean = false;
   private querySubscription;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: false}) sort: MatSort;
   displayedColumns = ['code', 'descr', '_id'];
   salCDs$;
 

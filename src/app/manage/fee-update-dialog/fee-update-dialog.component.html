@@ -1,0 +1,22 @@
+<h2>Update Fee Payments</h2>
+<form #updateFeeData="ngForm" (ngSubmit)="updateFee(updateFeeData.value)" novalidate>
+  <div class="dialog-content">
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Amount" name="amount" id="amount" [ngModel]="data.amt" required>
+    </mat-form-field>
+    <br />
+    <mat-form-field class="full-width">
+      <mat-select placeholder="Status" id="status" name="status" [ngModel]="data.status" class="fee-status" required>
+        <mat-option *ngFor="let CD of feeStatus" [value]="CD">
+          {{ CD }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div align="end">
+    <button mat-button color="primary" mat-raised-button (click)="onNoClick()">No Thanks</button>
+    <span class="spacer">&nbsp;</span>
+    <button mat-button type="submit" color="primary" mat-raised-button [disabled]="!updateFeeData.valid">Ok</button>
+  </div>
+
+</form>

@@ -32,7 +32,6 @@ import {
         MatRadioModule
         } from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
-import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {DomSanitizer} from '@angular/platform-browser';
 import {MatIconRegistry} from '@angular/material';
@@ -206,6 +205,9 @@ export class ElishCustomMaterialModule {
             iconRegistry.addSvgIcon(
                 'security',
             sanitizer.bypassSecurityTrustResourceUrl('assets/icons/security.svg'));
+            iconRegistry.addSvgIcon(
+                'settings',
+            sanitizer.bypassSecurityTrustResourceUrl('assets/icons/settings.svg'));
             iconRegistry.addSvgIcon(
                 'radio_on',
             sanitizer.bypassSecurityTrustResourceUrl('assets/icons/radio_on.svg'));
