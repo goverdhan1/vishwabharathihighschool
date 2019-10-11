@@ -1,5 +1,4 @@
-<!-- <app-header-admin pageTitle="Classes" imageUrl="book" helpType="salarypage"></app-header-admin> -->
-<mat-card [@fallIn]='state'>
+<mat-card>
     <mat-card-content>
         <div *ngIf="(toggleField=='searchMode') else (toggleField=='addMode')? showAddMode : ((toggleField=='editMode')? showEditMode : showResMode)">
             <!-- searchmode -->
@@ -14,11 +13,11 @@
                             Show Recent Results</button> 
                 </mat-card-actions>
                 <mat-form-field class="example-form">
-                    <input matInput type="text" placeholder="Classes Code" id="code" name="code" #code="ngModel" ngModel [disabled]="descr.value !== ''">
+                    <input matInput type="text" placeholder="Subject Code" id="code" name="code" #code="ngModel" ngModel [disabled]="descr.value !== ''">
                 </mat-form-field>
                 <br>
                 <mat-form-field class="example-form">
-                    <input matInput type="text" placeholder="Classes Code Descr" id="descr" name="descr" #descr="ngModel" ngModel [disabled]="code.value !== ''">
+                    <input matInput type="text" placeholder="Subject Name" id="descr" name="descr" #descr="ngModel" ngModel [disabled]="code.value !== ''">
                 </mat-form-field>
                 <mat-card-actions align="end">
                         <button type="button" (click)="toggle('resMode');getData(searchFormData.value);" mat-raised-button [disabled]="(code.value == '' && descr.value == '')"
@@ -32,7 +31,7 @@
 <ng-template #showAddMode>
     <form #addDataForm="ngForm" (ngSubmit)="setData(addDataForm.value);this.addDataForm.reset();" novalidate>
         <mat-error *ngIf="savedChanges">
-            Your Classes information is saved. To upload related documents, please use data table.
+            Your Subject information is saved. To upload related documents, please use data table.
             <label class="small-spacer"></label>
             <mat-icon (click)="this.addDataForm.reset();savedChanges=false;toggle('searchMode');" svgIcon="clear"></mat-icon>
         </mat-error>
@@ -49,14 +48,14 @@
                 </button>
             </mat-card-actions>
             <mat-form-field class="example-form">
-                <input matInput placeholder="Classes Code" name="code" id="code" #code="ngModel" ngModel required>
+                <input matInput placeholder="Subject Code" name="code" id="code" #code="ngModel" ngModel required>
                 <mat-hint align="end">exm- S1G1AP1</mat-hint>
             </mat-form-field>
             <br>
             <mat-form-field class="example-form">
                 <br>
-                <input matInput placeholder="Classes Code Descr" name="descr" id="descr" #descr="ngModel" ngModel required>
-                <mat-hint align="end">exm- Sem1-Grade 1A-Prelim1</mat-hint>
+                <input matInput placeholder="Subject Name" name="descr" id="descr" #descr="ngModel" ngModel required>
+                <mat-hint align="end">exm- English, Hindi, Telugu, Maths, Science, Social Studies...</mat-hint>
             </mat-form-field>
             <br>
             <!-- <mat-form-field class="example-form">
@@ -101,13 +100,13 @@
                 </button>
             </mat-card-actions>
             <mat-form-field class="example-form">
-                <input matInput placeholder="Classes Code" name="code" id="code" [ngModel]="(data$ | async)?.code" required>
+                <input matInput placeholder="Subject Code" name="code" id="code" [ngModel]="(data$ | async)?.code" required>
                 <mat-hint align="end">exm- S1G1AP1</mat-hint>
             </mat-form-field>
             <br>
             <mat-form-field class="example-form">
-                <input matInput placeholder="Classes Code Descr" name="descr" id="descr" [ngModel]="(data$ | async)?.descr" required>
-                <mat-hint align="end">exm- Sem1-Grade 1A-Prelim1</mat-hint>
+                <input matInput placeholder="Subject Name" name="descr" id="descr" [ngModel]="(data$ | async)?.descr" required>
+                <mat-hint align="end">exm- exm- English, Hindi, Telugu, Maths, Science, Social Studies...</mat-hint>
             </mat-form-field>
             <br>
             <!-- <mat-form-field class="example-form">
@@ -173,13 +172,14 @@
     </div>
     <div class="example-container mat-elevation-z8">
         <mat-table [dataSource]="dataSource" matSort>
+
             <ng-container matColumnDef="code">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Classes Code</mat-header-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Subject Code</mat-header-cell>
                 <mat-cell *matCellDef="let row"> {{row.code}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="descr">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Descr</mat-header-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Subject Name</mat-header-cell>
                 <mat-cell *matCellDef="let row"> {{row.descr}} </mat-cell>
             </ng-container>
 
@@ -211,7 +211,7 @@
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
         </mat-table>
-        <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+        <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="15" [pageSizeOptions]="[5, 15, 30, 100]"></mat-paginator>
     </div>
 </ng-template>
 <ng-template #showMyPic>

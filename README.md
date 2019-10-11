@@ -1,12 +1,9 @@
-<h2>Online School Management App</h2>
-<h2><a href="https://www.youtube.com/playlist?list=PLp0TENYyY8lHnfxOOzZ_hTnPF8Hh3eKDo">Video Tutorials!</a></h2>
 <h2>Tools: </h2>
-<b>front-end:</b> Angular 7.2.14 & 8.0.0 rc.0<br/>
-<b>back-end:</b> Google Firestore / Firebase<br/>
-Pro Version: AI, Machine Learning Algorithm supported Advance features<br/>
+<b>front-end:</b> Angular 7.2.14 & 8.0.0 rc.0<br />
+<b>back-end:</b> Google Firestore / Firebase<br />
 <h2>Objective</h2>
 <ol>
-<li>Manage Small, Medium, Large Schools / Colleges online for free</li>
+<li>Manage Small, Medium, Large Schools / Colleges online</li>
 <li>Role based Online App access for Student, Parents, Teacher and School Management</li>
 <li>Instant password/role reset for all users</li>
 <li>Complete Online School Management App for storing Students Records, Grades, Fee, Attendance, Staff and a lot more.</li>
@@ -24,31 +21,6 @@ Pro Version: AI, Machine Learning Algorithm supported Advance features<br/>
 <i>send an email to info@elishconsulting.com for Pro version enquiries.</i>
 
 <h2>Let's get started :-</h2>
-<br/><br/>
-Before we start, Please make sure you have latest version of node js installed.<br/>
-Let's head out to https://nodejs.org/en/ and grab latest nodejs.<br/>
-Once you have nodejs installed, open command prompt/terminal window.<br/>
-$ node -v // make sure, this command comes back with a node version<br/>
-$ npm -v // make sure, this command comes back with a npm version<br/><br/>
-
-<h2>How to Install NodeJS on Windows, Mac, Linux & ChromeOS</h2>
-# First run<br/>
-$ sudo apt-get update<br/>
-# and then if needed<br/>
-$ sudo apt-get install curl gnupg -y<br/>
-# or nodejs version 11<br/>
-$ curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -<br/>
-$ sudo apt-get install -y nodejs<br/><br/>
-<h2>Install Angular CLI</h2>
-$ npm install -g @angular/cli<br/>
-$ ng -v // make sure, this command comes back with a npm version<br/><br/>
-$ mkdir app<br/>
-$ cd app<br/>
-$ mkdir client<br/
-$ cd client<br/>
-$ ng new SMA<br/>
-$ cd SMS<br/>
-$ ng serve<br/>
 <br/><br/>
 
 <h2> Setup Google Firestore / Firebase Database & Role / Rules</h2>

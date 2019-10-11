@@ -1,3 +1,4 @@
+<mat-card>
 <mat-card-actions>
   <mat-form-field>
     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search Recent Results">
@@ -7,7 +8,7 @@
     <mat-icon color="primary" svgIcon="settings">Settings</mat-icon>
     </button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item (click)="sendFeeDueSMS()">Send Fee Due SMS</button>
+    <!-- <button mat-menu-item (click)="sendFeeDueSMS()">Send Fee Due SMS</button> -->
   </mat-menu>
 </mat-card-actions>
 <div class="example-container mat-elevation-z8">
@@ -46,3 +47,4 @@
   <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="5"
     [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 </div>
+</mat-card>

@@ -13,18 +13,18 @@ import { switchMap } from 'rxjs/operators';
 })
 export class StudentViewComponent implements OnInit, OnDestroy {
   data;
-  state: string = '';
+  state: string;
   savedChanges = false;
-  error: boolean = false;
-  errorMessage: String = "";
-  dataLoading: boolean = false;
+  error: boolean;
+  errorMessage = '';
+  dataLoading: boolean;
   private querySubscription;
 
   // file upload
   docId: string;
   fileName: string;
-  showFileUpload: boolean = false;
-  showDocument: boolean = false;
+  showFileUpload: boolean;
+  showDocument: boolean;
   docUrl: Observable<string | null>;
 
   constructor(private _backendService: BackendService) { }
@@ -41,7 +41,7 @@ export class StudentViewComponent implements OnInit, OnDestroy {
     .subscribe(res => {
       if (res.length > 0) {
         this.data = res[0];
-        this.docId = res[0]["_id"]; // this is required to pass at file upload directive
+        this.docId = res[0]['_id']; // this is required to pass at file upload directive
       } else {
         this.error = true;
         this.errorMessage = "Your passcode didn't match with our records. Please check your passcode with your Education provider. Please go to SETTINGS page to update your passcode.";

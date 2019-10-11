@@ -5,23 +5,46 @@
   <mat-icon class="example-icon">{{ imageUrl }}</mat-icon>
   <span matTooltip="About us">{{ pageTitle }}</span>
   <span class="example-spacer"></span>
-  <span matTooltip="Live notifications">
-    <button mat-icon-button routerLink="/notifications">
-      <mat-icon matBadge="{{ (msgCount$ | async)?.length }}" matBadgeColor="warn">sms</mat-icon>
-    </button>
-  </span>
-  <span matTooltip="Update Settings">
-    <button mat-icon-button routerLink="/settings">
-      <mat-icon svgIcon="account_circle"></mat-icon>
-    </button>
-  </span>
-  <span matTooltip="eMail">
+
+
+  <button mat-button routerLink="/aboutus">Home</button>
+
+  <button mat-button [matMenuTriggerFor]="students">Students</button>
+  <mat-menu #students="matMenu">
+    <button mat-menu-item routerLink="/student">Students</button>
+    <button mat-menu-item routerLink="/student-attendance">Attendance</button>
+    <button mat-menu-item routerLink="/marks-view">Marks</button>
+    <button mat-menu-item routerLink="/fee-view">Fee</button>
+  </mat-menu>
+  
+  <button mat-button [matMenuTriggerFor]="teachers">Teachers</button>
+  <mat-menu #teachers="matMenu">
+    <button mat-menu-item routerLink="/employee">Teachers</button>
+    <button mat-menu-item routerLink="/employee-attendance">Attendance</button>
+    <button mat-menu-item routerLink="/periods">Periods</button>
+    <button mat-menu-item routerLink="/salary-view">Salaries</button>
+  </mat-menu>
+  
+
+
+  <button mat-button [matMenuTriggerFor]="setup">Setup</button>
+  <mat-menu #setup="matMenu">
+    <button mat-menu-item routerLink="/enrollment">Enrollment</button>
+    <button mat-menu-item routerLink="/classes">Classes</button>
+    <button mat-menu-item routerLink="/subjects">Subjects</button>
+    <button mat-menu-item routerLink="/settings">User Settings</button>
+  </mat-menu>
+  
+  <button mat-button routerLink="/transport">Transport</button>
+
+
+  <!-- <span matTooltip="eMail">
     <button mat-icon-button (click)="formShowing=!formShowing">
       <mat-icon svgIcon="email"></mat-icon>
     </button>
-  </span>
+  </span> -->
   <!--<span matTooltip="Security Policy" [matMenuTriggerFor]="helpSecMenu"><button mat-icon-button><mat-icon svgIcon="security"></mat-icon></button></span>-->
-  <span matTooltip="Help" [matMenuTriggerFor]="helpMenu">
+  <!-- <span matTooltip="Help" [matMenuTriggerFor]="helpMenu">
     <button mat-icon-button>
       <mat-icon svgIcon="help"></mat-icon>
     </button>
@@ -74,4 +97,4 @@
       </mat-card-actions>
     </ng-template>
   </form>
-</mat-card>
+</mat-card> -->

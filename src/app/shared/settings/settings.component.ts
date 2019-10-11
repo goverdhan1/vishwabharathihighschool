@@ -9,11 +9,11 @@ import { Observable } from 'rxjs';
   styleUrls: ['./settings.component.css']
 })
 export class SettingsComponent implements OnInit {
-  state: string = '';
+  state: string;
   savedChanges = false;
-  error: boolean = false;
-  errorMessage: String = "";
-  dataLoading: boolean = false;
+  error  = false;
+  errorMessage = '';
+  dataLoading = false;
   data$: Observable<any>;
   private querySubscription;
   roles: any[] = [
@@ -36,7 +36,7 @@ export class SettingsComponent implements OnInit {
       .then(
         (success) => {
           this._router.navigate(['/login']);
-        }).catch(function (error) {
+        }).catch((error) => {
           console.log(error);
         })
   }
@@ -50,12 +50,15 @@ export class SettingsComponent implements OnInit {
   onSubmit(formData) {
     this.dataLoading = true;
     this._backendService.updateUser(formData).then(res => {
+      console.log(res);
       if (res) {
         this.savedChanges = true;
         this.error = false;
-        this.errorMessage = "";
+        this.errorMessage = '';
         this.dataLoading = false;
-        window.localStorage.setItem("role", formData.role);
+        window.localStorage.setItem('role', formData.role);
+        const role = window.localStorage.getItem('role');
+        console.log(role);
       }
     }
     ).catch(err => {
@@ -70,7 +73,7 @@ export class SettingsComponent implements OnInit {
 
   routeLoginPage() {
     this.error = false;
-    this.errorMessage = "";
+    this.errorMessage = '';
     this.savedChanges = false;
   }
 }

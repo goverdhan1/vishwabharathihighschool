@@ -1,50 +1,46 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { auth } from 'firebase/app';
-import { Observable, of } from 'rxjs';
-import { switchMap, take } from 'rxjs/operators';
+import { combineLatest, merge, of, from } from 'rxjs';
+import { switchMap, map, mergeMap, concatMap, flatMap } from 'rxjs/operators';
 import { firestore } from 'firebase/app';
-
 @Injectable({
   providedIn: 'root'
 })
 export class StudentService {
-
+  querySubctiption;
   constructor(
     public afAuth: AngularFireAuth,
-    private _afs: AngularFirestore,
-    private _storage: AngularFireStorage ) { }
-    getConfig() {
+    private afs: AngularFirestore,
+    private storage: AngularFireStorage) {
+  }
+  getConfig() {
     return environment.social;
   }
 
-
   // generic collection url pages and generic CRUD functions
   get timestamp() {
-    const d = new Date();
-    return d;
+    return new Date();
     // return firebase.firestore.FieldValue.serverTimestamp();
   }
 
   getActiveEnrollmentId() {
-    return this._afs.collection('SMS_CONFIG_ENROLL_CD', ref => ref.where('active', '==', true)).valueChanges();
+    return this.afs.collection('SMS_CONFIG_ENROLL_CD', ref => ref.where('orderBy', '==', 0)).valueChanges();
   }
 
   createStudent(data: any, attendanceDays: any, feeMonths: any, marks?: any): any {
-    const batch = this._afs.firestore.batch();
-    const id = this._afs.createId();
+    const batch = this.afs.firestore.batch();
+    const id = this.afs.createId();
     const timestamp = this.timestamp;
 
-    const enrollmentRef = this._afs.firestore.collection('SMS_CONFIG_ENROLL_CD').doc(data.studentDetails.ENROLLMENT_CODE);
+    const enrollmentRef = this.afs.firestore.collection('SMS_CONFIG_ENROLL_CD').doc(data.studentDetails.ENROLLMENT_CODE);
     const studentRef = enrollmentRef.collection('STUDENTS').doc(id);
-    const parentRef = this._afs.firestore.collection('PARENT_DETAILS').doc(id);
-    const contactRef = this._afs.firestore.collection('CONTACT_DETAILS').doc(id);
-    const qualificationRef = this._afs.firestore.collection('QUALIFICATIONS').doc(id);
-    const physicalStatusRef = this._afs.firestore.collection('PHYSICAL_STATUS').doc(id);
+    const parentRef = this.afs.firestore.collection('PARENT_DETAILS').doc(id);
+    const contactRef = this.afs.firestore.collection('CONTACT_DETAILS').doc(id);
+    const qualificationRef = this.afs.firestore.collection('QUALIFICATIONS').doc(id);
+    const physicalStatusRef = this.afs.firestore.collection('PHYSICAL_STATUS').doc(id);
 
     const attendanceRef = enrollmentRef.collection('ATTENDANCE').doc(id);
     const feeRef = enrollmentRef.collection('FEE').doc(id);
@@ -112,7 +108,7 @@ export class StudentService {
       _id: id
     });
     batch.set(marksRef, {
-    //  markSheet: marks,
+      //  markSheet: marks,
       _id: id
     });
     return batch.commit().then((res) => true);
@@ -120,14 +116,14 @@ export class StudentService {
 
   updateStudent(ENROLLMENT_CODE: string, docId: string, data: any): any {
     const timestamp = this.timestamp;
-    const batch = this._afs.firestore.batch();
+    const batch = this.afs.firestore.batch();
 
-    const enrollmentRef = this._afs.firestore.collection('SMS_CONFIG_ENROLL_CD').doc(ENROLLMENT_CODE);
+    const enrollmentRef = this.afs.firestore.collection('SMS_CONFIG_ENROLL_CD').doc(ENROLLMENT_CODE);
     const studentRef = enrollmentRef.collection('STUDENTS').doc(docId);
-    const parentRef = this._afs.firestore.collection('PARENT_DETAILS').doc(docId);
-    const contactRef = this._afs.firestore.collection('CONTACT_DETAILS').doc(docId);
-    const qualificationRef = this._afs.firestore.collection('QUALIFICATIONS').doc(docId);
-    const physicalStatusRef = this._afs.firestore.collection('PHYSICAL_STATUS').doc(docId);
+    const parentRef = this.afs.firestore.collection('PARENT_DETAILS').doc(docId);
+    const contactRef = this.afs.firestore.collection('CONTACT_DETAILS').doc(docId);
+    const qualificationRef = this.afs.firestore.collection('QUALIFICATIONS').doc(docId);
+    const physicalStatusRef = this.afs.firestore.collection('PHYSICAL_STATUS').doc(docId);
 
     const attendanceRef = enrollmentRef.collection('ATTENDANCE').doc(docId);
     const feeRef = enrollmentRef.collection('FEE').doc(docId);
@@ -180,7 +176,7 @@ export class StudentService {
 
   updateFileUpload(enrollId: string, docId: string, filePath: string) {
     const timestamp = this.timestamp;
-    const docRef = this._afs.collection('SMS_CONFIG_ENROLL_CD').doc(enrollId).collection('STUDENTS').doc(docId);
+    const docRef = this.afs.collection('SMS_CONFIG_ENROLL_CD').doc(enrollId).collection('STUDENTS').doc(docId);
     return docRef.update({
       files: firestore.FieldValue.arrayUnion(filePath),
       updatedAt: timestamp,
@@ -189,31 +185,58 @@ export class StudentService {
       author: this.afAuth.auth.currentUser.uid
     });
   }
+
   getFileDownloadUrl(url) {
-    const ref = this._storage.ref(url);
+    const ref = this.storage.ref(url);
     return ref.getDownloadURL();
   }
+
   // deleteDoc(coll: string, docId: string) {
   //   const timestamp = this.timestamp
-  //   const docRef = this._afs.collection(this.getCollUrls(coll)).doc(docId);
+  //   const docRef = this.afs.collection(this.getCollUrls(coll)).doc(docId);
   //   return docRef.delete().then((res) => true);
   // }
-  getDoc(enrollId: string, docId: string) {
-    return this._afs.collection('SMS_CONFIG_ENROLL_CD').doc(enrollId).collection('STUDENTS').doc(docId).valueChanges();
-  }
-  getStudentsList(enrollId, formData?) {
- //   const docs = this._afs.collection('enrollCode').doc(enrollCode).collection('STUDENTS');
 
+  getDoc(enrollId: string, docId: string) {
+    return this.afs.collection('SMS_CONFIG_ENROLL_CD').doc(enrollId).collection('STUDENTS').doc(docId).valueChanges();
+  }
+
+  getStudents(enrollId) {
+    return this.afs.collection('SMS_CONFIG_ENROLL_CD').doc(enrollId).collection('STUDENTS').valueChanges();
+  }
+
+  getParentDetails(enrollId) {
+    return this.getStudents(enrollId).pipe(switchMap((res: any): any => {
+      return res.map((r: any) => {
+        return this.afs.collection('PARENT_DETAILS', ref => ref.where('_id', '==', r._id)).valueChanges();
+      });
+    }), flatMap((fData: any) => fData));
+  }
+
+  getStudentsList(enrollId, formData?) {
     if (formData) {
       if (formData.code) {
-        return this._afs.collection('SMS_CONFIG_ENROLL_CD').doc(enrollId)
-        .collection('STUDENTS', ref => ref.where('code', '>=', formData.code)).valueChanges();
+        return this.afs.collection('SMS_CONFIG_ENROLL_CD').doc(enrollId)
+          .collection('STUDENTS', ref => ref.where('code', '>=', formData.code)).valueChanges();
       } else {
-        return this._afs.collection('SMS_CONFIG_ENROLL_CD').doc(enrollId)
-        .collection('STUDENTS', ref => ref.where('fName', '>=', formData.fName)).valueChanges();
+        return this.afs.collection('SMS_CONFIG_ENROLL_CD').doc(enrollId)
+          .collection('STUDENTS', ref => ref.where('fName', '>=', formData.fName)).valueChanges();
       }
     } else { // no search critera - fetch all docs
-        return this._afs.collection('SMS_CONFIG_ENROLL_CD').doc(enrollId).collection('STUDENTS').valueChanges();
+
+      return combineLatest(
+        this.getStudents(enrollId),
+        this.getParentDetails(enrollId)
+      ).pipe(map(([studentDetails, parentDetails]) => {
+        const newArr = [];
+        for (const std of studentDetails) {
+          newArr.push({ ...std, parent: parentDetails });
+        }
+        return newArr;
+      }));
+
+      //      return this.afs.collection('SMS_CONFIG_ENROLL_CD').doc(enrollId).collection('STUDENTS').valueChanges();
+
     }
   }
 }

@@ -29,13 +29,14 @@ import { environment } from '../environments/environment';
 import { AttendanceComponent } from './manage/attendance.component';
 import { HeaderAdminComponent } from './shared/header.admin.component';
 import { EmployeeComponent } from './staff/employee.component';
+import { EmployeeAttendanceComponent} from './manage/employee-attendance.component';
 import { SalaryCodeComponent } from './staff/salarycode.component';
 import { VoucherComponent } from './staff/voucher.component';
 import { ExpensesComponent } from './staff/expenses.component';
 import { SalaryComponent } from './staff/salary.component';
 import { HomeworkComponent } from './online/homework.component';
 import { TutorialsComponent } from './online/tutorials.component';
-import { ClassesComponent } from './online/classes.component';
+import { ClassesComponent } from './manage/classes.component';
 import { AssignmentsComponent } from './online/assignments.component';
 
 // file upload
@@ -48,7 +49,7 @@ import { HomeworkViewComponent } from './online/homework-view.component';
 import { TutorialsViewComponent } from './online/tutorials-view.component';
 import { StudentViewComponent } from './manage/student-view.component';
 import { FeeViewComponent } from './manage/fee-view.component';
-import { AttendanceViewComponent } from './manage/attendance-view.component';
+import { StudentAttendanceComponent } from './manage/student-attendance.component';
 import { MarksViewComponent } from './manage/marks-view.component';
 import { NotificationsComponent } from './shared/settings/notifications.component';
 import { SidenavListComponent } from './shared/sidenav-list/sidenav-list.component';
@@ -60,6 +61,8 @@ import { ViewModeDirective } from './editable/view-mode.directive';
 import { EditModeDirective } from './editable/edit-mode.directive';
 import { EditableOnEnterDirective } from './editable/edit-on-enter.directive';
 import { EditableDirective } from './directives/editable.directive';
+import { SubjectsComponent } from './setup/subjects/subjects.component';
+import { PeriodsComponent } from './manage/periods.component';
 
 
 // import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
@@ -75,7 +78,8 @@ import { EditableDirective } from './directives/editable.directive';
     SettingsComponent,
     AboutusComponent,
     FeecodeComponent,
-    AttendanceViewComponent,
+    StudentAttendanceComponent,
+    EmployeeAttendanceComponent,
     MarkscodeComponent,
     StudentComponent,
     EnrollmentComponent,
@@ -110,7 +114,9 @@ import { EditableDirective } from './directives/editable.directive';
     ViewModeDirective,
     EditModeDirective,
     EditableOnEnterDirective,
-    EditableDirective
+    EditableDirective,
+    SubjectsComponent,
+    PeriodsComponent
   ],
   imports: [
     BrowserModule,

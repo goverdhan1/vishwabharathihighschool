@@ -1,0 +1,14 @@
+.list-inline mat-list-option {
+    display: inline-block;
+    width: auto;
+    margin-right: 5px;
+}
+
+.enrollment-field {
+ display: inline-block;
+ width: 200px;
+}
+
+.btn-right {
+    float: right;
+}

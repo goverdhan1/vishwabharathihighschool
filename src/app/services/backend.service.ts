@@ -14,21 +14,22 @@ import { firestore } from 'firebase/app';
 })
 export class BackendService {
 
+  enrollDB = 'SMS_CONFIG_ENROLL_CD';
   constructor(
     public afAuth: AngularFireAuth,
-    private _afs: AngularFirestore,
-    private _http: HttpClient,
-    private _storage: AngularFireStorage ) { }
+    private afs: AngularFirestore,
+    private http: HttpClient,
+    private storage: AngularFireStorage ) { }
     getConfig() {
     return environment.social;
   }
 
   // function to send emails using a PHP API //
   sendEmail(messageData) {
-    let httpOptions_e = {
+    const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/X-www-form-urlencoded' })
     };
-    return this._http.post(environment.emailAPI, messageData, httpOptions_e);
+    return this.http.post(environment.emailAPI, messageData, httpOptions);
   }
 
   // login page funcitons - login with FB/GOOGLE/EMAIL, if formData is passed, this means is user is using email/password login
@@ -77,27 +78,27 @@ export class BackendService {
   }
   getUserStudentDoc() {
     return this.getDoc('USERS', this.afAuth.auth.currentUser.uid)
-   .pipe(switchMap(res => this._afs.collection(this.getCollUrls('STUDENT'), ref => ref.where('SKEY', '==', res['phone'])).valueChanges()
+   .pipe(switchMap(res => this.afs.collection(this.getCollUrls('STUDENT'), ref => ref.where('SKEY', '==', res['phone'])).valueChanges()
   ));
   }
   getUserStudentMSGDoc() {
     return this.getDoc('USERS', this.afAuth.auth.currentUser.uid)
-   .pipe(switchMap(res => this._afs.collection(this.getCollUrls('STUDENT'), ref => ref.where('SKEY', '==', res['phone'])).valueChanges()
-   .pipe(switchMap(res => this._afs.collection(this.getCollUrls('STUDENT')+ '/' + res[0]['_id'] + '/notifications').valueChanges()))));
+   .pipe(switchMap(res => this.afs.collection(this.getCollUrls('STUDENT'), ref => ref.where('SKEY', '==', res['phone'])).valueChanges()
+   .pipe(switchMap(res => this.afs.collection(this.getCollUrls('STUDENT') + '/' + res[0]['_id'] + '/notifications').valueChanges()))));
    // .pipe(switchMap(res =>
-   // this._afs.collection(this.getCollUrls('STUDENT')/res[0]['_id']/notifications,
+   // this.afs.collection(this.getCollUrls('STUDENT')/res[0]['_id']/notifications,
    // ref => ref.where('studentdocid', '==', res[0]['_id'])).valueChanges()))));
   }
   getUserStudentMSGCounts() {
     if (this.afAuth.auth.currentUser != null) {
     return this.getDoc('USERS', this.afAuth.auth.currentUser.uid)
-   .pipe(switchMap(res => this._afs.collection(this.getCollUrls('STUDENT'), ref => ref.where('SKEY', '==', res['phone'])).valueChanges()
+   .pipe(switchMap(res => this.afs.collection(this.getCollUrls('STUDENT'), ref => ref.where('SKEY', '==', res['phone'])).valueChanges()
    .pipe(switchMap(
-     res => this._afs.collection(this.getCollUrls('STUDENT')+'/'+res[0]['_id'] + '/notifications', 
+     res => this.afs.collection(this.getCollUrls('STUDENT') + '/' + res[0]['_id'] + '/notifications',
      ref => ref.where('readReceipt', '==', true)).valueChanges()))
     ));
    // .pipe(switchMap(
-   // res => this._afs.collection(this.getCollUrls('STUDENT')/res[0]['_id']/notifications,
+   // res => this.afs.collection(this.getCollUrls('STUDENT')/res[0]['_id']/notifications,
    // ref => ref.where('studentdocid', '==', res[0]['_id'])).valueChanges()))));
     } else {
       return false;
@@ -105,41 +106,40 @@ export class BackendService {
   }
   getUserStudentFeeDoc() {
     return this.getDoc('USERS', this.afAuth.auth.currentUser.uid)
-   .pipe(switchMap(res => this._afs.collection(this.getCollUrls('STUDENT'), ref => ref.where('SKEY', '==', res['phone'])).valueChanges()
+   .pipe(switchMap(res => this.afs.collection(this.getCollUrls('STUDENT'), ref => ref.where('SKEY', '==', res['phone'])).valueChanges()
    .pipe(switchMap(
-     res => this._afs.collection(this.getCollUrls('FEE'),
+     res => this.afs.collection(this.getCollUrls('FEE'),
      ref => ref.where('studentdocid', '==', res[0]['_id'])).valueChanges()))
     ));
   }
   getUserStudentAttendanceDoc() {
     return this.getDoc('USERS', this.afAuth.auth.currentUser.uid)
-   .pipe(switchMap(res => this._afs.collection(this.getCollUrls('STUDENT'), ref => ref.where('SKEY', '==', res['phone'])).valueChanges()
+   .pipe(switchMap(res => this.afs.collection(this.getCollUrls('STUDENT'), ref => ref.where('SKEY', '==', res['phone'])).valueChanges()
    .pipe(switchMap(
-     res => this._afs.collection(this.getCollUrls('ATTENDANCE'),
+     res => this.afs.collection(this.getCollUrls('ATTENDANCE'),
      ref => ref.where('studentdocid', '==', res[0]['_id'])).valueChanges()))
     ));
   }
   getUserStudentMarksDoc() {
     return this.getDoc('USERS', this.afAuth.auth.currentUser.uid)
-   .pipe(switchMap(res => this._afs.collection(this.getCollUrls('STUDENT'), ref => ref.where('SKEY', '==', res['phone'])).valueChanges()
+   .pipe(switchMap(res => this.afs.collection(this.getCollUrls('STUDENT'), ref => ref.where('SKEY', '==', res['phone'])).valueChanges()
    .pipe(switchMap(
-      res => this._afs.collection(this.getCollUrls('MARKS'),
+      res => this.afs.collection(this.getCollUrls('MARKS'),
       ref => ref.where('studentdocid', '==', res[0]['_id'])).valueChanges()))
     ));
   }
   getUserStudentTutsDoc(_url) {
     return this.getDoc('USERS', this.afAuth.auth.currentUser.uid)
-   .pipe(switchMap(res => this._afs.collection(this.getCollUrls('STUDENT'), ref => ref.where('SKEY', '==', res['phone'])).valueChanges()
+   .pipe(switchMap(res => this.afs.collection(this.getCollUrls('STUDENT'), ref => ref.where('SKEY', '==', res['phone'])).valueChanges()
    .pipe(switchMap(
-      res => this._afs.collection(this.getCollUrls(_url),
+      res => this.afs.collection(this.getCollUrls(_url),
       ref => ref.where('ENROLLMENT_CODE', '==', res[0]['ENROLLMENT_CODE'])).valueChanges()))
     ));
   }
 
   // generic collection url pages and generic CRUD functions
   get timestamp() {
-    const d = new Date();
-    return d;
+    return new Date();
     // return firebase.firestore.FieldValue.serverTimestamp();
   }
   getCollUrls(coll) {
@@ -160,17 +160,18 @@ export class BackendService {
     if (coll === 'EXPENSES') { _coll = 'SMS_EXPENSES'; }
     if (coll === 'ASSIGNMENT') { _coll = 'SMS_ASSIGNMENT'; }
     if (coll === 'CLASSES') { _coll = 'SMS_CLASSES'; }
+    if (coll === 'SUBJECTS') { _coll = 'SMS_SUBJECTS'; }
     if (coll === 'HOMEWORK') { _coll = 'SMS_HOMEWORK'; }
     if (coll === 'TUTORIALS') { _coll = 'SMS_TUTORIALS'; }
     return _coll;
   }
-  
+
   setDoc(coll: string, data: any, docId?: any) {
-    const id = this._afs.createId();
+    const id = this.afs.createId();
     const item = { id, name };
     if (docId) { item.id = docId; }
-    const timestamp = this.timestamp
-    const docRef = this._afs.collection(this.getCollUrls(coll)).doc(item.id);
+    const timestamp = this.timestamp;
+    const docRef = this.afs.collection(this.getCollUrls(coll)).doc(item.id);
     return docRef.set({
       ...data,
       _id: id,
@@ -183,8 +184,8 @@ export class BackendService {
   }
 
   updateDoc(coll: string, docId: string, data: any) {
-    const timestamp = this.timestamp
-    const docRef = this._afs.collection(this.getCollUrls(coll)).doc(docId);
+    const timestamp = this.timestamp;
+    const docRef = this.afs.collection(this.getCollUrls(coll)).doc(docId);
     return docRef.update({
       ...data,
       updatedAt: timestamp,
@@ -195,7 +196,7 @@ export class BackendService {
   }
   updateFileUpload(coll: string, docId: string, filePath: string) {
     const timestamp = this.timestamp;
-    const docRef = this._afs.collection(this.getCollUrls(coll)).doc(docId);
+    const docRef = this.afs.collection(this.getCollUrls(coll)).doc(docId);
     return docRef.update({
       files: firestore.FieldValue.arrayUnion(filePath),
       updatedAt: timestamp,
@@ -205,26 +206,95 @@ export class BackendService {
     });
   }
   getFileDownloadUrl(url) {
-    const ref = this._storage.ref(url);
+    const ref = this.storage.ref(url);
     return ref.getDownloadURL();
   }
   deleteDoc(coll: string, docId: string) {
-    const timestamp = this.timestamp
-    const docRef = this._afs.collection(this.getCollUrls(coll)).doc(docId);
+    const timestamp = this.timestamp;
+    const docRef = this.afs.collection(this.getCollUrls(coll)).doc(docId);
     return docRef.delete().then((res) => true);
   }
   getDoc(coll: string, docId: string) {
-    return this._afs.collection(this.getCollUrls(coll)).doc(docId).valueChanges();
+    return this.afs.collection(this.getCollUrls(coll)).doc(docId).valueChanges();
   }
+
   getDocs(coll: string, formData?) {
     if (formData) {
       if (formData.code) {
-        return this._afs.collection(this.getCollUrls(coll), ref => ref.where('code', '>=', formData.code)).valueChanges();
+        return this.afs.collection(this.getCollUrls(coll), ref => ref.where('code', '>=', formData.code)).valueChanges();
       } else {
-        return this._afs.collection(this.getCollUrls(coll), ref => ref.where('descr', '>=', formData.descr)).valueChanges();
+        return this.afs.collection(this.getCollUrls(coll), ref => ref.where('descr', '>=', formData.descr)).valueChanges();
       }
     } else { // no search critera - fetch all docs
-      return this._afs.collection(this.getCollUrls(coll)).valueChanges();
+      return this.afs.collection(this.getCollUrls(coll)).valueChanges();
     }
   }
+
+
+  getActiveEnrollmentId() {
+    return this.afs.collection(this.enrollDB, ref => ref.where('active', '==', true)).valueChanges();
+  }
+
+  setDocInEnrollment(collName: string, data: any, enrollId?: string) {
+    const id = this.afs.createId();
+    const timestamp = this.timestamp;
+    const docRef = this.afs.collection(this.enrollDB).doc(enrollId).collection(collName).doc(id);
+    return docRef.set({
+      ...data,
+      _id: id,
+      updatedAt: timestamp,
+      createdAt: timestamp,
+      username: this.afAuth.auth.currentUser.displayName,
+      useremail: this.afAuth.auth.currentUser.email,
+      author: this.afAuth.auth.currentUser.uid
+    }).then((res) => true);
+  }
+
+  getDocFromEnrollment(collName: string, docId: string, enrollId?: string) {
+    return this.afs.collection(this.enrollDB).doc(enrollId).collection(collName).doc(docId).valueChanges();
+  }
+
+  updateDocInEnrollment(collName: string, docId: string, data: any, enrollId?: string) {
+    const timestamp = this.timestamp;
+    const docRef = this.afs.collection(this.enrollDB).doc(enrollId).collection(collName).doc(docId);
+    return docRef.update({
+      ...data,
+      updatedAt: timestamp,
+      username: this.afAuth.auth.currentUser.displayName,
+      useremail: this.afAuth.auth.currentUser.email,
+      author: this.afAuth.auth.currentUser.uid
+    }).then((res) => true);
+  }
+  updateFileUploadInEnrollment(collName: string, docId: string, filePath: string, enrollId?: string) {
+    const timestamp = this.timestamp;
+    const docRef = this.afs.collection(this.enrollDB).doc(enrollId).collection(collName).doc(docId);
+    return docRef.update({
+      files: firestore.FieldValue.arrayUnion(filePath),
+      updatedAt: timestamp,
+      username: this.afAuth.auth.currentUser.displayName,
+      useremail: this.afAuth.auth.currentUser.email,
+      author: this.afAuth.auth.currentUser.uid
+    });
+  }
+
+  deleteDocFromEnrollment(collName: string, docId: string, enrollId?: string) {
+    const timestamp = this.timestamp;
+    const docRef = this.afs.collection(this.enrollDB).doc(enrollId).collection(collName).doc(docId);
+    return docRef.delete().then((res) => true);
+  }
+
+  getDocsFromEnrollment(collName: string, docId: string, formData?: any, enrollId?: string) {
+    if (formData) {
+      if (formData.code) {
+        return this.afs.collection(this.enrollDB).doc(enrollId).
+        collection(collName, ref => ref.where('code', '>=', formData.code)).valueChanges();
+      } else {
+        return this.afs.collection(this.enrollDB).doc(enrollId).
+        collection(collName, ref => ref.where('descr', '>=', formData.descr)).valueChanges();
+      }
+    } else { // no search critera - fetch all docs
+      return this.afs.collection(this.enrollDB).doc(enrollId).collection(collName).valueChanges();
+    }
+  }
+
 }

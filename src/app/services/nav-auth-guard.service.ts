@@ -7,7 +7,7 @@ import { CanActivate, Router } from '@angular/router';
 
 export class NavAuthGuardService implements CanActivate {
 
-  constructor (private _router: Router) { }
+  constructor(private _router: Router) { }
   async canActivate() {
       if (!window.localStorage.getItem("role")) {
         this._router.navigate(['/settings']);

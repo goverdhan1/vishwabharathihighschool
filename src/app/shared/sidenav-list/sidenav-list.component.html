@@ -49,7 +49,7 @@
       <a mat-list-item routerLink="/student">
         <mat-icon></mat-icon> <span class="nav-caption">Students</span>
         </a>
-      <a mat-list-item routerLink="/attendance-view">
+      <a mat-list-item routerLink="/student-attendance">
         <mat-icon></mat-icon> <span class="nav-caption">Attendance</span>
         </a>
       <a mat-list-item routerLink="/marks-view">
@@ -60,6 +60,27 @@
         </a>
     </div>
   </mat-list>
+
+  <mat-list #manageTeacher *ngIf="(userRole == 'admin' || userRole == 'teacher')">
+    <mat-list-item>
+      <mat-icon>star</mat-icon> <span class="nav-caption">Manange Teacher</span>
+    </mat-list-item>
+    <div style="padding-left: 10px;">
+      <a mat-list-item routerLink="/employee">
+        <mat-icon></mat-icon> <span class="nav-caption">Teachers</span>
+        </a>
+      <a mat-list-item routerLink="/employee-attendance">
+        <mat-icon></mat-icon> <span class="nav-caption">Attendance</span>
+        </a>
+
+        <a mat-list-item routerLink="/salary-view">
+          <mat-icon></mat-icon> <span class="nav-caption">Salaries</span>
+          </a>
+  
+    </div>
+  </mat-list>
+
+
   <!-- <mat-list #teacherMenu *ngIf="(userRole == 'admin' || userRole == 'teacher')">
     <mat-list-item>
       <mat-icon>star</mat-icon> <span class="nav-caption">Teacher</span>
@@ -111,7 +132,18 @@
         <a mat-list-item routerLink="/classes">
           <mat-icon></mat-icon> <span class="nav-caption">Classes</span>
           </a>
-    
+
+          <a mat-list-item routerLink="/subjects">
+            <mat-icon></mat-icon> <span class="nav-caption">Subjects</span>
+            </a>
+  
+
+          <a mat-list-item routerLink="/settings">
+            <mat-icon svgIcon="account_circle"></mat-icon>
+             <span class="nav-caption">Update Settings</span>
+            </a>
+            
+
       <!-- <a mat-list-item routerLink="/feecode">
         <mat-icon></mat-icon> <span class="nav-caption">Fee Code</span>
         </a>

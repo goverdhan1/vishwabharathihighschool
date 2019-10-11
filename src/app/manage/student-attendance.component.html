@@ -1,0 +1,87 @@
+<mat-card>
+<mat-card-actions>
+  <mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search Recent Results">
+  </mat-form-field>
+  <span class="fill-space"></span>
+    <button mat-icon-button matTooltip="Settings" [matMenuTriggerFor]="menu">
+      <mat-icon color="primary" svgIcon="settings">Settings</mat-icon>
+
+      <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="sendAttendSMS()">Send SMS</button>
+          <!-- <button mat-menu-item (click)="showTodayAttend()">Today</button> -->
+          <button mat-menu-item (click)="showLastSevenDaysAttend()">Last 7 days</button>
+          <button mat-menu-item (click)="showAllAttend()">All</button>
+        </mat-menu>
+    </button>
+ 
+</mat-card-actions>
+<div class="example-container mat-elevation-z8">
+  <mat-table [dataSource]="dataSource" matSort>
+    <ng-container matColumnDef="code">
+      <mat-header-cell class='fixed-column' *matHeaderCellDef mat-sort-header>Adimission #</mat-header-cell>
+      <mat-cell class='fixed-column' *matCellDef="let row"> {{row.code}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="fName">
+      <mat-header-cell class='fixed-column' *matHeaderCellDef mat-sort-header>First Name</mat-header-cell>
+      <mat-cell class='fixed-column' *matCellDef="let row"> {{row.fName}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="lName">
+      <mat-header-cell class='fixed-column' *matHeaderCellDef mat-sort-header>Last Name</mat-header-cell>
+      <mat-cell class='fixed-column' *matCellDef="let row"> {{row.lName}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="class">
+      <mat-header-cell class='fixed-column' *matHeaderCellDef mat-sort-header>Class</mat-header-cell>
+      <mat-cell class='fixed-column' *matCellDef="let row"> {{row.CLASS_CODE.className}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="{{disCol.label}}" *ngFor="let disCol of days; let i = index; trackBy: customTrackBy">
+      <mat-header-cell [ngClass]="{'hide-column': !disCol.show}" *matHeaderCellDef>
+        {{disCol.label | replace:'_':'/'}}
+      </mat-header-cell>
+      <mat-cell [ngClass]="{'hide-column': !disCol.show, 
+          'present': row.days[disCol.label]=='P', 
+          'absent': row.days[disCol.label]=='A', 
+          'leave': row.days[disCol.label]=='L',
+          'late': row.days[disCol.label]=='LA',
+          'holiday': row.days[disCol.label]=='H'}" *matCellDef="let row">
+
+
+        <div *ngIf="todayDate != disCol.label">
+
+          <editable class="editable">
+            <ng-template viewMode>
+              <div class="editable"> {{row.days[disCol.label]}}</div>
+            </ng-template>
+            <ng-template editMode>
+              <div *ngIf="row.days[disCol.label]=='H'">
+                {{row.days[disCol.label]}}
+              </div>
+              <div *ngIf="row.days[disCol.label]!='H'">
+                <mat-select placeholder="Status" [ngModel]="row.days[disCol.label]" class="attendence-status"
+                  (selectionChange)="submitAttendance($event, row._id, disCol.label)">
+                  <mat-option *ngFor="let CD of attendanceStatus" [value]="CD">
+                    {{ CD }}
+                  </mat-option>
+                </mat-select>
+              </div>
+            </ng-template>
+          </editable>
+
+        </div>
+        <div *ngIf="todayDate == disCol.label">
+          <mat-select placeholder="Status" [ngModel]="row.days[disCol.label]" class="attendence-status"
+            (selectionChange)="submitAttendance($event, row._id, disCol.label)">
+            <mat-option *ngFor="let CD of attendanceStatus" [value]="CD">
+              {{ CD }}
+            </mat-option>
+          </mat-select>
+        </div>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns" sticky></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="500"
+    [pageSizeOptions]="[5, 10, 25, 100, 500]"></mat-paginator>
+</div>
+</mat-card>

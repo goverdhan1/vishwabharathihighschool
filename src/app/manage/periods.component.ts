@@ -9,22 +9,26 @@ import {
   HostListener,
   HostBinding
 } from '@angular/core';
-import { moveIn, fallIn } from '../shared/router.animation';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { AttendanceService } from '../services/attendance.service';
-import { EditableComponent } from '../editable/editable.component';
+import { ClassesService } from '../services/classes.service';
+import { PeriodsService} from '../services/periods.service';
+import {FormControl} from '@angular/forms';
+
 
 @Component({
-  selector: 'app-attendance-view',
-  templateUrl: './attendance-view.component.html',
-  styleUrls: ['./attendance-view.component.css'],
-  animations: [moveIn(), fallIn()],
+  selector: 'app-periods',
+  templateUrl: './periods.component.html',
+  styleUrls: ['./periods.component.css']
 })
-export class AttendanceViewComponent implements OnInit, OnDestroy, AfterViewInit {
+export class PeriodsComponent implements OnInit, AfterViewInit, OnDestroy {
+
+  specificDay = new FormControl(new Date());
   members: any[];
   dataSource: MatTableDataSource<any>;
   myDocData;
-  data$;
+  data$: Array<any> = [];
+  dates$;
   toggleEditableField: string;
   error = false;
   errorMessage = '';
@@ -32,18 +36,20 @@ export class AttendanceViewComponent implements OnInit, OnDestroy, AfterViewInit
   private querySubscriptionSpecific;
   private querySubscription;
   private querySubscriptionList;
-  enrollId: string;
+  enrollId: any;
   enrollmentCDs$;
   days: Array<any> = [];
   todayDate;
   attendanceStatus = ['P', 'A', 'L', 'LA', 'H'];
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: false}) sort: MatSort;
-  displayedColumns: Array<any> = ['code', 'lName', 'fName', 'class'];
+  displayedColumns: Array<any> = ['code', 'period1', 'period2', 'period3', 'period4', 'period5', 'period6', 'period7'];
   editable = false;
+  availableTeachers$;
 
   constructor(
-    private attendanceService: AttendanceService,
+    private periodService: PeriodsService,
+    private classService: ClassesService,
     private ref: ChangeDetectorRef
     ) { }
 
@@ -52,16 +58,19 @@ export class AttendanceViewComponent implements OnInit, OnDestroy, AfterViewInit
     this.errorMessage = '';
     this.dataSource = new MatTableDataSource(this.members);
     this.getActiveEnrollmentId();
-    this.todayDate = new Date().toLocaleString();
-    this.todayDate = this.todayDate.split(',')[0].toString();
-    this.todayDate = this.todayDate.replace (/\//g, '_');
   }
 
-  submitAttendance(event, docId, field) {
+  getClassTeachers() {
+    this.querySubscription = this.classService.getTeachers(this.enrollId._id).subscribe(res => {
+           this.availableTeachers$ = res;
+       });
+   }
+
+  assignTeacher(event, docId, field) {
     this.dataLoading = true;
     const data = {};
     data[field] = event.value;
-    this.querySubscriptionSpecific = this.attendanceService.updateSpecificDayAttendance( this.enrollId, docId, data).then((res: any) => {
+    this.querySubscriptionSpecific = this.periodService.assignTeacher(this.enrollId._id, docId, data).then((res: any) => {
       console.log(res);
         }).catch(err => {
           if (err) {
@@ -72,7 +81,7 @@ export class AttendanceViewComponent implements OnInit, OnDestroy, AfterViewInit
         });
   }
   customTrackBy(i) { return i; }
-  showTodayAttend() {
+  showTodayPeriods() {
     for (const day of this.days) {
       if ( day.label === this.todayDate) {
         day.show = true;
@@ -121,9 +130,10 @@ export class AttendanceViewComponent implements OnInit, OnDestroy, AfterViewInit
 
   getActiveEnrollmentId() {
     this.dataLoading = true;
-    this.querySubscription = this.attendanceService.getActiveEnrollmentId().subscribe((res: any) => {
-        this.enrollId = res[0]._id;
-        this.getData(this.enrollId);
+    this.querySubscription = this.classService.getActiveEnrollmentId().subscribe((res: any) => {
+      this.enrollId = res[0];
+      this.getClassTeachers();
+      this.getData(this.enrollId._id);
         },
         (error) => {
             this.error = true;
@@ -135,33 +145,26 @@ export class AttendanceViewComponent implements OnInit, OnDestroy, AfterViewInit
         });
 }
 
+dateChanged() {
+  this.displayPeriods();
+}
+
+displayPeriods() {
+  const dateStr = (this.specificDay.value.getMonth() + 1)
+  + '_' + this.specificDay.value.getDate() + '_' + this.specificDay.value.getFullYear();
+  this.dates$ = [];
+  for (const obj of this.data$) {
+    this.dates$.push({code: obj.code, days: obj.days[dateStr]});
+  }
+  console.log(this.dates$);
+  this.dataSource = new MatTableDataSource(this.dates$);
+}
+
   getData(enrollId: string, formData?) {
     this.dataLoading = true;
-    this.querySubscriptionList = this.attendanceService.getAttendanceList(enrollId).subscribe((res: any) => {
-
-      let dates =  Object.keys(res[0].days);
-      dates = dates.filter((ele: any) => ele !== '_id');
-
-      dates.sort((a, b) => {
-        a = a.replace (/\_/g, '/');
-        b = b.replace (/\_/g, '/');
-        const dateA = new Date(a).getTime();
-        const dateB = new Date(b).getTime();
-        return dateA > dateB ? 1 : -1;
-      });
-
-      this.displayedColumns = [];
-      this.displayedColumns = ['code', 'lName', 'fName', 'class'];
-      this.days = [];
-      for (const date of dates) {
-        this.displayedColumns.push(date);
-        this.days.push({label: date, show: true});
-      }
-
-      this.dataSource = new MatTableDataSource(res);
-      this.showLastSevenDaysAttend();
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+    this.querySubscriptionList = this.classService.getClassesList(enrollId).subscribe((res: any) => {
+      this.data$ = res;
+      this.displayPeriods();
     },
     (error) => {
         this.error = true;
@@ -198,4 +201,6 @@ export class AttendanceViewComponent implements OnInit, OnDestroy, AfterViewInit
       this.querySubscriptionSpecific.unsubscribe();
     }
   }
+
+
 }

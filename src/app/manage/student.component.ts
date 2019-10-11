@@ -5,7 +5,7 @@ import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { BackendService } from '../services/backend.service';
 import { StudentService } from '../services/student.service';
-import { StringDecoder } from 'string_decoder';
+import { ClassesService } from '../services/classes.service';
 
 @Component({
     selector: 'app-student',
@@ -28,10 +28,11 @@ export class StudentComponent implements OnInit, AfterViewInit, OnDestroy {
     dataLoading = false;
     private querySubscription;
     ENROLLMENT_CODE;
+    currentEnrollment;
 
     @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
     @ViewChild(MatSort, {static: false}) sort: MatSort;
-    displayedColumns = ['code', 'fName', 'class', 'status', '_id'];
+    displayedColumns = ['code', 'fName', 'class', 'parent', 'status', '_id'];
     // feeCDs$;
     // marksCDs$;
     // attendanceCDs$;
@@ -46,13 +47,12 @@ export class StudentComponent implements OnInit, AfterViewInit, OnDestroy {
     showDocument = false;
     docUrl: Observable<string | null>;
 
-    constructor(private _backendService: BackendService, private studentService: StudentService) { }
+    constructor(private _backendService: BackendService, private classService: ClassesService, private studentService: StudentService) { }
 
     ngOnInit() {
         this.toggleField = 'resMode';
         this.dataSource = new MatTableDataSource(this.members);
         this.getActiveEnrollmentId();
-        this.getClassCDs();
         // this.getFeeCDs();
         // this.getAttendanceCDs();
         // this.getMarksCDs();
@@ -74,9 +74,14 @@ export class StudentComponent implements OnInit, AfterViewInit, OnDestroy {
 
     getActiveEnrollmentId() {
         this.dataLoading = true;
-        this.querySubscription = this.studentService.getActiveEnrollmentId().subscribe((res: any) => {
-            this.ENROLLMENT_CODE = res[0];
-            this.getData(this.ENROLLMENT_CODE._id);
+        this.querySubscription = this._backendService.getDocs('ENROLL_CD').subscribe((res: any) => {
+            res.sort((a, b) => a.orderBy - b.orderBy);
+            this.enrollmentCDs$ = res;
+            this.currentEnrollment = res.filter(item => item.orderBy === 0);
+            this.currentEnrollment = this.currentEnrollment[0];
+            this.getData(this.currentEnrollment._id);
+            this.getClassCDs();
+
         },
         (error) => {
             this.error = true;
@@ -88,24 +93,17 @@ export class StudentComponent implements OnInit, AfterViewInit, OnDestroy {
         });
     }
 
-    getEnrollmentCDs() {
-        this.dataLoading = true;
-        this.querySubscription = this._backendService.getDocs('ENROLL_CD').subscribe((res) => {
-                this.enrollmentCDs$ = res;
-            },
-            (error) => {
-                this.error = true;
-                this.errorMessage = error.message;
-                this.dataLoading = false;
-            },
-            () => {
-                this.dataLoading = false;
-            });
+    changeCurrentEnrollment(e) {
+        this.currentEnrollment = e.value;
+        this.getData(this.currentEnrollment._id);
     }
+
 
     getClassCDs() {
         this.dataLoading = true;
-        this.querySubscription = this._backendService.getDocs('CLASSES').subscribe((res) => {
+        this.querySubscription = this.classService.getClasses(this.currentEnrollment._id).subscribe((res: any) => {
+            console.log(res);
+            res.sort((a, b) => a.orderBy - b.orderBy);
             this.classCDs$ = res;
         },
             (error) => {
@@ -120,7 +118,9 @@ export class StudentComponent implements OnInit, AfterViewInit, OnDestroy {
 
     getData(enrollId, formData?) {
         this.dataLoading = true;
-        this.querySubscription = this.studentService.getStudentsList(enrollId, formData).subscribe((res) => {
+        console.log(enrollId);
+        this.querySubscription = this.studentService.getStudentsList(enrollId, formData).subscribe((res: any) => {
+            console.log(res);
             this.dataSource = new MatTableDataSource(res);
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
@@ -194,7 +194,7 @@ export class StudentComponent implements OnInit, AfterViewInit, OnDestroy {
         console.log(formData);
         this.querySubscription = this.studentService.createStudent(formData, this.attendanceDays, this.feeMonths).then(res => {
             console.log(res);
-            if(res) {
+            if (res) {
                 this.savedChanges = true;
                 this.error = false;
                 this.errorMessage = '';
@@ -270,6 +270,7 @@ export class StudentComponent implements OnInit, AfterViewInit, OnDestroy {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
     }
+
 
     applyFilter(filterValue: string) {
         filterValue = filterValue.trim(); // Remove whitespace

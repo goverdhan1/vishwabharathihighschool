@@ -1,30 +1,7 @@
-<!-- <app-header-admin pageTitle="Enrollment Code" imageUrl="business" helpType="jobpage"></app-header-admin> -->
-<mat-card [@fallIn]='state'>
+<mat-card>
   <mat-card-content>
-    <div *ngIf="(toggleField=='searchMode') else (toggleField=='addMode')? showAddMode : ((toggleField=='editMode')? showEditMode : showResMode)">
-      <!-- searchmode -->
-      <form #searchFormData="ngForm" class="example-form">
-        <mat-card-actions align="end">
-          <button type="button" matTooltip="Add New" (click)="toggle('addMode')" mat-raised-button color="primary">
-              <mat-icon color="white" svgIcon="add"></mat-icon>
-            Add New</button>
-          <span class="small-spacer"></span>
-          <button matTooltip="Show Recent Results" type="button" (click)="toggle('resMode');getData();" mat-raised-button color="primary">
-              <mat-icon color="white" svgIcon="cached"></mat-icon>
-            Show Recent Results</button>
-        </mat-card-actions>
-        <mat-form-field class="example-form">
-          <input matInput type="text" placeholder="Enrollment Code" id="code" name="code" #code="ngModel" ngModel [disabled]="descr.value !== ''">
-        </mat-form-field>
-        <br>
-        <mat-form-field class="example-form">
-          <input matInput type="text" placeholder="Enrollment Title" id="descr" name="descr" #descr="ngModel" ngModel [disabled]="code.value !== ''">
-        </mat-form-field>
-        <mat-card-actions align="end">
-        <button type="button" (click)="toggle('resMode');getData(searchFormData.value);" mat-raised-button [disabled]="(code.value == '' && descr.value == '')"
-            color="primary">Search</button>
-          </mat-card-actions>
-      </form>
+    <div
+      *ngIf="(toggleField=='searchMode') else (toggleField=='addMode')? showAddMode : ((toggleField=='editMode')? showEditMode : showResMode)">
     </div>
   </mat-card-content>
 </mat-card>
@@ -40,62 +17,65 @@
       <mat-progress-bar mode="indeterminate" *ngIf="dataLoading"></mat-progress-bar>
       <mat-error *ngIf="error">Error: {{ errorMessage }}</mat-error>
       <mat-card-actions align="end">
-        <button matTooltip="Search" type="button" mat-raised-button color="primary" (click)="toggle('searchMode')">
-          <mat-icon svgIcon="search" color="white"></mat-icon>
-          Search</button>  
-        <span class="small-spacer"></span>
-        <button matTooltip="Show Recent Results" mat-raised-button type="button" color="primary" (click)="toggle('resMode');getData();">
-            <mat-icon svgIcon="cached" color="white"></mat-icon>
-          Show Recent Results</button> 
-
+        <button matTooltip="Show Recent Results" mat-raised-button type="button" color="primary"
+          (click)="toggle('resMode');getData();">
+          <mat-icon svgIcon="cached" color="white"></mat-icon>
+          Show Recent Results
+        </button>
       </mat-card-actions>
+      <input type="hidden" name="orderBy" id="orderBy" [ngModel]="orderBy">
+      <br>
+
+
       <mat-form-field class="example-form">
-          <input matInput placeholder="Enrollment Code" name="code" id="code" ngModel required minlength="1">
-          <mat-hint align="end">eg O1S2019G1ASUB1</mat-hint>
-        </mat-form-field>
-        <br>
-        <mat-form-field class="example-form">
-          <input matInput placeholder="Enrollment Title" name="descr" id="descr" ngModel required minlength="1">
-          <mat-hint align="end">eg Org1Sess1Grade1ASubj1</mat-hint>
-        </mat-form-field>
-        <br>
+        <input matInput placeholder="Enrollment Code" name="code" id="code" ngModel required minlength="1">
+        <mat-hint align="end">eg O1S2019G1ASUB1</mat-hint>
+      </mat-form-field>
+      <br>
+      <mat-form-field class="example-form">
+        <input matInput placeholder="Enrollment Title" name="descr" id="descr" ngModel required minlength="1">
+        <mat-hint align="end">eg Org1Sess1Grade1ASubj1</mat-hint>
+      </mat-form-field>
+      <br>
 
-        <mat-form-field>
-            <input matInput [matDatepicker]="schoolStartDate" placeholder="School Start Date" ngModel name="schoolStartDate" id="schoolStartDate" required readonly>
-            <mat-datepicker-toggle matSuffix [for]="schoolStartDate"></mat-datepicker-toggle>
-            <mat-datepicker #schoolStartDate></mat-datepicker>
-        </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-              <input matInput [matDatepicker]="schoolEndDate" placeholder="School End Date" ngModel name="schoolEndDate" id="schoolEndDate" required readonly>
-              <mat-datepicker-toggle matSuffix [for]="schoolEndDate"></mat-datepicker-toggle>
-              <mat-datepicker #schoolEndDate></mat-datepicker>
-          </mat-form-field>
-  
+      <mat-form-field class="example-form">
+        <mat-select placeholder="Status" (selectionChange)="setOrderBy($event)" name="status" id="status" ngModel
+          required>
+          <!-- <mat-option value="past">
+                Past
+              </mat-option> -->
+          <mat-option *ngIf="!currentYear" value="present">
+            Present
+          </mat-option>
+          <mat-option value="future">
+            Future
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <br>
 
-        <!-- <mat-form-field class="example-form">
-          <textarea  matInput placeholder="Organization Name" name="org" id="org" ngModel></textarea>
-          <mat-hint align="end">eg Organization ABC</mat-hint>
-        </mat-form-field>
-        <br>
-        <mat-form-field class="example-form">
-          <textarea  matInput placeholder="Session 2019-2020" name="session" id="session" ngModel></textarea>
-          <mat-hint align="end">eg 2020-2021</mat-hint>
-        </mat-form-field>
-        <br> -->
-        <!-- <mat-form-field class="example-form">
-          <textarea  matInput placeholder="Grade" name="grade" id="grade" ngModel></textarea>
-          <mat-hint align="end">eg Grade 1A</mat-hint>
-        </mat-form-field>
-        <br> -->
-        <mat-form-field class="example-form">
-          <textarea  matInput placeholder="Comments" name="comments" id="comments" ngModel></textarea>
-        </mat-form-field>
-        <mat-card-actions align="end">
-          <button type="submit" mat-raised-button [disabled]="!addDataForm.valid" color="primary">Add</button>
-          <button type="reset" (click)="this.addDataForm.reset();" mat-raised-button [disabled]="!addDataForm.valid" color="primary">Clear</button>
-          </mat-card-actions>
-  
+      <mat-form-field>
+        <input matInput [matDatepicker]="schoolStartDate" placeholder="School Start Date" ngModel name="schoolStartDate"
+          id="schoolStartDate" required readonly>
+        <mat-datepicker-toggle matSuffix [for]="schoolStartDate"></mat-datepicker-toggle>
+        <mat-datepicker #schoolStartDate></mat-datepicker>
+      </mat-form-field>
+      <span class="small-spacer"></span>
+      <mat-form-field>
+        <input matInput [matDatepicker]="schoolEndDate" placeholder="School End Date" ngModel name="schoolEndDate"
+          id="schoolEndDate" required readonly>
+        <mat-datepicker-toggle matSuffix [for]="schoolEndDate"></mat-datepicker-toggle>
+        <mat-datepicker #schoolEndDate></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field class="example-form">
+        <textarea matInput placeholder="Comments" name="comments" id="comments" ngModel></textarea>
+      </mat-form-field>
+      <mat-card-actions align="end">
+        <button type="submit" mat-raised-button [disabled]="!addDataForm.valid" color="primary">Add</button>
+        <button type="reset" (click)="this.addDataForm.reset();" mat-raised-button [disabled]="!addDataForm.valid"
+          color="primary">Clear</button>
+      </mat-card-actions>
+
     </div>
   </form>
 </ng-template>
@@ -103,81 +83,80 @@
 <ng-template #showEditMode>
   <form #editDataForm="ngForm" (ngSubmit)="updateData(editDataForm.value);" novalidate>
     <input type="hidden" name="_id" id="_id" [ngModel]="(data$ | async)?._id" required>
-    <mat-error *ngIf="savedChanges">
+    <!-- <mat-error *ngIf="savedChanges">
       Data is saved.
       <label class="small-spacer"></label>
       <mat-icon (click)="this.editDataForm.reset();savedChanges=false;toggle('searchMode');" svgIcon="clear"></mat-icon>
-    </mat-error>
+    </mat-error> -->
     <div *ngIf="!savedChanges">
       <mat-progress-bar mode="indeterminate" *ngIf="dataLoading"></mat-progress-bar>
       <mat-error *ngIf="error">Error: {{ errorMessage }}</mat-error>
       <mat-card-actions align="end">
-        <button matTooltip="Search" type="button" color="primary" mat-raised-button (click)="toggle('searchMode')">
-            <mat-icon color="white" svgIcon="search"></mat-icon>
-          Search</button> 
-        <span class="small-spacer"></span>
-        <button type="button" matTooltip="Shwo Recent Results" mat-raised-button color="primary" (click)="toggle('resMode');getData();">
-            <mat-icon color="white" svgIcon="cached"></mat-icon>
-          Show Recent Results</button>
-
+        <button type="button" matTooltip="Shwo Recent Results" mat-raised-button color="primary"
+          (click)="toggle('resMode');getData();">
+          <mat-icon color="white" svgIcon="cached"></mat-icon>
+          Show Recent Results
+        </button>
       </mat-card-actions>
       <mat-form-field class="example-form">
-          <input matInput placeholder="Enrollment Code" name="code" id="code" [ngModel]="(data$ | async)?.code" required minlength="1">
-          <mat-hint align="end">eg O1S2019G1ASUB1</mat-hint>
-        </mat-form-field>
-        <br>
-        <mat-form-field class="example-form">
-          <input matInput placeholder="Enrollment Title" name="descr" id="descr" [ngModel]="(data$ | async)?.descr" required minlength="1">
-          <mat-hint align="end">eg Org1Sess1Grade1ASubj1</mat-hint>
-        </mat-form-field>
-        <br>
-        <!-- {{(data$ | async)?.schoolStartDate.seconds * 1000 | date:'MM/dd/yyyy'}} -->
-        <mat-form-field>
-            <input matInput [matDatepicker]="schoolStartDate" readonly placeholder="School Start Date" [ngModel]="startDate" name="schoolStartDate" id="schoolStartDate" required>
-            <mat-datepicker-toggle matSuffix [for]="schoolStartDate"></mat-datepicker-toggle>
-            <mat-datepicker #schoolStartDate></mat-datepicker>
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-              <input matInput [matDatepicker]="schoolEndDate" readonly placeholder="School End Date" [ngModel]="endDate" name="schoolEndDate" id="schoolEndDate" required>
-              <mat-datepicker-toggle matSuffix [for]="schoolEndDate"></mat-datepicker-toggle>
-              <mat-datepicker #schoolEndDate></mat-datepicker>
-            </mat-form-field>
-        <!-- <mat-form-field class="example-form">
-          <textarea  matInput placeholder="Organization Name" name="org" id="org" [ngModel]="(data$ | async)?.org"></textarea>
-          <mat-hint align="end">eg Organization ABC</mat-hint>
-        </mat-form-field>
-        <br>
-        <mat-form-field class="example-form">
-          <textarea  matInput placeholder="Session 2019-2020" name="session" id="session" [ngModel]="(data$ | async)?.session"></textarea>
-          <mat-hint align="end">eg 2020-2021</mat-hint>
-        </mat-form-field> -->
-        <br>
-        <!-- <mat-form-field class="example-form">
-          <textarea  matInput placeholder="Grade" name="grade" id="grade" [ngModel]="(data$ | async)?.grade"></textarea>
-          <mat-hint align="end">eg Grade 1A</mat-hint>
-        </mat-form-field>
-        <br> -->
-        <mat-form-field class="example-form">
-          <textarea  matInput placeholder="Comments" name="comments" id="comments" [ngModel]="(data$ | async)?.comments"></textarea>
-        </mat-form-field>
-        <mat-card-actions align="end">
-        <button type="submit" mat-raised-button [disabled]="!this.editDataForm.valid || this.editDataForm.pristine" color="primary">Update</button>
-          </mat-card-actions>
+        <input matInput placeholder="Enrollment Code" name="code" id="code" [ngModel]="(data$ | async)?.code" required
+          minlength="1">
+        <mat-hint align="end">eg O1S2019G1ASUB1</mat-hint>
+      </mat-form-field>
+      <br>
+      <mat-form-field class="example-form">
+        <input matInput placeholder="Enrollment Title" name="descr" id="descr" [ngModel]="(data$ | async)?.descr"
+          required minlength="1">
+        <mat-hint align="end">eg Org1Sess1Grade1ASubj1</mat-hint>
+      </mat-form-field>
+      <br>
+
+      <!-- <mat-form-field class="example-form">
+        <mat-select placeholder="Status" name="status" id="status" [ngModel]="(data$ | async)?.status" required>
+          <mat-option value="present">
+            Present
+          </mat-option>
+          <mat-option value="future">
+            Future
+          </mat-option>
+
+        </mat-select>
+      </mat-form-field>
+      <br> -->
+
+      <mat-form-field>
+        <input matInput [matDatepicker]="schoolStartDate" readonly placeholder="School Start Date" [ngModel]="startDate"
+          name="schoolStartDate" id="schoolStartDate" required>
+        <mat-datepicker-toggle matSuffix [for]="schoolStartDate"></mat-datepicker-toggle>
+        <mat-datepicker #schoolStartDate></mat-datepicker>
+      </mat-form-field>
+      <span class="small-spacer"></span>
+      <mat-form-field>
+        <input matInput [matDatepicker]="schoolEndDate" readonly placeholder="School End Date" [ngModel]="endDate"
+          name="schoolEndDate" id="schoolEndDate" required>
+        <mat-datepicker-toggle matSuffix [for]="schoolEndDate"></mat-datepicker-toggle>
+        <mat-datepicker #schoolEndDate></mat-datepicker>
+      </mat-form-field>
+      <br>
+      <mat-form-field class="example-form">
+        <textarea matInput placeholder="Comments" name="comments" id="comments"
+          [ngModel]="(data$ | async)?.comments"></textarea>
+      </mat-form-field>
+      <mat-card-actions align="end">
+        <button type="submit" mat-raised-button [disabled]="!this.editDataForm.valid || this.editDataForm.pristine"
+          color="primary">Update</button>
+      </mat-card-actions>
     </div>
   </form>
 </ng-template>
 <!-- Results mode -->
 <ng-template #showResMode>
-  <mat-card-actions align="end">
+  <mat-card-actions *ngIf="orderByMax < 1" align="end">
     <button matTooltip="Add New" color="primary" mat-raised-button type="button" (click)="toggle('addMode')">
-        <mat-icon color="white" svgIcon="add"></mat-icon>
-        Add New</button>  
-    <span class="small-spacer"></span>
-    <button matTooltip="Search All" color="primary" mat-raised-button type="button" (click)="toggle('searchMode')">
-        <mat-icon color="white" svgIcon="search"></mat-icon>
-        Search All</button>  
-      </mat-card-actions>
+      <mat-icon color="white" svgIcon="add"></mat-icon>
+      Add New
+    </button>
+  </mat-card-actions>
   <div class="example-header">
     <mat-form-field>
       <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search Recent Results">
@@ -185,14 +164,62 @@
   </div>
   <div class="example-container mat-elevation-z8">
     <mat-table [dataSource]="dataSource" matSort>
+
+      <ng-container matColumnDef="orderBy">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.orderBy}} </mat-cell>
+      </ng-container>
+
       <ng-container matColumnDef="code">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Enrollment Code</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef>Enrollment Code</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.code}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="descr">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Title</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.descr}} </mat-cell>
+      </ng-container>
+
+
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <div *ngIf="row.orderBy < -1">{{row.status}}</div>
+          <div *ngIf="row.orderBy == -1">
+            <mat-select name="status" id="status" [ngModel]="row.status">
+              <mat-option value="past">
+                Past
+              </mat-option>
+              <mat-option value="present">
+                Present
+              </mat-option>
+            </mat-select>
+          </div>
+
+          <div *ngIf="row.orderBy == 0">
+              <mat-select name="status" id="status" [ngModel]="row.status">
+                <mat-option value="present">
+                  Present
+                </mat-option>
+                <mat-option value="past">
+                  Past
+                </mat-option>
+              </mat-select>
+            </div>
+
+            <div *ngIf="row.orderBy == 1">
+                <mat-select name="status" id="status" [ngModel]="row.status">
+                  <mat-option value="present">
+                    Present
+                  </mat-option>
+                  <mat-option value="future">
+                    Future
+                  </mat-option>
+                </mat-select>
+              </div>
+  
+
+        </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="_id">
@@ -203,17 +230,18 @@
               <mat-icon color="primary" svgIcon="edit"></mat-icon>
             </button>
           </span>
-          <span matTooltip="Delete">
+          <!-- <span matTooltip="Delete">
             <button mat-icon-button (click)="deleteDoc(row._id)">
               <mat-icon color="primary" svgIcon="delete"></mat-icon>
             </button>
-          </span>
+          </span> -->
         </mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
     </mat-table>
-    <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="5"
+      [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
   </div>
 </ng-template>

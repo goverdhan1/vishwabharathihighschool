@@ -1,7 +1,6 @@
-<!-- <app-header-admin pageTitle="Notifications" imageUrl="sms" helpType="settingspage"></app-header-admin> -->
-<mat-card [@fallIn]='state'>
+<mat-card>
   <mat-card-content>
-    <mat-error *ngIf="savedChanges">
+    <!-- <mat-error *ngIf="savedChanges">
       Data is saved.
       <label class="small-spacer"></label>
       <mat-icon (click)="this.editDataForm.reset();savedChanges=false;toggle('searchMode');" svgIcon="clear"></mat-icon>
@@ -20,6 +19,53 @@
     <div *ngIf="toggle">
       {{ this.data }}
       <mat-icon (click)="toggle=!toggle">close</mat-icon>
-    </div>
-  </mat-card-content>
+    </div> -->
+
+    <mat-grid-list cols="10" rowHeight="200px">
+        <mat-grid-tile colspan="2">
+          <div class='titles'>Classes:</div>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="8">
+          <mat-selection-list>
+              <mat-list-option style="display: inline-block; width: 20%;">
+                  <mat-checkbox placeholder="Nursery" id="nursery" name="nursery" ngModel>Nursery</mat-checkbox>
+                </mat-list-option>
+                <mat-list-item>
+                  <mat-checkbox placeholder="Teachers / Staff" id="teachersStaff" name="teachersStaff" ngModel>Teachers / Staff
+                  </mat-checkbox>
+                </mat-list-item>
+          </mat-selection-list>
+      
+          </mat-grid-tile>
+    </mat-grid-list>
+
+
+    <mat-grid-list cols="10" rowHeight="70px">
+      <mat-grid-tile colspan="2">
+        <div class='titles'>
+        Additional Numbers: 
+        </div>
+      </mat-grid-tile>
+      <mat-grid-tile  colspan="8">
+          <mat-form-field class="add-numbers-box">
+              <input matInput placeholder="Enter comma seperated Additional Numbers, ex: xxxxxxxxxx, xxxxxxxxxx" type="text" id="additionalNumbers" name="additionalNumber" ngModel />
+            </mat-form-field>
+      </mat-grid-tile>
+    </mat-grid-list>
+    <mat-grid-list cols="10" align="top" rowHeight="100px">
+        <mat-grid-tile colspan="2">
+            <div class='titles'>
+          Message: 
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="8">
+          <mat-form-field class="input-box">
+          <textarea matInput placeholder="Enter Message" id="message" name="message" required ngModel></textarea>
+        </mat-form-field>
+        </mat-grid-tile>
+      </mat-grid-list>
+      <mat-card-actions align="end">
+        <button type="button" mat-raised-button color="primary">Send SMS</button> 
+      </mat-card-actions>
+    </mat-card-content>
 </mat-card>

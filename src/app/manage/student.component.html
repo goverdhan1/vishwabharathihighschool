@@ -1,1144 +1,1035 @@
-<!-- <app-header-admin pageTitle="Student" imageUrl="star" helpType="settingspage"></app-header-admin> -->
-<mat-card [@fallIn]='state'>
-  <mat-card-content>
-    <div
-      *ngIf="(toggleField=='searchMode') else (toggleField=='addMode')? showAddMode : ((toggleField=='editMode')? showEditMode : showResMode)">
-      <!-- searchmode -->
-      <form #searchFormData="ngForm" class="example-form">
-        <mat-card-actions align="end">
-          <button color="primary" (click)="toggle('addMode')" matTooltip="Add New" type="button" mat-raised-button>
+<mat-tab-group class="tab-group">
+
+  <mat-tab label="Student Details">
+
+      <mat-card>
+        <mat-card-content>
+          <div
+            *ngIf="(toggleField=='searchMode') else (toggleField=='addMode')? showAddMode : ((toggleField=='editMode')? showEditMode : showResMode)">
+            <!-- searchmode -->
+            <form #searchFormData="ngForm" class="example-form">
+              <mat-card-actions align="end">
+                <button color="primary" (click)="toggle('addMode')" matTooltip="Add New" type="button" mat-raised-button>
+                  <mat-icon color="white" svgIcon="add"></mat-icon> Add New
+                </button>
+                <span class="small-spacer"></span>
+                <button matTooltip="Show Recent Results" color="primary" (click)="toggle('resMode');" type="button"
+                  mat-raised-button>
+                  <mat-icon color="white" svgIcon="cached"></mat-icon> Show Recent Results
+                </button>         
+              </mat-card-actions>
+              <mat-form-field class="example-form">
+                <input matInput type="text" placeholder="Student ID" id="code" name="code" #code="ngModel" ngModel
+                  [disabled]="fName.value !== ''">
+              </mat-form-field>
+              <br>
+              <mat-form-field class="example-form">
+                <input matInput type="text" placeholder="Student First Name" id="fName" name="fName" #fName="ngModel" ngModel
+                  [disabled]="code.value !== ''">
+              </mat-form-field>
+              <mat-card-actions align="end">
+                <button type="button" (click)="toggle('resMode');getData(searchFormData.value);" mat-raised-button
+                  [disabled]="(code.value == '' && descr.value == '')" color="primary">Search</button>
+              </mat-card-actions>
+            </form>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      <!-- addMode -->
+      <ng-template #showAddMode>
+        <form #addDataForm="ngForm" (ngSubmit)="setData(addDataForm.value);" novalidate>
+          <mat-error *ngIf="savedChanges">
+            Data is saved.
+            <label class="small-spacer"></label>
+            <mat-icon (click)="this.addDataForm.reset();savedChanges=false;toggle('searchMode');" svgIcon="clear"></mat-icon>
+          </mat-error>
+          <div *ngIf="!savedChanges">
+            <mat-progress-bar mode="indeterminate" *ngIf="dataLoading"></mat-progress-bar>
+            <mat-error *ngIf="error">Error: {{ errorMessage }}</mat-error>
+            <mat-card-actions align="end">
+              <button matTooltip="Search" color="primary" (click)="toggle('searchMode')" type="button" mat-raised-button>
+                <mat-icon svgIcon="search"></mat-icon> Search
+              </button>
+              <span class="small-spacer"></span>
+              <button type="button" color="primary" (click)="toggle('resMode');getData();" mat-raised-button
+                matTooltip="Show Recent Results">
+                <mat-icon color="white" svgIcon="cached"></mat-icon> Show Recent Results
+              </button>
+      
+      
+            </mat-card-actions>
+            <mat-card>
+              <mat-card-title>
+                Student Details (*)
+              </mat-card-title>
+              <mat-card-content>
+                <div ngModelGroup="studentDetails">
+                <input type="hidden" [ngModel]="ENROLLMENT_CODE._id" name="ENROLLMENT_CODE" id="ENROLLMENT_CODE" />
+                <input type="hidden" [ngModel]="'Active'"  name="status" id="status" />
+                <mat-form-field>
+                  <input matInput placeholder="Student ID" name="code" id="code" ngModel required minlength="2">
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput placeholder="Student Passcode" name="SKEY" id="SKEY" ngModel required minlength="2">
+                </mat-form-field>
+                <br>
+                <mat-form-field>
+                  <input matInput placeholder="First name" name="fName" id="fName" ngModel required minlength="4">
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput placeholder="Middle name" name="mName" id="mName" ngModel minlength="4">
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput placeholder="Last name" name="lName" id="lName" ngModel required minlength="4">
+                </mat-form-field>
+                <br>
+                <fieldset class="gender">
+               Gender* :
+                <mat-radio-group id="gender" name="gender" ngModel required>
+                  <mat-radio-button value="male"> Male </mat-radio-button>
+                  <span class="small-spacer"></span>
+                  <mat-radio-button value="female"> Female </mat-radio-button>
+                </mat-radio-group>
+                </fieldset>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput [matDatepicker]="DOB" readonly placeholder="Date of Birth" ngModel name="DOB" id="DOB"
+                    required>
+                  <mat-datepicker-toggle matSuffix [for]="DOB"></mat-datepicker-toggle>
+                  <mat-datepicker #DOB></mat-datepicker>
+                </mat-form-field>
+                <span class="small-spacer"></span>      
+                <mat-form-field>
+                    <input matInput placeholder="Aadhar Card Number (Student) " name="studentAadharCardNumber" id="studentAadharCardNumber" ngModel
+                      minlength="12" maxlength="12">
+                  </mat-form-field>
+                <br />
+                <mat-form-field>
+                  <mat-select placeholder="Class into which admission is sought" name="CLASS_CODE" id="CLASS_CODE" ngModel required>
+                    <mat-option *ngFor="let code of classCDs$" [value]="{_id:code._id, className:code.code}">
+                      {{ code.code }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                </div>
+              </mat-card-content>
+            </mat-card>
+            <br>
+            <mat-card>
+              <mat-card-title>
+                Parent Details *
+              </mat-card-title>
+              <mat-card-content>
+                  <div ngModelGroup="parentDetails">
+                <mat-form-field>
+                  <input matInput placeholder="Father's name" name="fatherName" id="fatherName" ngModel minlength="4">
+                </mat-form-field>
+                <span class="small-spacer"></span>
+      
+                <mat-form-field>
+                    <input matInput type="tel" placeholder="Father Contact Number" name="fatherContactNumber" id="fatherContactNumber" ngModel minlength="10">
+                  </mat-form-field>
+                  <span class="small-spacer"></span>
+      
+                  <mat-form-field>
+                      <input matInput type="email" placeholder="Father Email Address" name="fatherEmailAddress" id="fatherEmailAddress" ngModel minlength="4">
+                    </mat-form-field>  
+      
+                    <span class="small-spacer"></span>
+      
+                    <mat-form-field>
+                        <input matInput placeholder="Aadhar Card Number (Father) " name="fatherAadharCardNumber" id="fatherAadharCardNumber" ngModel
+                          minlength="12" maxlength="12">
+                      </mat-form-field>
+      
+                    <br>
+      
+                <mat-form-field>
+                  <input matInput placeholder="Mother's name" name="motherName" id="motherName" ngModel minlength="4">
+                </mat-form-field>
+                <span class="small-spacer"></span>
+      
+                <mat-form-field>
+                    <input matInput type="tel" placeholder="Mother Contact Number" name="motherContactNumber" id="motherContactNumber" ngModel minlength="10">
+                  </mat-form-field>
+                  <span class="small-spacer"></span>
+      
+                  <mat-form-field>
+                      <input matInput type="email" placeholder="Mother Email Address" name="motherEmailAddress" id="motherEmailAddress" ngModel minlength="4">
+                    </mat-form-field>  
+                    <span class="small-spacer"></span>
+      
+                    <mat-form-field>
+                        <input matInput placeholder="Aadhar Card Number (Mother) " name="motherAadharCardNumber" id="motherAadharCardNumber" ngModel
+                          minlength="12" maxlength="12">
+                      </mat-form-field>
+      
+      
+                <br>
+                <mat-form-field>
+                  <input matInput placeholder="Legal Guardian's name" name="guardianName" id="guardianName" ngModel
+                    minlength="4">
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput [matDatepicker]="GDOB" readonly placeholder="Guardian Date of Birth" name="GDOB" id="GDOB"
+                    ngModel>
+                  <mat-datepicker-toggle matSuffix [for]="GDOB"></mat-datepicker-toggle>
+                  <mat-datepicker #GDOB></mat-datepicker>
+                </mat-form-field>
+                <span class="small-spacer"></span>
+      
+                <mat-form-field>
+                    <input matInput type="tel" placeholder="Guardian Contact Number" name="guardianContactNumber" id="guardianContactNumber" ngModel minlength="10">
+                  </mat-form-field>
+                  <span class="small-spacer"></span>
+      
+                  <mat-form-field>
+                      <input matInput type="email" placeholder="Guardian Email Address" name="guardianEmailAddress" id="guardianEmailAddress" ngModel minlength="4">
+                    </mat-form-field>  
+                    <span class="small-spacer"></span>
+      
+                    <mat-form-field>
+                        <input matInput placeholder="Aadhar Card Number (Guardian) " name="guardianAadharCardNumber" id="motherAadharCardNumber" ngModel
+                          minlength="12" maxlength="12">
+                      </mat-form-field>
+      
+      
+                <br>
+                <mat-form-field>
+                  <input matInput placeholder="Religion" name="religion" id="religion" ngModel minlength="4">
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <mat-select placeholder="Caste" name="caste" id="caste" ngModel>
+                    <mat-option value="S.C.">
+                      S.C.
+                    </mat-option>
+                    <mat-option value="S.T.">
+                      S.T.
+                    </mat-option>
+                    <mat-option value="B.C.">
+                      B.C.
+                    </mat-option>
+                    <mat-option value="Other Sub Caste">
+                      Other Sub Caste
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <br>
+                <mat-form-field>
+                  <input matInput placeholder="Ration Card Number" name="radionCardNumber" id="radionCardNumber" ngModel
+                    minlength="4">
+                </mat-form-field>
+                </div>
+              </mat-card-content>
+            </mat-card>
+            <br>
+            <mat-card>
+              <mat-card-title>
+                Contact Details
+              </mat-card-title>
+              <br>
+              <mat-card-content>
+                <mat-label>
+                  Present Address:
+                </mat-label>
+                <br>
+                <div ngModelGroup="contactDetails">
+                <mat-form-field>
+                  <input matInput placeholder="House Number" name="houseNumber" id="houseNumber" ngModel minlength="4">
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput placeholder="Street Number" name="streetNumber" id="streetNumber" ngModel minlength="4">
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput placeholder="Village" name="village" id="village" ngModel>
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput placeholder="Mandal" name="mandal" id="mandal" ngModel>
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput placeholder="District" name="district" id="district" ngModel>
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput placeholder="Pin Code" name="pinCode" id="pinCode" ngModel>
+                </mat-form-field>
+      
+                <br>
+                <mat-label>
+                  Permanent Address:
+                </mat-label>
+                <br>
+      
+                <mat-form-field>
+                  <input matInput placeholder="House Number" name="houseNumber" id="houseNumber" ngModel minlength="4">
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput placeholder="Street Number" name="streetNumber" id="streetNumber" ngModel minlength="4">
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput placeholder="Village" name="village" id="village" ngModel>
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput placeholder="Mandal" name="mandal" id="mandal" ngModel>
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput placeholder="District" name="district" id="district" ngModel>
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput placeholder="Pin Code" name="pinCode" id="pinCode" ngModel>
+                </mat-form-field>
+              </div>
+              </mat-card-content>
+            </mat-card>
+            <br>
+            <mat-card>
+              <mat-card-title>
+                Qualifications
+              </mat-card-title>
+              <mat-card-content>
+                <div ngModelGroup="qualifications">
+                <mat-label>
+                  Details of School/Educational Institutions, student studied in the previous years:
+                </mat-label>
+                <!-- <mat-table>
+                  <ng-container>
+                    <mat-header-cell mat-sort-header>School Name</mat-header-cell>
+                    <mat-cell>
+                      <mat-form-field>
+                        <input matInput placeholder="School Name" name="schoolName" id="schoolName" ngModel minlength="4">
+                      </mat-form-field>
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container>
+                    <mat-header-cell mat-sort-header>Class</mat-header-cell>
+                    <mat-cell>
+                      <mat-form-field>
+                        <input matInput placeholder="Class" name="class" id="class" ngModel minlength="4">
+                      </mat-form-field>
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container>
+                    <mat-header-cell mat-sort-header>Year</mat-header-cell>
+                    <mat-cell>
+                      <mat-form-field>
+                        <input matInput placeholder="Year" name="year" id="year" ngModel minlength="4">
+                      </mat-form-field>
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container>
+                    <mat-header-cell mat-sort-header>Result</mat-header-cell>
+                    <mat-cell>
+                      <mat-form-field>
+                        <input matInput placeholder="Result" name="result" id="result" ngModel minlength="4">
+                      </mat-form-field>
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container>
+                    <mat-header-cell mat-sort-header>Reason to Leave</mat-header-cell>
+                    <mat-cell>
+                      <mat-form-field>
+                        <input matInput placeholder="Reason to leave" name="reasonToLeave" id="reasonToLeave" ngModel
+                          minlength="4">
+                      </mat-form-field>
+                    </mat-cell>
+                  </ng-container>
+                </mat-table> -->
+                <br>
+                <mat-form-field>
+                    <input matInput placeholder="Record Sheet / Transfer Certificate Number" name="transferCertificateNumber" id="transferCertificateNumber" ngModel minlength="4">
+                  </mat-form-field>
+                </div>
+              </mat-card-content>
+            </mat-card>
+            <br>
+            <mat-card>
+              <mat-card-title>
+                Physical Status
+              </mat-card-title>
+              <mat-card-content>
+                <div ngModelGroup="physicalStatus">
+                <mat-label>
+                  In case if the student is suffering from any of the below problems: 
+                </mat-label>
+                <br>        <br>
+       
+                  <mat-checkbox id="listenProblem" name="listenProblem">Listen Problem</mat-checkbox>
+                  <span class="small-spacer"></span>
+                  <mat-checkbox id="seeingProblem" name="seeingProblem">Seeing Problem</mat-checkbox>
+                  <span class="small-spacer"></span>
+                  <mat-checkbox id="mentalProblem" name="mentalProblem">Mental Problem</mat-checkbox>
+                  <span class="small-spacer"></span>
+                  <mat-checkbox id="skinProblem" name="skinProblem">Skin Problem</mat-checkbox>
+                  <br>
+                <mat-form-field>
+                  <input matInput placeholder="Other Problem" name="otherProblem" id="otherProblem" ngModel
+                    minlength="4">
+                </mat-form-field>
+                <br>
+       
+                <mat-label>
+                    In Case, if any student requires the below instruments:
+                          </mat-label>
+                    <br>        <br>
+       
+                    <mat-checkbox id="listenMachine" name="listenMachine">Listen Machine</mat-checkbox>
+                    <span class="small-spacer"></span>
+                    <mat-checkbox id="eyeSpects" name="eyeSpects">Eye Spects</mat-checkbox>
+                    <span class="small-spacer"></span>
+                    <mat-checkbox id="wheelCycle" name="wheelCycle">3 WheelCycle</mat-checkbox>
+                    <span class="small-spacer"></span>
+                    <mat-checkbox id="wheelChair" name="wheelChair">Wheel Chair</mat-checkbox>
+                    <span class="small-spacer"></span>
+                    <mat-checkbox id="chankaSticks" name="chankaSticks">Chanka Sticks</mat-checkbox>
+                    <span class="small-spacer"></span>
+                    <mat-checkbox id="kaliVars" name="kaliVars">Kali Vars</mat-checkbox>
+                    <span class="small-spacer"></span>
+                    <mat-checkbox id="bailyKit" name="bailyKit">Baily Kit</mat-checkbox>
+                    <span class="small-spacer"></span>
+                    <mat-checkbox id="maginifiedLense" name="maginifiedLense">Maginified Lense</mat-checkbox>
+      
+                    <br>
+                  <mat-form-field>
+                    <input matInput placeholder="Other Items" name="otherItems" id="otherItems" ngModel
+                      minlength="4">
+                  </mat-form-field>
+        
+                </div>
+              </mat-card-content>
+            </mat-card>
+            <br>
+         
+            <mat-card-actions align="end">
+              <button type="submit" mat-raised-button [disabled]="!addDataForm.valid" color="primary">Add</button>
+              <button type="reset" (click)="this.addDataForm.reset();" mat-raised-button [disabled]="!addDataForm.valid"
+                color="primary">Clear</button>
+            </mat-card-actions>
+          </div>
+        </form>
+      </ng-template>
+      <!-- edit mode -->
+      <ng-template #showEditMode>
+        <form #editDataForm="ngForm" (ngSubmit)="updateData(editDataForm.value);" novalidate>
+          <input type="hidden" name="_id" id="_id" [ngModel]="(data$ | async)?._id" required>
+          <mat-error *ngIf="savedChanges">
+            Data is saved.
+            <label class="small-spacer"></label>
+            <mat-icon (click)="this.editDataForm.reset();savedChanges=false;toggle('searchMode');" svgIcon="clear"></mat-icon>
+          </mat-error>
+          <div *ngIf="!savedChanges">
+            <mat-progress-bar mode="indeterminate" *ngIf="dataLoading"></mat-progress-bar>
+            <mat-error *ngIf="error">Error: {{ errorMessage }}</mat-error>
+            <mat-card-actions align="end">
+              <button matTooltip="Search" type="button" mat-raised-button color="primary" (click)="toggle('searchMode')">
+                <mat-icon color="white" svgIcon="search"></mat-icon> Search
+              </button>
+              <span class="small-spacer"></span>
+              <button matTooltip="Show Recent Results" type="button" mat-raised-button color="primary"
+                (click)="toggle('resMode');getData();">
+                <mat-icon color="white" svgIcon="cached"></mat-icon> Show Recent Results
+              </button>
+      
+            </mat-card-actions>
+      
+      
+      
+            <mat-card>
+              <mat-card-title>
+                Student Details (*)
+              </mat-card-title>
+              <mat-card-content>
+                <div ngModelGroup="studentDetails">
+                <!-- <mat-form-field>
+                  <input matInput placeholder="Student ID" name="code" id="code" [ngModel]="(data$ | async)?.code" minlength="2">
+                </mat-form-field>
+                <br> -->
+                <!-- <mat-form-field>
+                  <input matInput placeholder="Student Passcode" name="SKEY" id="SKEY" [ngModel]="(data$ | async)?.SKEY" required minlength="2">
+                </mat-form-field>
+                <br> -->
+                <mat-form-field>
+                  <input matInput placeholder="First name" name="fName" id="fName" [ngModel]="(data$ | async)?.fname" required minlength="4">
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput placeholder="Middle name" name="mName" id="mName" [ngModel]="(data$ | async)?.mName" minlength="4">
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput placeholder="Last name" name="lName" id="lName" [ngModel]="(data$ | async)?.lName" required minlength="4">
+                </mat-form-field>
+                <br><br>
+                <fieldset class="gender">
+                Gender * : 
+                <mat-radio-group id="gender" name="gender" [ngModel]="(data$ | async)?.gender" required aria-label="Gender">
+                  <mat-radio-button value="male"> Male </mat-radio-button>
+                  <span class="small-spacer"></span>
+                  <mat-radio-button value="female"> Female </mat-radio-button>
+                </mat-radio-group>
+                </fieldset>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput [matDatepicker]="DOB" readonly placeholder="Date of Birth" [ngModel]="(data$ | async)?.DOB" name="DOB" id="DOB"
+                    required>
+                  <mat-datepicker-toggle matSuffix [for]="DOB"></mat-datepicker-toggle>
+                  <mat-datepicker #DOB></mat-datepicker>
+                </mat-form-field>
+                <br>
+                <mat-form-field>
+                    <mat-select placeholder="Class" name="CLASS_CODE" id="CLASS_CODE" [compareWith]="compareObjects"
+                      [ngModel]="(data$ | async)?.CLASS_CODE" required>
+                      <mat-option *ngFor="let code of classCDs$" [value]="{_id: code._id, className: code.code}">
+                        {{ code.code }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  </div>
+              </mat-card-content>
+            </mat-card>
+            <br>
+            <mat-card>
+              <mat-card-title>
+                Parent Details *
+              </mat-card-title>
+              <mat-card-content>
+                <div ngModelGroup="parentDetails">
+                <mat-form-field>
+                  <input matInput placeholder="Father's name" name="fatherName" id="fatherName" [ngModel]="(data$ | async)?.fatherName" minlength="4">
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput placeholder="Mother's name" name="motherName" id="motherName" [ngModel]="(data$ | async)?.motherName" minlength="4">
+                </mat-form-field>
+                <br>
+                <mat-form-field>
+                  <input matInput placeholder="Legal Guardian's name" name="guardianName" id="guardianName" [ngModel]="(data$ | async)?.guardianName"
+                    minlength="4">
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput [matDatepicker]="GDOB" readonly placeholder="Guardian Date of Birth" name="GDOB" id="GDOB"
+                  [ngModel]="(data$ | async)?.GDOB">
+                  <mat-datepicker-toggle matSuffix [for]="GDOB"></mat-datepicker-toggle>
+                  <mat-datepicker #GDOB></mat-datepicker>
+                </mat-form-field>
+                <br>
+                <mat-form-field>
+                  <input matInput placeholder="Religion" name="religion" id="religion" [ngModel]="(data$ | async)?.religion" minlength="4">
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <mat-select placeholder="Caste" name="caste" id="caste" ngModel>
+                    <mat-option value="S.C.">
+                      S.C.
+                    </mat-option>
+                    <mat-option value="S.T.">
+                      S.T.
+                    </mat-option>
+                    <mat-option value="B.C.">
+                      B.C.
+                    </mat-option>
+                    <mat-option value="Other Sub Caste">
+                      Other Sub Caste
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <br>
+                <mat-form-field>
+                  <input matInput placeholder="Aadhar Card Number" name="aadharCardNumber" id="aadharCardNumber" [ngModel]="(data$ | async)?.aadharCardNumber"
+                    minlength="12" maxlength="12">
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput placeholder="Ration Card Number" name="radionCardNumber" id="radionCardNumber" [ngModel]="(data$ | async)?.rationCardNumber"
+                    minlength="4">
+                </mat-form-field>
+                </div>
+              </mat-card-content>
+            </mat-card>
+            <br>
+            <mat-card>
+              <mat-card-title>
+                Contact Details
+              </mat-card-title>
+              <br>
+              <mat-card-content>
+                <div ngModelGroup="contactDetails">
+                <mat-label>
+                  Present Address:
+                </mat-label>
+                <br>
+                <div ngModelGroup="presentAddress">
+                <mat-form-field>
+                  <input matInput placeholder="House Number" name="houseNumber" id="houseNumber" [ngModel]="(data$ | async)?.houseNumber" minlength="4">
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput placeholder="Street Number" name="streetNumber" id="streetNumber" [ngModel]="(data$ | async)?.streetNumber" minlength="4">
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput placeholder="Village" name="village" id="village" [ngModel]="(data$ | async)?.village">
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput placeholder="Mandal" name="mandal" id="mandal" [ngModel]="(data$ | async)?.mandal">
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput placeholder="District" name="district" id="district" [ngModel]="(data$ | async)?.district">
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput placeholder="Pin Code" name="pinCode" id="pinCode" [ngModel]="(data$ | async)?.pinCode">
+                </mat-form-field>
+              </div>
+                <br>
+              <div ngModelGroup="parmanentAddress">
+                <mat-label>
+                  Permanent Address:
+                </mat-label>
+                <br>
+                <mat-form-field>
+                  <input matInput placeholder="House Number" name="houseNumber" id="houseNumber" [ngModel]="(data$ | async)?.houseNumber" minlength="4">
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput placeholder="Street Number" name="streetNumber" id="streetNumber" [ngModel]="(data$ | async)?.streetNumber" minlength="4">
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput placeholder="Village" name="village" id="village" [ngModel]="(data$ | async)?.village">
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput placeholder="Mandal" name="mandal" id="mandal" [ngModel]="(data$ | async)?.mondal">
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput placeholder="District" name="district" id="district" [ngModel]="(data$ | async)?.district">
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput placeholder="Pin Code" name="pinCode" id="pinCode" [ngModel]="(data$ | async)?.pinCode">
+                </mat-form-field>
+              </div>
+              <div ngModelGroup="guardianAddress">
+                  <mat-label>
+                    Permanent Address:
+                  </mat-label>
+                  <br>
+                  <mat-form-field>
+                    <input matInput placeholder="House Number" name="houseNumber" id="houseNumber" [ngModel]="(data$ | async)?.houseNumber" minlength="4">
+                  </mat-form-field>
+                  <span class="small-spacer"></span>
+                  <mat-form-field>
+                    <input matInput placeholder="Street Number" name="streetNumber" id="streetNumber" [ngModel]="(data$ | async)?.streetNumber" minlength="4">
+                  </mat-form-field>
+                  <span class="small-spacer"></span>
+                  <mat-form-field>
+                    <input matInput placeholder="Village" name="village" id="village" [ngModel]="(data$ | async)?.village">
+                  </mat-form-field>
+                  <span class="small-spacer"></span>
+                  <mat-form-field>
+                    <input matInput placeholder="Mandal" name="mandal" id="mandal" [ngModel]="(data$ | async)?.mondal">
+                  </mat-form-field>
+                  <span class="small-spacer"></span>
+                  <mat-form-field>
+                    <input matInput placeholder="District" name="district" id="district" [ngModel]="(data$ | async)?.district">
+                  </mat-form-field>
+                  <span class="small-spacer"></span>
+                  <mat-form-field>
+                    <input matInput placeholder="Pin Code" name="pinCode" id="pinCode" [ngModel]="(data$ | async)?.pinCode">
+                  </mat-form-field>
+                </div>
+        
+                <br>
+                <mat-form-field>
+                  <input matInput placeholder="Mobile 1" name="mobile1" id="mobile1" [ngModel]="(data$ | async)?.mobile1" phone minlength="10">
+                </mat-form-field> <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput placeholder="Mobile 2" name="mobile2" id="mobile2" [ngModel]="(data$ | async)?.mobile2" phone minlength="10">
+                </mat-form-field>
+                <br>
+                <mat-form-field>
+                  <input matInput placeholder="Email 1" name="email1" id="email1" [ngModel]="(data$ | async)?.email1" minlength="10">
+                </mat-form-field>
+                <span class="small-spacer"></span>
+                <mat-form-field>
+                  <input matInput placeholder="Email 2" name="email2" id="email2" [ngModel]="(data$ | async)?.email2" minlength="10">
+                </mat-form-field>
+                
+                </div>
+              </mat-card-content>
+            </mat-card>
+            <br>
+            <mat-card>
+              <mat-card-title>
+                Qualifications
+              </mat-card-title>
+              <mat-card-content>
+                <div ngModelGroup="qualifications">
+                <mat-label>
+                  Details of School/Educational Institutions, student studied in the previous years:
+                </mat-label>
+                <!-- <mat-table>
+                  <ng-container>
+                    <mat-header-cell mat-sort-header>School Name</mat-header-cell>
+                    <mat-cell>
+                      <mat-form-field>
+                        <input matInput placeholder="School Name" name="schoolName" id="schoolName" ngModel minlength="4">
+                      </mat-form-field>
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container>
+                    <mat-header-cell mat-sort-header>Class</mat-header-cell>
+                    <mat-cell>
+                      <mat-form-field>
+                        <input matInput placeholder="Class" name="class" id="class" ngModel minlength="4">
+                      </mat-form-field>
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container>
+                    <mat-header-cell mat-sort-header>Year</mat-header-cell>
+                    <mat-cell>
+                      <mat-form-field>
+                        <input matInput placeholder="Year" name="year" id="year" ngModel minlength="4">
+                      </mat-form-field>
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container>
+                    <mat-header-cell mat-sort-header>Result</mat-header-cell>
+                    <mat-cell>
+                      <mat-form-field>
+                        <input matInput placeholder="Result" name="result" id="result" ngModel minlength="4">
+                      </mat-form-field>
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container>
+                    <mat-header-cell mat-sort-header>Reason to Leave</mat-header-cell>
+                    <mat-cell>
+                      <mat-form-field>
+                        <input matInput placeholder="Reason to leave" name="reasonToLeave" id="reasonToLeave" ngModel
+                          minlength="4">
+                      </mat-form-field>
+                    </mat-cell>
+                  </ng-container>
+                </mat-table> -->
+                <br>
+                <mat-form-field>
+                    <input matInput placeholder="Record Sheet / Transfer Certificate Number" name="transferCertificateNumber" id="transferCertificateNumber" [ngModel]="(data$ | async)?.transferCertificateNumber" minlength="4">
+                  </mat-form-field>
+                  </div>
+              </mat-card-content>
+            </mat-card>
+            <br>
+            <mat-card>
+              <mat-card-title>
+                Physical Status
+              </mat-card-title>
+              <mat-card-content>
+                <div ngModelGroup="physicalStatus">
+                <mat-label>
+                  In case if the student is suffering from any of the below problems: 
+                </mat-label>
+                <br>        
+                <br>
+       
+                  <mat-checkbox id="listenProblem" name="listenProblem" [ngModel]="(data$ | async)?.listenProblem">Listen Problem</mat-checkbox>
+                  <span class="small-spacer"></span>
+                  <mat-checkbox id="seeingProblem" name="seeingProblem" [ngModel]="(data$ | async)?.seeingProblem">Seeing Problem</mat-checkbox>
+                  <span class="small-spacer"></span>
+                  <mat-checkbox id="mentalProblem" name="mentalProblem" [ngModel]="(data$ | async)?.mentalProblem">Mental Problem</mat-checkbox>
+                  <span class="small-spacer"></span>
+                  <mat-checkbox id="skinProblem" name="skinProblem" [ngModel]="(data$ | async)?.skinProblem">Skin Problem</mat-checkbox>
+                  <br>
+                <mat-form-field>
+                  <input matInput placeholder="Other Problem" name="otherProblem" id="otherProblem" [ngModel]="(data$ | async)?.otherProblem"
+                    minlength="4">
+                </mat-form-field>
+                <br>
+       
+                <mat-label>
+                    In Case, if any student requires the below instruments:
+                          </mat-label>
+                    <br>        <br>
+       
+                    <mat-checkbox id="listenMachine" name="listenMachine" [ngModel]="(data$ | async)?.listenMachine">Listen Machine</mat-checkbox>
+                    <span class="small-spacer"></span>
+                    <mat-checkbox id="eyeSpects" name="eyeSpects" [ngModel]="(data$ | async)?.eyeSpects">Eye Spects</mat-checkbox>
+                    <span class="small-spacer"></span>
+                    <mat-checkbox id="wheelCycle" name="wheelCycle" [ngModel]="(data$ | async)?.wheelCycle">3 WheelCycle</mat-checkbox>
+                    <span class="small-spacer"></span>
+                    <mat-checkbox id="wheelChair" name="wheelChair" [ngModel]="(data$ | async)?.wheelChair">Wheel Chair</mat-checkbox>
+                    <span class="small-spacer"></span>
+                    <mat-checkbox id="chankaSticks" name="chankaSticks" [ngModel]="(data$ | async)?.chankaSticks">Chanka Sticks</mat-checkbox>
+                    <span class="small-spacer"></span>
+                    <mat-checkbox id="kaliVars" name="kaliVars" [ngModel]="(data$ | async)?.kaliVars">Kali Vars</mat-checkbox>
+                    <span class="small-spacer"></span>
+                    <mat-checkbox id="bailyKit" name="bailyKit" [ngModel]="(data$ | async)?.bailyKit">Baily Kit</mat-checkbox>
+                    <span class="small-spacer"></span>
+                    <mat-checkbox id="maginifiedLense" name="maginifiedLense" [ngModel]="(data$ | async)?.maginifiedLense">Maginified Lense</mat-checkbox>
+      
+                    <br>
+                  <mat-form-field>
+                    <input matInput placeholder="Other Items" name="otherItems" id="otherItems" [ngModel]="(data$ | async)?.otherItems"
+                      minlength="4">
+                  </mat-form-field>
+        
+                </div>
+              </mat-card-content>
+            </mat-card>
+            <br>
+      
+            <br>
+            <mat-card>
+              <mat-card-title>
+                Documents Links
+              </mat-card-title>
+              <mat-card-content>
+                <div ngModelGroup="documents">
+                <div *ngFor="let file of (data$ | async)?.files">
+                  <br />
+                  <button type="button" mat-raised-button (click)="showDocument=!showDocument; getDocUrl(file);"
+                    color="primary">Show Document</button>
+                </div>
+                <div *ngIf="showDocument">
+                  <span matTooltip="Close">
+                    <mat-icon color="primary" (click)="showDocument = !showDocument;">clear
+                    </mat-icon>
+                  </span>
+                  <br />
+                  <a href="{{ docUrl | async }}" target="_blank">Click here to open {{ fileName }} document</a>
+                </div>
+                <br>
+                <div *ngIf="showFileUpload">
+                  <span matTooltip="Close">
+                    <mat-icon color="primary" (click)="showFileUpload = !showFileUpload;">clear
+                    </mat-icon>
+                  </span>
+                  <br />
+                  <app-fileupload fileUrl="STUDENT" docId="{{docId}}"></app-fileupload>
+                </div>
+                <br>
+                <button type="button" mat-raised-button (click)="showFileUpload=!showFileUpload" color="primary">Upload
+                  File</button>
+                </div>
+              </mat-card-content>
+            </mat-card>
+      
+       
+            <mat-card-actions align="end">
+              <button type="submit" mat-raised-button [disabled]="!this.editDataForm.valid || this.editDataForm.pristine"
+                color="primary">Update</button>
+            </mat-card-actions>
+          </div>
+        </form>
+      </ng-template>
+      <!-- Results mode -->
+      
+      
+      <ng-template #showResMode>
+        <div class="btn-right">
+          <button matTooltip="Add New" color="primary" type="button" mat-raised-button (click)="toggle('addMode')">
             <mat-icon color="white" svgIcon="add"></mat-icon> Add New
           </button>
           <span class="small-spacer"></span>
-          <button matTooltip="Show Recent Results" color="primary" (click)="toggle('resMode');getData();" type="button"
-            mat-raised-button>
-            <mat-icon color="white" svgIcon="cached"></mat-icon> Show Recent Results
+          <button matTooltip="Search All" color="primary" type="button" mat-raised-button (click)="toggle('searchMode')">
+            <mat-icon color="white" svgIcon="search"></mat-icon> Search
           </button>
-        </mat-card-actions>
-        <mat-form-field class="example-form">
-          <input matInput type="text" placeholder="Student ID" id="code" name="code" #code="ngModel" ngModel
-            [disabled]="fName.value !== ''">
-        </mat-form-field>
-        <br>
-        <mat-form-field class="example-form">
-          <input matInput type="text" placeholder="Student First Name" id="fName" name="fName" #fName="ngModel" ngModel
-            [disabled]="code.value !== ''">
-        </mat-form-field>
-        <mat-card-actions align="end">
-          <button type="button" (click)="toggle('resMode');getData(searchFormData.value);" mat-raised-button
-            [disabled]="(code.value == '' && descr.value == '')" color="primary">Search</button>
-        </mat-card-actions>
-      </form>
-    </div>
-  </mat-card-content>
-</mat-card>
-<!-- addMode -->
-<ng-template #showAddMode>
-  <form #addDataForm="ngForm" (ngSubmit)="setData(addDataForm.value);" novalidate>
-    <mat-error *ngIf="savedChanges">
-      Data is saved.
-      <label class="small-spacer"></label>
-      <mat-icon (click)="this.addDataForm.reset();savedChanges=false;toggle('searchMode');" svgIcon="clear"></mat-icon>
-    </mat-error>
-    <div *ngIf="!savedChanges">
-      <mat-progress-bar mode="indeterminate" *ngIf="dataLoading"></mat-progress-bar>
-      <mat-error *ngIf="error">Error: {{ errorMessage }}</mat-error>
-      <mat-card-actions align="end">
-        <button matTooltip="Search" color="primary" (click)="toggle('searchMode')" type="button" mat-raised-button>
-          <mat-icon svgIcon="search"></mat-icon> Search
-        </button>
-        <span class="small-spacer"></span>
-        <button type="button" color="primary" (click)="toggle('resMode');getData();" mat-raised-button
-          matTooltip="Show Recent Results">
-          <mat-icon color="white" svgIcon="cached"></mat-icon> Show Recent Results
-        </button>
-      </mat-card-actions>
-      <mat-card>
-        <mat-card-title>
-          Student Details (*)
-        </mat-card-title>
-        <mat-card-content>
-          <div ngModelGroup="studentDetails">
-          <input type="hidden" [ngModel]="ENROLLMENT_CODE._id" name="ENROLLMENT_CODE" id="ENROLLMENT_CODE" />
-          <input type="hidden" [ngModel]="'Active'"  name="status" id="status" />
-          <mat-form-field>
-            <input matInput placeholder="Student ID" name="code" id="code" ngModel required minlength="2">
-          </mat-form-field>
-          <br>
-          <mat-form-field>
-            <input matInput placeholder="Student Passcode" name="SKEY" id="SKEY" ngModel required minlength="2">
-          </mat-form-field>
-          <br>
-          <mat-form-field>
-            <input matInput placeholder="First name" name="fName" id="fName" ngModel required minlength="4">
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="Middle name" name="mName" id="mName" ngModel minlength="4">
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="Last name" name="lName" id="lName" ngModel required minlength="4">
-          </mat-form-field>
-          <br>
-          <fieldset>
-          <legend>Gender *: </legend>
-          <span class="small-spacer"></span>
-          <mat-radio-group id="gender" name="gender" ngModel required>
-            <mat-radio-button value="male"> Male </mat-radio-button>
-            <span class="small-spacer"></span>
-            <mat-radio-button value="female"> Female </mat-radio-button>
-          </mat-radio-group>
-          </fieldset>
-          <br>
-          <mat-form-field>
-            <input matInput [matDatepicker]="DOB" readonly placeholder="Date of Birth" ngModel name="DOB" id="DOB"
-              required>
-            <mat-datepicker-toggle matSuffix [for]="DOB"></mat-datepicker-toggle>
-            <mat-datepicker #DOB></mat-datepicker>
-          </mat-form-field>
-          <br>
-          <mat-form-field>
-            <mat-select placeholder="Class into which admission is sought" name="CLASS_CODE" id="CLASS_CODE" ngModel required>
-              <mat-option *ngFor="let code of classCDs$" [value]="{_id:code._id, className:code.code}">
-                {{ code.code }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          </div>
-        </mat-card-content>
-      </mat-card>
-      <br>
-      <mat-card>
-        <mat-card-title>
-          Parent Details *
-        </mat-card-title>
-        <mat-card-content>
-            <div ngModelGroup="parentDetails">
-          <mat-form-field>
-            <input matInput placeholder="Father's name" name="fatherName" id="fatherName" ngModel minlength="4">
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="Mother's name" name="motherName" id="motherName" ngModel minlength="4">
-          </mat-form-field>
-          <br>
-          <mat-form-field>
-            <input matInput placeholder="Legal Guardian's name" name="guardianName" id="guardianName" ngModel
-              minlength="4">
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput [matDatepicker]="GDOB" readonly placeholder="Guardian Date of Birth" name="GDOB" id="GDOB"
-              ngModel>
-            <mat-datepicker-toggle matSuffix [for]="GDOB"></mat-datepicker-toggle>
-            <mat-datepicker #GDOB></mat-datepicker>
-          </mat-form-field>
-          <br>
-          <mat-form-field>
-            <input matInput placeholder="Religion" name="religion" id="religion" ngModel minlength="4">
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <mat-select placeholder="Caste" name="caste" id="caste" ngModel>
-              <mat-option value="S.C.">
-                S.C.
-              </mat-option>
-              <mat-option value="S.T.">
-                S.T.
-              </mat-option>
-              <mat-option value="B.C.">
-                B.C.
-              </mat-option>
-              <mat-option value="Other Sub Caste">
-                Other Sub Caste
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <br>
-          <mat-form-field>
-            <input matInput placeholder="Aadhar Card Number" name="aadharCardNumber" id="aadharCardNumber" ngModel
-              minlength="12" maxlength="12">
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="Ration Card Number" name="radionCardNumber" id="radionCardNumber" ngModel
-              minlength="4">
-          </mat-form-field>
-          </div>
-        </mat-card-content>
-      </mat-card>
-      <br>
-      <mat-card>
-        <mat-card-title>
-          Contact Details
-        </mat-card-title>
-        <br>
-        <mat-card-content>
-          <mat-label>
-            Present Address:
-          </mat-label>
-          <br>
-          <div ngModelGroup="contactDetails">
-          <mat-form-field>
-            <input matInput placeholder="House Number" name="houseNumber" id="houseNumber" ngModel minlength="4">
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="Street Number" name="streetNumber" id="streetNumber" ngModel minlength="4">
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="Village" name="village" id="village" ngModel>
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="Mandal" name="mandal" id="mandal" ngModel>
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="District" name="district" id="district" ngModel>
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="Pin Code" name="pinCode" id="pinCode" ngModel>
-          </mat-form-field>
-
-          <br>
-          <mat-label>
-            Permanent Address:
-          </mat-label>
-          <br>
-
-          <mat-form-field>
-            <input matInput placeholder="House Number" name="houseNumber" id="houseNumber" ngModel minlength="4">
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="Street Number" name="streetNumber" id="streetNumber" ngModel minlength="4">
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="Village" name="village" id="village" ngModel>
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="Mandal" name="mandal" id="mandal" ngModel>
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="District" name="district" id="district" ngModel>
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="Pin Code" name="pinCode" id="pinCode" ngModel>
-          </mat-form-field>
-          <br>
-          <mat-form-field>
-            <input matInput placeholder="Mobile 1" name="mobile1" id="mobile1" ngModel phone minlength="10">
-          </mat-form-field> <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="Mobile 2" name="mobile2" id="mobile2" ngModel phone minlength="10">
-          </mat-form-field>
-          <br>
-          <mat-form-field>
-            <input matInput placeholder="Email 1" name="email1" id="email1" ngModel phone minlength="10">
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="Email 2" name="email2" id="email2" ngModel phone minlength="10">
-          </mat-form-field>
         </div>
-        </mat-card-content>
-      </mat-card>
-      <br>
-      <mat-card>
-        <mat-card-title>
-          Qualifications
-        </mat-card-title>
-        <mat-card-content>
-          <div ngModelGroup="qualifications">
-          <mat-label>
-            Details of School/Educational Institutions, student studied in the previous years:
-          </mat-label>
-          <!-- <mat-table>
-            <ng-container>
-              <mat-header-cell mat-sort-header>School Name</mat-header-cell>
-              <mat-cell>
-                <mat-form-field>
-                  <input matInput placeholder="School Name" name="schoolName" id="schoolName" ngModel minlength="4">
-                </mat-form-field>
-              </mat-cell>
-            </ng-container>
-            <ng-container>
-              <mat-header-cell mat-sort-header>Class</mat-header-cell>
-              <mat-cell>
-                <mat-form-field>
-                  <input matInput placeholder="Class" name="class" id="class" ngModel minlength="4">
-                </mat-form-field>
-              </mat-cell>
-            </ng-container>
-            <ng-container>
-              <mat-header-cell mat-sort-header>Year</mat-header-cell>
-              <mat-cell>
-                <mat-form-field>
-                  <input matInput placeholder="Year" name="year" id="year" ngModel minlength="4">
-                </mat-form-field>
-              </mat-cell>
-            </ng-container>
-            <ng-container>
-              <mat-header-cell mat-sort-header>Result</mat-header-cell>
-              <mat-cell>
-                <mat-form-field>
-                  <input matInput placeholder="Result" name="result" id="result" ngModel minlength="4">
-                </mat-form-field>
-              </mat-cell>
-            </ng-container>
-            <ng-container>
-              <mat-header-cell mat-sort-header>Reason to Leave</mat-header-cell>
-              <mat-cell>
-                <mat-form-field>
-                  <input matInput placeholder="Reason to leave" name="reasonToLeave" id="reasonToLeave" ngModel
-                    minlength="4">
-                </mat-form-field>
-              </mat-cell>
-            </ng-container>
-          </mat-table> -->
-          <br>
+      
+      
+        <div>
+
           <mat-form-field>
-              <input matInput placeholder="Record Sheet / Transfer Certificate Number" name="transferCertificateNumber" id="transferCertificateNumber" ngModel minlength="4">
-            </mat-form-field>
-          </div>
-        </mat-card-content>
-      </mat-card>
-      <br>
-      <mat-card>
-        <mat-card-title>
-          Physical Status
-        </mat-card-title>
-        <mat-card-content>
-          <div ngModelGroup="physicalStatus">
-          <mat-label>
-            In case if the student is suffering from any of the below problems: 
-          </mat-label>
-          <br>        <br>
- 
-            <mat-checkbox id="listenProblem" name="listenProblem">Listen Problem</mat-checkbox>
-            <span class="small-spacer"></span>
-            <mat-checkbox id="seeingProblem" name="seeingProblem">Seeing Problem</mat-checkbox>
-            <span class="small-spacer"></span>
-            <mat-checkbox id="mentalProblem" name="mentalProblem">Mental Problem</mat-checkbox>
-            <span class="small-spacer"></span>
-            <mat-checkbox id="skinProblem" name="skinProblem">Skin Problem</mat-checkbox>
-            <br>
-          <mat-form-field>
-            <input matInput placeholder="Other Problem" name="otherProblem" id="otherProblem" ngModel
-              minlength="4">
-          </mat-form-field>
-          <br>
- 
-          <mat-label>
-              In Case, if any student requires the below instruments:
-                    </mat-label>
-              <br>        <br>
- 
-              <mat-checkbox id="listenMachine" name="listenMachine">Listen Machine</mat-checkbox>
-              <span class="small-spacer"></span>
-              <mat-checkbox id="eyeSpects" name="eyeSpects">Eye Spects</mat-checkbox>
-              <span class="small-spacer"></span>
-              <mat-checkbox id="wheelCycle" name="wheelCycle">3 WheelCycle</mat-checkbox>
-              <span class="small-spacer"></span>
-              <mat-checkbox id="wheelChair" name="wheelChair">Wheel Chair</mat-checkbox>
-              <span class="small-spacer"></span>
-              <mat-checkbox id="chankaSticks" name="chankaSticks">Chanka Sticks</mat-checkbox>
-              <span class="small-spacer"></span>
-              <mat-checkbox id="kaliVars" name="kaliVars">Kali Vars</mat-checkbox>
-              <span class="small-spacer"></span>
-              <mat-checkbox id="bailyKit" name="bailyKit">Baily Kit</mat-checkbox>
-              <span class="small-spacer"></span>
-              <mat-checkbox id="maginifiedLense" name="maginifiedLense">Maginified Lense</mat-checkbox>
+                    <mat-select placeholder="Enrollment Code" 
+                    name="currentEnrollment" 
+                    (selectionChange)="changeCurrentEnrollment($event)" id="currentEnrollment" 
+                    [compareWith]="compareObjects" [ngModel]="currentEnrollment">
+                        <mat-option *ngFor="let enroll of enrollmentCDs$" [value]="enroll">
+                            {{ enroll.code }} 
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
 
-              <br>
-            <mat-form-field>
-              <input matInput placeholder="Other Items" name="otherItems" id="otherItems" ngModel
-                minlength="4">
-            </mat-form-field>
-  
-          </div>
-        </mat-card-content>
-      </mat-card>
-      <br>
-   
-      <mat-card-actions align="end">
-        <button type="submit" mat-raised-button [disabled]="!addDataForm.valid" color="primary">Add</button>
-        <button type="reset" (click)="this.addDataForm.reset();" mat-raised-button [disabled]="!addDataForm.valid"
-          color="primary">Clear</button>
-      </mat-card-actions>
-    </div>
-  </form>
-</ng-template>
-<!-- edit mode -->
-<ng-template #showEditMode>
-  <form #editDataForm="ngForm" (ngSubmit)="updateData(editDataForm.value);" novalidate>
-    <input type="hidden" name="_id" id="_id" [ngModel]="(data$ | async)?._id" required>
-    <mat-error *ngIf="savedChanges">
-      Data is saved.
-      <label class="small-spacer"></label>
-      <mat-icon (click)="this.editDataForm.reset();savedChanges=false;toggle('searchMode');" svgIcon="clear"></mat-icon>
-    </mat-error>
-    <div *ngIf="!savedChanges">
-      <mat-progress-bar mode="indeterminate" *ngIf="dataLoading"></mat-progress-bar>
-      <mat-error *ngIf="error">Error: {{ errorMessage }}</mat-error>
-      <mat-card-actions align="end">
-        <button matTooltip="Search" type="button" mat-raised-button color="primary" (click)="toggle('searchMode')">
-          <mat-icon color="white" svgIcon="search"></mat-icon> Search
-        </button>
-        <span class="small-spacer"></span>
-        <button matTooltip="Show Recent Results" type="button" mat-raised-button color="primary"
-          (click)="toggle('resMode');getData();">
-          <mat-icon color="white" svgIcon="cached"></mat-icon> Show Recent Results
-        </button>
-      </mat-card-actions>
-
-
-
-      <mat-card>
-        <mat-card-title>
-          Student Details (*)
-        </mat-card-title>
-        <mat-card-content>
-          <div ngModelGroup="studentDetails">
           <!-- <mat-form-field>
-            <input matInput placeholder="Student ID" name="code" id="code" [ngModel]="(data$ | async)?.code" minlength="2">
-          </mat-form-field>
-          <br> -->
-          <!-- <mat-form-field>
-            <input matInput placeholder="Student Passcode" name="SKEY" id="SKEY" [ngModel]="(data$ | async)?.SKEY" required minlength="2">
-          </mat-form-field>
-          <br> -->
-          <mat-form-field>
-            <input matInput placeholder="First name" name="fName" id="fName" [ngModel]="(data$ | async)?.fname" required minlength="4">
-          </mat-form-field>
+                <mat-select placeholder="Enrollment Code" name="ENROLLMENT_CODE" id="ENROLLMENT_CODE" [ngModel]="enrollId | async">
+                    <mat-option *ngFor="let enroll of enrollmentCDs$" [value]="enroll._id">
+                        {{ enroll.code }} 
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field> -->
           <span class="small-spacer"></span>
+      
           <mat-form-field>
-            <input matInput placeholder="Middle name" name="mName" id="mName" [ngModel]="(data$ | async)?.mName" minlength="4">
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="Last name" name="lName" id="lName" [ngModel]="(data$ | async)?.lName" required minlength="4">
-          </mat-form-field>
-          <br><br>
-          <fieldset>
-          <legend>Gender * : </legend>
-          <span class="small-spacer"></span>
-          <mat-radio-group id="gender" name="gender" [ngModel]="(data$ | async)?.gender" required aria-label="Gender">
-            <mat-radio-button value="male"> Male </mat-radio-button>
-            <span class="small-spacer"></span>
-            <mat-radio-button value="female"> Female </mat-radio-button>
-          </mat-radio-group>
-          </fieldset>
-          <br>
-          <mat-form-field>
-            <input matInput [matDatepicker]="DOB" readonly placeholder="Date of Birth" [ngModel]="(data$ | async)?.DOB" name="DOB" id="DOB"
-              required>
-            <mat-datepicker-toggle matSuffix [for]="DOB"></mat-datepicker-toggle>
-            <mat-datepicker #DOB></mat-datepicker>
-          </mat-form-field>
-          <br>
-          <mat-form-field>
-              <mat-select placeholder="Class" name="CLASS_CODE" id="CLASS_CODE" [compareWith]="compareObjects"
-                [ngModel]="(data$ | async)?.CLASS_CODE" required>
-                <mat-option *ngFor="let code of classCDs$" [value]="{_id: code._id, className: code.code}">
-                  {{ code.code }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-            </div>
-        </mat-card-content>
-      </mat-card>
-      <br>
-      <mat-card>
-        <mat-card-title>
-          Parent Details *
-        </mat-card-title>
-        <mat-card-content>
-          <div ngModelGroup="parentDetails">
-          <mat-form-field>
-            <input matInput placeholder="Father's name" name="fatherName" id="fatherName" [ngModel]="(data$ | async)?.fatherName" minlength="4">
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="Mother's name" name="motherName" id="motherName" [ngModel]="(data$ | async)?.motherName" minlength="4">
-          </mat-form-field>
-          <br>
-          <mat-form-field>
-            <input matInput placeholder="Legal Guardian's name" name="guardianName" id="guardianName" [ngModel]="(data$ | async)?.guardianName"
-              minlength="4">
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput [matDatepicker]="GDOB" readonly placeholder="Guardian Date of Birth" name="GDOB" id="GDOB"
-            [ngModel]="(data$ | async)?.GDOB">
-            <mat-datepicker-toggle matSuffix [for]="GDOB"></mat-datepicker-toggle>
-            <mat-datepicker #GDOB></mat-datepicker>
-          </mat-form-field>
-          <br>
-          <mat-form-field>
-            <input matInput placeholder="Religion" name="religion" id="religion" [ngModel]="(data$ | async)?.religion" minlength="4">
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <mat-select placeholder="Caste" name="caste" id="caste" ngModel>
-              <mat-option value="S.C.">
-                S.C.
-              </mat-option>
-              <mat-option value="S.T.">
-                S.T.
-              </mat-option>
-              <mat-option value="B.C.">
-                B.C.
-              </mat-option>
-              <mat-option value="Other Sub Caste">
-                Other Sub Caste
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <br>
-          <mat-form-field>
-            <input matInput placeholder="Aadhar Card Number" name="aadharCardNumber" id="aadharCardNumber" [ngModel]="(data$ | async)?.aadharCardNumber"
-              minlength="12" maxlength="12">
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="Ration Card Number" name="radionCardNumber" id="radionCardNumber" [ngModel]="(data$ | async)?.rationCardNumber"
-              minlength="4">
-          </mat-form-field>
-          </div>
-        </mat-card-content>
-      </mat-card>
-      <br>
-      <mat-card>
-        <mat-card-title>
-          Contact Details
-        </mat-card-title>
-        <br>
-        <mat-card-content>
-          <div ngModelGroup="contactDetails">
-          <mat-label>
-            Present Address:
-          </mat-label>
-          <br>
-          <div ngModelGroup="presentAddress">
-          <mat-form-field>
-            <input matInput placeholder="House Number" name="houseNumber" id="houseNumber" [ngModel]="(data$ | async)?.houseNumber" minlength="4">
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="Street Number" name="streetNumber" id="streetNumber" [ngModel]="(data$ | async)?.streetNumber" minlength="4">
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="Village" name="village" id="village" [ngModel]="(data$ | async)?.village">
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="Mandal" name="mandal" id="mandal" [ngModel]="(data$ | async)?.mandal">
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="District" name="district" id="district" [ngModel]="(data$ | async)?.district">
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="Pin Code" name="pinCode" id="pinCode" [ngModel]="(data$ | async)?.pinCode">
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search Recent Results">
           </mat-form-field>
         </div>
-          <br>
-        <div ngModelGroup="parmanentAddress">
-          <mat-label>
-            Permanent Address:
-          </mat-label>
-          <br>
-          <mat-form-field>
-            <input matInput placeholder="House Number" name="houseNumber" id="houseNumber" [ngModel]="(data$ | async)?.houseNumber" minlength="4">
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="Street Number" name="streetNumber" id="streetNumber" [ngModel]="(data$ | async)?.streetNumber" minlength="4">
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="Village" name="village" id="village" [ngModel]="(data$ | async)?.village">
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="Mandal" name="mandal" id="mandal" [ngModel]="(data$ | async)?.mondal">
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="District" name="district" id="district" [ngModel]="(data$ | async)?.district">
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="Pin Code" name="pinCode" id="pinCode" [ngModel]="(data$ | async)?.pinCode">
-          </mat-form-field>
-        </div>
-        <div ngModelGroup="guardianAddress">
-            <mat-label>
-              Permanent Address:
-            </mat-label>
-            <br>
-            <mat-form-field>
-              <input matInput placeholder="House Number" name="houseNumber" id="houseNumber" [ngModel]="(data$ | async)?.houseNumber" minlength="4">
-            </mat-form-field>
-            <span class="small-spacer"></span>
-            <mat-form-field>
-              <input matInput placeholder="Street Number" name="streetNumber" id="streetNumber" [ngModel]="(data$ | async)?.streetNumber" minlength="4">
-            </mat-form-field>
-            <span class="small-spacer"></span>
-            <mat-form-field>
-              <input matInput placeholder="Village" name="village" id="village" [ngModel]="(data$ | async)?.village">
-            </mat-form-field>
-            <span class="small-spacer"></span>
-            <mat-form-field>
-              <input matInput placeholder="Mandal" name="mandal" id="mandal" [ngModel]="(data$ | async)?.mondal">
-            </mat-form-field>
-            <span class="small-spacer"></span>
-            <mat-form-field>
-              <input matInput placeholder="District" name="district" id="district" [ngModel]="(data$ | async)?.district">
-            </mat-form-field>
-            <span class="small-spacer"></span>
-            <mat-form-field>
-              <input matInput placeholder="Pin Code" name="pinCode" id="pinCode" [ngModel]="(data$ | async)?.pinCode">
-            </mat-form-field>
-          </div>
-  
-          <br>
-          <mat-form-field>
-            <input matInput placeholder="Mobile 1" name="mobile1" id="mobile1" [ngModel]="(data$ | async)?.mobile1" phone minlength="10">
-          </mat-form-field> <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="Mobile 2" name="mobile2" id="mobile2" [ngModel]="(data$ | async)?.mobile2" phone minlength="10">
-          </mat-form-field>
-          <br>
-          <mat-form-field>
-            <input matInput placeholder="Email 1" name="email1" id="email1" [ngModel]="(data$ | async)?.email1" minlength="10">
-          </mat-form-field>
-          <span class="small-spacer"></span>
-          <mat-form-field>
-            <input matInput placeholder="Email 2" name="email2" id="email2" [ngModel]="(data$ | async)?.email2" minlength="10">
-          </mat-form-field>
+        <div class="example-container mat-elevation-z8">
+          <mat-table [dataSource]="dataSource" matSort>
+            <ng-container matColumnDef="code">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Student ID</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.code}} </mat-cell>
+            </ng-container>
+      
+            <ng-container matColumnDef="fName">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.fName}} </mat-cell>
+            </ng-container>
+      
+            <ng-container matColumnDef="class">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Class</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.CLASS_CODE.className}} </mat-cell>
+            </ng-container>
+      
+            <ng-container matColumnDef="parent">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Parent / Guardian Details</mat-header-cell>
+                <mat-cell *matCellDef="let row"> 
+                  <div class="full-width">Father: {{row.parent.fatherName}}  (M): {{row.parent.fatherContactNumber}} </div>
+                  <div class="full-width">Mother: {{row.parent.motherName}}  (M): {{row.parent.motherContactNumber}} </div>
+                  <div class="full-width" *ngIf="row.parent.guardianName">Guardian: {{row.parent.guardianName}}  (M): {{row.parent.gurdianContactNumber}}</div> 
+                </mat-cell>
+              </ng-container>
           
-          </div>
-        </mat-card-content>
-      </mat-card>
-      <br>
-      <mat-card>
-        <mat-card-title>
-          Qualifications
-        </mat-card-title>
-        <mat-card-content>
-          <div ngModelGroup="qualifications">
-          <mat-label>
-            Details of School/Educational Institutions, student studied in the previous years:
-          </mat-label>
-          <!-- <mat-table>
-            <ng-container>
-              <mat-header-cell mat-sort-header>School Name</mat-header-cell>
-              <mat-cell>
-                <mat-form-field>
-                  <input matInput placeholder="School Name" name="schoolName" id="schoolName" ngModel minlength="4">
-                </mat-form-field>
+      
+            <ng-container matColumnDef="status">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                  <mat-select placeholder="Status" name="studStatus" id="studStatus" [ngModel]="row.status" required>
+                    <mat-option value="Active">
+                      Active
+                    </mat-option>
+                    <mat-option value="Active">
+                      InActive
+                    </mat-option>
+                  </mat-select>
               </mat-cell>
             </ng-container>
-            <ng-container>
-              <mat-header-cell mat-sort-header>Class</mat-header-cell>
-              <mat-cell>
-                <mat-form-field>
-                  <input matInput placeholder="Class" name="class" id="class" ngModel minlength="4">
-                </mat-form-field>
+      
+      
+            <ng-container matColumnDef="_id">
+              <mat-header-cell *matHeaderCellDef> action </mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <span matTooltip="Edit">
+                  <!-- {{row | json}} -->
+                  <button mat-icon-button (click)="getDoc(row.ENROLLMENT_CODE._id, row._id)">
+                    <mat-icon color="primary" svgIcon="edit"></mat-icon>
+                  </button>
+                </span>
+                <!-- <span matTooltip="Fee">
+                  <button mat-icon-button routerLink="/fee/{{row._id}}">
+                    <mat-icon color="primary" svgIcon="salary"></mat-icon>
+                  </button>
+                </span>
+                <span matTooltip="Attendance">
+                  <button mat-icon-button routerLink="/attendance/{{row._id}}">
+                    <mat-icon color="primary" svgIcon="event"></mat-icon>
+                  </button>
+                </span> -->
+                <span matTooltip="Marks">
+                  <button mat-icon-button routerLink="/marks/{{row._id}}">
+                    <mat-icon color="primary">score</mat-icon>
+                  </button>
+                </span>
               </mat-cell>
             </ng-container>
-            <ng-container>
-              <mat-header-cell mat-sort-header>Year</mat-header-cell>
-              <mat-cell>
-                <mat-form-field>
-                  <input matInput placeholder="Year" name="year" id="year" ngModel minlength="4">
-                </mat-form-field>
-              </mat-cell>
-            </ng-container>
-            <ng-container>
-              <mat-header-cell mat-sort-header>Result</mat-header-cell>
-              <mat-cell>
-                <mat-form-field>
-                  <input matInput placeholder="Result" name="result" id="result" ngModel minlength="4">
-                </mat-form-field>
-              </mat-cell>
-            </ng-container>
-            <ng-container>
-              <mat-header-cell mat-sort-header>Reason to Leave</mat-header-cell>
-              <mat-cell>
-                <mat-form-field>
-                  <input matInput placeholder="Reason to leave" name="reasonToLeave" id="reasonToLeave" ngModel
-                    minlength="4">
-                </mat-form-field>
-              </mat-cell>
-            </ng-container>
-          </mat-table> -->
-          <br>
-          <mat-form-field>
-              <input matInput placeholder="Record Sheet / Transfer Certificate Number" name="transferCertificateNumber" id="transferCertificateNumber" [ngModel]="(data$ | async)?.transferCertificateNumber" minlength="4">
-            </mat-form-field>
-            </div>
-        </mat-card-content>
-      </mat-card>
-      <br>
-      <mat-card>
-        <mat-card-title>
-          Physical Status
-        </mat-card-title>
-        <mat-card-content>
-          <div ngModelGroup="physicalStatus">
-          <mat-label>
-            In case if the student is suffering from any of the below problems: 
-          </mat-label>
-          <br>        
-          <br>
- 
-            <mat-checkbox id="listenProblem" name="listenProblem" [ngModel]="(data$ | async)?.listenProblem">Listen Problem</mat-checkbox>
-            <span class="small-spacer"></span>
-            <mat-checkbox id="seeingProblem" name="seeingProblem" [ngModel]="(data$ | async)?.seeingProblem">Seeing Problem</mat-checkbox>
-            <span class="small-spacer"></span>
-            <mat-checkbox id="mentalProblem" name="mentalProblem" [ngModel]="(data$ | async)?.mentalProblem">Mental Problem</mat-checkbox>
-            <span class="small-spacer"></span>
-            <mat-checkbox id="skinProblem" name="skinProblem" [ngModel]="(data$ | async)?.skinProblem">Skin Problem</mat-checkbox>
-            <br>
-          <mat-form-field>
-            <input matInput placeholder="Other Problem" name="otherProblem" id="otherProblem" [ngModel]="(data$ | async)?.otherProblem"
-              minlength="4">
-          </mat-form-field>
-          <br>
- 
-          <mat-label>
-              In Case, if any student requires the below instruments:
-                    </mat-label>
-              <br>        <br>
- 
-              <mat-checkbox id="listenMachine" name="listenMachine" [ngModel]="(data$ | async)?.listenMachine">Listen Machine</mat-checkbox>
-              <span class="small-spacer"></span>
-              <mat-checkbox id="eyeSpects" name="eyeSpects" [ngModel]="(data$ | async)?.eyeSpects">Eye Spects</mat-checkbox>
-              <span class="small-spacer"></span>
-              <mat-checkbox id="wheelCycle" name="wheelCycle" [ngModel]="(data$ | async)?.wheelCycle">3 WheelCycle</mat-checkbox>
-              <span class="small-spacer"></span>
-              <mat-checkbox id="wheelChair" name="wheelChair" [ngModel]="(data$ | async)?.wheelChair">Wheel Chair</mat-checkbox>
-              <span class="small-spacer"></span>
-              <mat-checkbox id="chankaSticks" name="chankaSticks" [ngModel]="(data$ | async)?.chankaSticks">Chanka Sticks</mat-checkbox>
-              <span class="small-spacer"></span>
-              <mat-checkbox id="kaliVars" name="kaliVars" [ngModel]="(data$ | async)?.kaliVars">Kali Vars</mat-checkbox>
-              <span class="small-spacer"></span>
-              <mat-checkbox id="bailyKit" name="bailyKit" [ngModel]="(data$ | async)?.bailyKit">Baily Kit</mat-checkbox>
-              <span class="small-spacer"></span>
-              <mat-checkbox id="maginifiedLense" name="maginifiedLense" [ngModel]="(data$ | async)?.maginifiedLense">Maginified Lense</mat-checkbox>
+      
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          </mat-table>
+          <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="5"
+            [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+        </div>
+      </ng-template>
 
-              <br>
-            <mat-form-field>
-              <input matInput placeholder="Other Items" name="otherItems" id="otherItems" [ngModel]="(data$ | async)?.otherItems"
-                minlength="4">
-            </mat-form-field>
+  </mat-tab>
+
+
+  <mat-tab label="Send Notifications (SMS)">
+    <mat-card>
+      <mat-card-content>
+
+        <form #notificationsForm="ngForm" (ngSubmit)="sendNotificationSMS(notificationsForm.value);" novalidate>
+          <mat-grid-list cols="10" rowHeight="200px">
+              <mat-grid-tile colspan="2">
+                <div class='titles'>Classes: <br />
+                <mat-checkbox labelPosition="before">All</mat-checkbox>
+                </div>
+              </mat-grid-tile>
+              <mat-grid-tile colspan="8">
   
-          </div>
-        </mat-card-content>
-      </mat-card>
-      <br>
+  
+                <mat-selection-list class="list-inline" #classes>
+                    <mat-list-option labelPosition="before" *ngFor="let class of classCDs$">
+                      {{class.code}}
+                      </mat-list-option>
+                      <mat-list-option>
+                        Teachers / Staff
+                      </mat-list-option>
+                </mat-selection-list>
+                <!-- <p>
+                    Options selected: {{classes.selectedOptions.selected.length}}
+                  </p>
+                  <p>
+            {{classes.selectedOptions | json}}</p>
+            <p>
+            {{classes | json}}
+          </p> -->
+  
+                </mat-grid-tile>
+          </mat-grid-list>
+      
+      
+          <mat-grid-list cols="10" rowHeight="70px">
+            <mat-grid-tile colspan="2">
+              <div class='titles'>
+              Additional Numbers: 
+              </div>
+            </mat-grid-tile>
+            <mat-grid-tile  colspan="8">
+                <mat-form-field class="add-numbers-box">
+                    <input matInput placeholder="Enter comma seperated Additional Numbers, ex: xxxxxxxxxx, xxxxxxxxxx" type="text" id="additionalNumbers" name="additionalNumber" ngModel />
+                  </mat-form-field>
+            </mat-grid-tile>
+          </mat-grid-list>
+          <mat-grid-list cols="10" align="top" rowHeight="100px">
+              <mat-grid-tile colspan="2">
+                  <div class='titles'>
+                Message: 
+                </div>
+              </mat-grid-tile>
+              <mat-grid-tile colspan="8">
+                <mat-form-field class="input-box">
+                <textarea matInput placeholder="Enter Message" id="message" name="message" required ngModel></textarea>
+              </mat-form-field>
+              </mat-grid-tile>
+            </mat-grid-list>
+            <mat-card-actions align="end">
+                <button type="reset" mat-raised-button (click)="notificationsForm.reset()" color="primary">Reset</button>
+                <span class="small-spacer"></span> 
+              <button type="submit" mat-raised-button color="primary" [disabled]="!notificationsForm.valid">Send SMS</button> 
+            </mat-card-actions>
+          </form>
+      </mat-card-content>
+  
+    </mat-card>
+  </mat-tab>
 
-      <br>
-      <mat-card>
-        <mat-card-title>
-          Documents Links
-        </mat-card-title>
-        <mat-card-content>
-          <div ngModelGroup="documents">
-          <div *ngFor="let file of (data$ | async)?.files">
-            <br />
-            <button type="button" mat-raised-button (click)="showDocument=!showDocument; getDocUrl(file);"
-              color="primary">Show Document</button>
-          </div>
-          <div *ngIf="showDocument">
-            <span matTooltip="Close">
-              <mat-icon color="primary" (click)="showDocument = !showDocument;">clear
-              </mat-icon>
-            </span>
-            <br />
-            <a href="{{ docUrl | async }}" target="_blank">Click here to open {{ fileName }} document</a>
-          </div>
-          <br>
-          <div *ngIf="showFileUpload">
-            <span matTooltip="Close">
-              <mat-icon color="primary" (click)="showFileUpload = !showFileUpload;">clear
-              </mat-icon>
-            </span>
-            <br />
-            <app-fileupload fileUrl="STUDENT" docId="{{docId}}"></app-fileupload>
-          </div>
-          <br>
-          <button type="button" mat-raised-button (click)="showFileUpload=!showFileUpload" color="primary">Upload
-            File</button>
-          </div>
-        </mat-card-content>
-      </mat-card>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- 
-
-
-      <mat-card>
-        <mat-card-title>
-          Personal data (*)
-        </mat-card-title>
-        <mat-card-content>
-          <mat-form-field>
-            <input matInput placeholder="Student ID" name="code" id="code" [ngModel]="(data$ | async)?.code" required
-              minlength="2">
-          </mat-form-field>
-          <br>
-          <mat-form-field>
-            <input matInput placeholder="Student Passcode" name="SKEY" id="SKEY" [ngModel]="(data$ | async)?.SKEY"
-              required minlength="2">
-          </mat-form-field>
-          <br>
-          <mat-form-field>
-            <input matInput placeholder="First name" name="descr" id="descr" [ngModel]="(data$ | async)?.descr" required
-              minlength="4">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="Middle name" name="MIDDLE_NAME" id="MIDDLE_NAME"
-              [ngModel]="(data$ | async)?.MIDDLE_NAME" minlength="4">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="Last name" name="LAST_NAME" id="LAST_NAME"
-              [ngModel]="(data$ | async)?.LAST_NAME" required minlength="4">
-          </mat-form-field>
-          <br>
-          <mat-form-field>
-            <input matInput placeholder="Date of Birth" type="date" name="DOB" id="DOB" [ngModel]="(data$ | async)?.DOB"
-              required>
-          </mat-form-field>
-          <br>
-          <mat-form-field>
-            <input matInput placeholder="Father's name" name="FATHER_NAME" id="FATHER_NAME"
-              [ngModel]="(data$ | async)?.FATHER_NAME" minlength="4">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="Mother's name" name="MOTHER_NAME" id="MOTHER_NAME"
-              [ngModel]="(data$ | async)?.MOTHER_NAME" minlength="4">
-          </mat-form-field>
-          <br>
-          <mat-form-field>
-            <input matInput placeholder="Guardian's name" name="GUARDIAN_NAME" id="GUARDIAN_NAME"
-              [ngModel]="(data$ | async)?.GUARDIAN_NAME" minlength="4">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="Guardian Date of Birth" type="date" name="GDOB" id="GDOB"
-              [ngModel]="(data$ | async)?.GDOB">
-          </mat-form-field>
-        </mat-card-content>
-      </mat-card>
-      <br>
-      <mat-card>
-        <mat-card-title>
-          Contact Details
-
-        </mat-card-title>
-        <mat-card-content>
-          <mat-form-field>
-            <input matInput placeholder="Address Type" name="ADD_TYPE_1" id="ADD_TYPE_1"
-              [ngModel]="(data$ | async)?.ADD_TYPE_1" minlength="4">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="Address Line 1" name="ADD_LINE_1" id="ADD_LINE_1"
-              [ngModel]="(data$ | async)?.ADD_LINE_1" minlength="4">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="Address Line 2" name="ADD_LINE_2" id="ADD_LINE_2"
-              [ngModel]="(data$ | async)?.ADD_LINE_2">
-          </mat-form-field>
-          <br>
-          <mat-form-field>
-            <input matInput placeholder="Pin Code" name="PIN_CODE" id="PIN_CODE" [ngModel]="(data$ | async)?.PIN_CODE">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="State" name="STATE" id="STATE" [ngModel]="(data$ | async)?.STATE">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="Country" name="COUNTRY" id="COUNTRY" [ngModel]="(data$ | async)?.COUNTRY">
-          </mat-form-field>
-          <br>
-          <mat-form-field>
-            <input matInput placeholder="Address Type (2)" name="ADD_TYPE_2" id="ADD_TYPE_2"
-              [ngModel]="(data$ | async)?.ADD_TYPE_2" minlength="4">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="Address Line 1" name="ADD_LINE_12" id="ADD_LINE_12"
-              [ngModel]="(data$ | async)?.ADD_LINE_12" minlength="4">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="Address Line 2" name="ADD_LINE_22" id="ADD_LINE_22"
-              [ngModel]="(data$ | async)?.ADD_LINE_22">
-          </mat-form-field>
-          <br>
-          <mat-form-field>
-            <input matInput placeholder="Pin Code" name="PIN_CODE2" id="PIN_CODE2"
-              [ngModel]="(data$ | async)?.PIN_CODE2">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="State" name="STATE2" id="STATE2" [ngModel]="(data$ | async)?.STATE2">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="Country" name="COUNTRY2" id="COUNTRY2" [ngModel]="(data$ | async)?.COUNTRY2">
-          </mat-form-field>
-          <br>
-          <mat-form-field>
-            <input matInput placeholder="Mobile 1" name="MOBILE1" id="MOBILE1" [ngModel]="(data$ | async)?.MOBILE1"
-              phone minlength="10">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="Mobile 2" name="MOBILE2" id="MOBILE2" [ngModel]="(data$ | async)?.MOBILE2"
-              phone minlength="10">
-          </mat-form-field>
-          <br>
-          <mat-form-field>
-            <input matInput placeholder="Email 1" name="EMAIL1" id="EMAIL1" [ngModel]="(data$ | async)?.EMAIL1" phone
-              minlength="10">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="Email 2" name="EMAIL2" id="EMAIL2" [ngModel]="(data$ | async)?.EMAIL2" phone
-              minlength="10">
-          </mat-form-field>
-
-        </mat-card-content>
-      </mat-card>
-      <br>
-      <mat-card>
-        <mat-card-title>
-          Qualifications
-        </mat-card-title>
-        <mat-card-content>
-          <mat-form-field>
-            <input matInput placeholder="Degree(s)" name="DEGREE" id="DEGREE" [ngModel]="(data$ | async)?.DEGREE"
-              minlength="4">
-          </mat-form-field>
-          <br>
-          <mat-form-field>
-            <input matInput placeholder="Last College Attended" name="COLLEGE" id="COLLEGE"
-              [ngModel]="(data$ | async)?.COLLEGE" minlength="4">
-          </mat-form-field>
-          <br>
-          <mat-form-field>
-            <input matInput placeholder="College Address Line 1" name="ADD_LINE_C1" id="ADD_LINE_C1"
-              [ngModel]="(data$ | async)?.ADD_LINE_C1" minlength="4">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="College Address Line 2" name="ADD_LINE_C2" id="ADD_LINE_C2"
-              [ngModel]="(data$ | async)?.ADD_LINE_C2">
-          </mat-form-field>
-          <br>
-          <mat-form-field>
-            <input matInput placeholder="College Pin Code" name="PIN_CODE_C" id="PIN_CODE_C"
-              [ngModel]="(data$ | async)?.PIN_CODE_C">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="College State" name="STATE_C" id="STATE_C"
-              [ngModel]="(data$ | async)?.STATE_C">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="College Country" name="COUNTRY_C" id="COUNTRY_C"
-              [ngModel]="(data$ | async)?.COUNTRY_C">
-          </mat-form-field>
-        </mat-card-content>
-      </mat-card>
-      <br>
-      <mat-card>
-        <mat-card-title>
-          References Details
-        </mat-card-title>
-        <mat-card-content>
-          <mat-form-field>
-            <input matInput placeholder="Reference 1" name="REFERENCE_1" id="REFERENCE_1"
-              [ngModel]="(data$ | async)?.REFERENCE_1" minlength="4">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="Reference 1 Address" name="REFERENCE_1_ADD" id="REFERENCE_1_ADD"
-              [ngModel]="(data$ | async)?.REFERENCE_1_ADD" minlength="4">
-          </mat-form-field>
-          <br>
-          <mat-form-field>
-            <input matInput placeholder="Reference 2" name="REFERENCE_2" id="REFERENCE_2"
-              [ngModel]="(data$ | async)?.REFERENCE_2" minlength="4">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="Reference 2 Address" name="REFERENCE_2_ADD" id="REFERENCE_2_ADD"
-              [ngModel]="(data$ | async)?.REFERENCE_2_ADD" minlength="4">
-          </mat-form-field>
-
-        </mat-card-content>
-      </mat-card>
-      <br>
-      <mat-card>
-        <mat-card-title>
-          HR (*)
-
-        </mat-card-title>
-        <mat-card-content>
-          <label>Enrollment Code: </label>
-          <div>{{(data$ | async)?.ENROLLMENT_CODE}}</div>
-          <!-- <mat-form-field>
-                      <mat-select placeholder="Enrollment Code" name="ENROLLMENT_CODE" id="ENROLLMENT_CODE" [ngModel]="(data$ | async)?.ENROLLMENT_CODE" required>
-                        <mat-option *ngFor="let code of enrollmentCDs$" [value]="code._id">
-                            {{ code.code }} 
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field> -->
-
-          <!-- <mat-form-field>
-            <mat-select placeholder="Class" name="CLASS_CODE" id="CLASS_CODE" [compareWith]="compareObjects"
-              [ngModel]="(data$ | async)?.CLASS_CODE" required>
-              <mat-option *ngFor="let code of classCDs$" [value]="{_id: code._id, className: code.code}">
-                {{ code.code }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field> -->
-
-          <!-- <mat-form-field>
-                      <mat-select placeholder="Fee Code" name="FEE_CODE" id="FEE_CODE" [ngModel]="(data$ | async)?.FEE_CODE" required>
-                        <mat-option *ngFor="let code of feeCDs$" [value]="code._id">
-                            {{ code.code }} 
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                    <mat-form-field>
-                      <mat-select placeholder="Attendance Code" name="ATTENDANCE_CODE" id="ATTENDANCE_CODE" [ngModel]="(data$ | async)?.ATTENDANCE_CODE" required>
-                        <mat-option *ngFor="let code of attendanceCDs$" [value]="code._id">
-                            {{ code.code }} 
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                    <mat-form-field>
-                      <mat-select placeholder="Marks Code" name="MARKS_CODE" id="MARKS_CODE" [ngModel]="(data$ | async)?.MARKS_CODE" required>
-                        <mat-option *ngFor="let code of marksCDs$" [value]="code._id">
-                          {{ code.code }} 
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field> 
-
-        </mat-card-content>
-      </mat-card> -->
-
-      <mat-card-actions align="end">
-        <button type="submit" mat-raised-button [disabled]="!this.editDataForm.valid || this.editDataForm.pristine"
-          color="primary">Update</button>
-      </mat-card-actions>
-    </div>
-  </form>
-</ng-template>
-<!-- Results mode -->
-<ng-template #showResMode>
-  <mat-card-actions align="end">
-    <button matTooltip="Add New" color="primary" type="button" mat-raised-button (click)="toggle('addMode')">
-      <mat-icon color="white" svgIcon="add"></mat-icon> Add New
-    </button>
-    <span class="small-spacer"></span>
-    <button matTooltip="Search All" color="primary" type="button" mat-raised-button (click)="toggle('searchMode')">
-      <mat-icon color="white" svgIcon="search"></mat-icon> Search
-    </button>
-  </mat-card-actions>
-  <div class="example-header">
-    <!-- <mat-form-field>
-          <mat-select placeholder="Enrollment Code" name="ENROLLMENT_CODE" id="ENROLLMENT_CODE" [ngModel]="enrollId | async">
-              <mat-option *ngFor="let enroll of enrollmentCDs$" [value]="enroll._id">
-                  {{ enroll.code }} 
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-    <span class="small-spacer"></span> -->
-
-    <mat-form-field>
-      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search Recent Results">
-    </mat-form-field>
-  </div>
-  <div class="example-container mat-elevation-z8">
-    <mat-table [dataSource]="dataSource" matSort>
-      <ng-container matColumnDef="code">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Student ID</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.code}} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="fName">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.fName}} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="class">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Class</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.CLASS_CODE.className}} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="status">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
-        <mat-cell *matCellDef="let row">
-            <mat-select placeholder="Status" name="studStatus" id="studStatus" [ngModel]="row.status" required>
-              <mat-option value="Active">
-                Active
-              </mat-option>
-              <mat-option value="Active">
-                InActive
-              </mat-option>
-            </mat-select>
-        </mat-cell>
-      </ng-container>
+  </mat-tab-group>
 
 
-      <ng-container matColumnDef="_id">
-        <mat-header-cell *matHeaderCellDef> action </mat-header-cell>
-        <mat-cell *matCellDef="let row">
-          <span matTooltip="Edit">
-            <!-- {{row | json}} -->
-            <button mat-icon-button (click)="getDoc(row.ENROLLMENT_CODE._id, row._id)">
-              <mat-icon color="primary" svgIcon="edit"></mat-icon>
-            </button>
-          </span>
-          <span matTooltip="Fee">
-            <button mat-icon-button routerLink="/fee/{{row._id}}">
-              <mat-icon color="primary" svgIcon="salary"></mat-icon>
-            </button>
-          </span>
-          <span matTooltip="Attendance">
-            <button mat-icon-button routerLink="/attendance/{{row._id}}">
-              <mat-icon color="primary" svgIcon="event"></mat-icon>
-            </button>
-          </span>
-          <span matTooltip="Marks">
-            <button mat-icon-button routerLink="/marks/{{row._id}}">
-              <mat-icon color="primary">score</mat-icon>
-            </button>
-          </span>
-        </mat-cell>
-      </ng-container>
-
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-    </mat-table>
-    <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="5"
-      [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-  </div>
-</ng-template>

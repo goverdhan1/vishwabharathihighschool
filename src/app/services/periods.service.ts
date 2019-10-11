@@ -8,10 +8,11 @@ import { Observable, combineLatest} from 'rxjs';
 import { switchMap, map} from 'rxjs/operators';
 import { firestore } from 'firebase/app';
 
+
 @Injectable({
   providedIn: 'root'
 })
-export class AttendanceService {
+export class PeriodsService {
 
   constructor(
     public afAuth: AngularFireAuth,
@@ -22,7 +23,7 @@ export class AttendanceService {
   }
 
   getActiveEnrollmentId() {
-    return this.afs.collection('SMS_CONFIG_ENROLL_CD', ref => ref.where('orderBy', '==', 0)).valueChanges();
+    return this.afs.collection('SMS_CONFIG_ENROLL_CD', ref => ref.where('active', '==', true)).valueChanges();
   }
 
   getAttendanceList(enrollId: string) {
@@ -37,6 +38,24 @@ export class AttendanceService {
       return newArr;
       })
     );
+
+//     const docRef = this.afs.collection('SMS_CONFIG_ENROLL_CD').doc(enrollId).collection('STUDENTS').doc(ID);
+
+//     docRef.get().then(function(doc) {
+//     if (doc.exists) {
+//   // gives full object of user
+//     console.log("Document data:", doc.data());
+//   // gives specific field 
+//   var name=doc.get('name');
+//   console.log(name);
+
+// } else {
+//     // doc.data() will be undefined in this case
+//     console.log("No such document!");
+// }
+// }).catch(function(error) {
+// console.log("Error getting document:", error);
+// });
   }
 
   getUserStudentDoc(enrollId) {
@@ -61,8 +80,8 @@ export class AttendanceService {
     // return firebase.firestore.FieldValue.serverTimestamp();
   }
 
-  updateSpecificDayAttendance(enrollId: string, docId: string, data: any) {
-    const docRef = this.afs.collection('SMS_CONFIG_ENROLL_CD').doc(enrollId).collection('ATTENDANCE').doc(docId);
+  assignTeacher(enrollId: string, docId: string, data: any) {
+    const docRef = this.afs.collection('SMS_CONFIG_ENROLL_CD').doc(enrollId).collection('PERIODS').doc(docId);
     return docRef.update(data).then((res) => res);
   }
 
@@ -162,4 +181,5 @@ export class AttendanceService {
       return this.afs.collection('SMS_CONFIG_ENROLL_CD').doc(enrollId).collection(coll).valueChanges();
     }
   }
+
 }

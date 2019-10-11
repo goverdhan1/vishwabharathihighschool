@@ -1,5 +1,10 @@
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 
+body{
+  margin: 0 !important;
+  height: 100%;
+}
+
 .small-headline {
 		font-family: times, Times New Roman, times-roman, georgia, serif;
 		font-size: 8;

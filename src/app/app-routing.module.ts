@@ -12,8 +12,8 @@ import { FeeComponent } from './manage/fee.component';
 import { FeeViewComponent } from './manage/fee-view.component';
 
 import { AttendanceComponent } from './manage/attendance.component';
-import { AttendanceViewComponent } from './manage/attendance-view.component';
-
+import { StudentAttendanceComponent } from './manage/student-attendance.component';
+import { EmployeeAttendanceComponent } from './manage/employee-attendance.component';
 
 import { MarksComponent } from './manage/marks.component';
 import { MarksViewComponent } from './manage/marks-view.component';
@@ -32,9 +32,13 @@ import { HomeworkComponent } from './online/homework.component';
 import { HomeworkViewComponent } from './online/homework-view.component';
 import { TutorialsComponent } from './online/tutorials.component';
 import { TutorialsViewComponent } from './online/tutorials-view.component';
-import { ClassesComponent } from './online/classes.component';
+import { ClassesComponent } from './manage/classes.component';
+
+import { SubjectsComponent } from './setup/subjects/subjects.component';
+
 import { ClassesViewComponent } from './online/classes-view.component';
 import { NotificationsComponent } from './shared/settings/notifications.component';
+import { PeriodsComponent } from './manage/periods.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/aboutus', pathMatch: 'full' },
@@ -53,7 +57,10 @@ const routes: Routes = [
   { path: 'fee/:id', component: FeeComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
 
   { path: 'attendance', component: AttendanceComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
-  { path: 'attendance-view', component: AttendanceViewComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
+  { path: 'student-attendance', component: StudentAttendanceComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
+  { path: 'employee-attendance', component: EmployeeAttendanceComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
+  { path: 'periods', component: PeriodsComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
+
   { path: 'attendance/:id', component: AttendanceComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
 
   { path: 'marks', component: MarksComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
@@ -70,6 +77,9 @@ const routes: Routes = [
   { path: 'tutorials', component: TutorialsComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
   { path: 'tutorials-view', component: TutorialsViewComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
   { path: 'classes', component: ClassesComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
+
+  { path: 'subjects', component: SubjectsComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
+
   { path: 'classes-view', component: ClassesViewComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
   { path: 'salarycode', component: SalaryCodeComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
   { path: 'salary/:id', component: SalaryComponent, canActivate: [AuthGuardService, NavAuthGuardService] },
