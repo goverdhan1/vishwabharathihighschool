@@ -16,6 +16,7 @@ export class StudentService {
     private afs: AngularFirestore,
     private storage: AngularFireStorage) {
   }
+
   getConfig() {
     return environment.social;
   }

@@ -9,9 +9,9 @@ import {
   HostListener,
   HostBinding
 } from '@angular/core';
-import { moveIn, fallIn } from '../shared/router.animation';
+import { moveIn, fallIn } from '@app/shared/router.animation';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { AttendanceService } from '../services/attendance.service';
+import { AttendanceService } from '@app/services/attendance.service';
 
 @Component({
   selector: 'app-employee-attendance',

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BackendService } from '../../services/backend.service';
+import { BackendService } from '@app/services/backend.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -7,9 +7,9 @@ import { Router } from '@angular/router';
   templateUrl: './signup.component.html'
 })
 export class SignupComponent implements OnInit {
-  state: string = '';
+  state = '';
   error: any;
-  dataLoading: boolean = false;
+  dataLoading = false;
   brokenNetwork = false;
   savedChanges = false;
 

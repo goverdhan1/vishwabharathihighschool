@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { moveIn, fallIn } from '../shared/router.animation';
+import { moveIn, fallIn } from '@app/shared/router.animation';
 import { Observable } from 'rxjs';
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { BackendService } from '../services/backend.service';
+import { BackendService } from '@app/services/backend.service';
 import { FormBuilder, FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
 
 @Component({
@@ -20,11 +20,11 @@ export class MarkscodeComponent implements OnInit, OnDestroy {
     myDocData;
     data$;
     toggleField: string;
-    state: string = '';
+    state = '';
     savedChanges = false;
-    error: boolean = false;
-    errorMessage: String = "";
-    dataLoading: boolean = false;
+    error = false;
+    errorMessage = '';
+    dataLoading = false;
     private querySubscription;
 
     total_amount = 0;
@@ -39,9 +39,9 @@ export class MarkscodeComponent implements OnInit, OnDestroy {
     constructor(private _backendService: BackendService, private _fb: FormBuilder) { }
 
     ngOnInit() {
-        this.toggleField = "searchMode";
+        this.toggleField = 'searchMode';
         this.error = false;
-        this.errorMessage = "";
+        this.errorMessage = '';
         this.dataSource = new MatTableDataSource(this.members);
         this.addDataForm = this._fb.group({
             code: ['', Validators.required],
@@ -50,7 +50,7 @@ export class MarkscodeComponent implements OnInit, OnDestroy {
                 subject: ['', Validators.required],
                 minmarks: ['', Validators.required],
                 maxmarks: ['', Validators.required],
-                marks: ['', [Validators.pattern("^[0-9]*$")]]
+                marks: ['', [Validators.pattern('^[0-9]*$')]]
             })]),
             gamount: ''
         });
@@ -71,11 +71,11 @@ export class MarkscodeComponent implements OnInit, OnDestroy {
             subject: ['', Validators.required],
                 minmarks: ['', Validators.required],
                 maxmarks: ['', Validators.required],
-                marks: ['', [Validators.pattern("^[0-9]*$")]]
+                marks: ['', [Validators.pattern('^[0-9]*$')]]
         }));
         this.calculateTotal(formName);
     }
-    deleteLINES(index,formName) {
+    deleteLINES(index, formName) {
         this.LINES(formName).removeAt(index);
         this.calculateTotal(formName);
     }
@@ -90,15 +90,15 @@ export class MarkscodeComponent implements OnInit, OnDestroy {
     }
 
     toggle(filter?) {
-        if (!filter) { filter = "searchMode" }
-        else { filter = filter; }
+        if (!filter) { filter = 'searchMode';
+        } else { filter = filter; }
         this.toggleField = filter;
         this.dataLoading = false;
     }
 
     getData(formData?) {
         this.dataLoading = true;
-        this.querySubscription = this._backendService.getDocs('MARKS_CD',formData).subscribe((res) => {
+        this.querySubscription = this._backendService.getDocs('MARKS_CD', formData).subscribe((res) => {
             this.dataSource = new MatTableDataSource(res);
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
@@ -115,35 +115,32 @@ export class MarkscodeComponent implements OnInit, OnDestroy {
 
     setData(formData) {
         this.dataLoading = true;
-        this.querySubscription = this._backendService.setDoc('MARKS_CD',formData).then(res => {
+        this.querySubscription = this._backendService.setDoc('MARKS_CD', formData).then(res => {
             if (res) {
                 this.savedChanges = true;
                 this.error = false;
-                this.errorMessage = "";
+                this.errorMessage = '';
                 this.dataLoading = false;
             }
-        }
-        ).catch(err => {
+        }).catch(err => {
             if (err) {
                 this.error = true;
                 this.errorMessage = err.message;
                 this.dataLoading = false;
             }
-        }
-        );
+        });
     }
 
     updateData(formData) {
         this.dataLoading = true;
-        this.querySubscription = this._backendService.updateDoc('MARKS_CD',formData._id,formData).then(res => {
+        this.querySubscription = this._backendService.updateDoc('MARKS_CD', formData._id, formData).then(res => {
             if (res) {
                 this.savedChanges = true;
                 this.error = false;
-                this.errorMessage = "";
+                this.errorMessage = '';
                 this.dataLoading = false;
             }
-        }
-        ).catch(err => {
+        }).catch(err => {
             if (err) {
                 this.error = true;
                 this.errorMessage = err.message;
@@ -155,24 +152,22 @@ export class MarkscodeComponent implements OnInit, OnDestroy {
     getDoc(docId) {
         this.dataLoading = true;
         this.data$ = this._backendService.getDoc('MARKS_CD',docId).subscribe(res => {
-            if(res) {
+            if (res) {
                 this.data$ = res;
-                            this.editDataForm = this._fb.group({
-                                _id: ['', Validators.required],
-                                code: ['', Validators.required],
-                                descr: ['', Validators.required],
-                                line: this._fb.array([]
-                                ),
-                                gamount: ''
-                            });
-                            this.editDataForm.patchValue(this.data$);
-        
-                            for (let i = 0; i < this.data$["line"].length; i++) {
-                                this.LINES('editDataForm').push(this._fb.group(this.data$["line"][i]));
-                            }
-                            this.calculateTotal(('editDataForm'));
-                            this.toggle('editMode');
-                            this.dataLoading = false;
+                this.editDataForm = this._fb.group({
+                    _id: ['', Validators.required],
+                    code: ['', Validators.required],
+                    descr: ['', Validators.required],
+                    line: this._fb.array([]),
+                    gamount: ''
+                });
+                this.editDataForm.patchValue(this.data$);
+                for (let i = 0; i < this.data$["line"].length; i++) {
+                    this.LINES('editDataForm').push(this._fb.group(this.data$["line"][i]));
+                }
+                this.calculateTotal(('editDataForm'));
+                this.toggle('editMode');
+                this.dataLoading = false;
             }},
                 (error) => {
                     this.error = true;
@@ -185,23 +180,21 @@ export class MarkscodeComponent implements OnInit, OnDestroy {
         }
 
         deleteDoc(docId) {
-            if (confirm("Are you sure want to delete this record ?")) {
+            if (confirm('Are you sure want to delete this record ?')) {
                 this.dataLoading = true;
-                this._backendService.deleteDoc('MARKS_CD',docId).then(res => {
+                this._backendService.deleteDoc('MARKS_CD', docId).then(res => {
                     if (res) {
                         this.error = false;
-                        this.errorMessage = "";
+                        this.errorMessage = '';
                         this.dataLoading = false;
                     }
-                }
-                ).catch(err => {
+                }).catch(err => {
                     if (err) {
                         this.error = true;
                         this.errorMessage = err.message;
                         this.dataLoading = false;
                     }
-                }
-                );
+                });
             }
         }
 

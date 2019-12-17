@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
-import { BackendService } from '../../services/backend.service';
+import { BackendService } from '@app/services/backend.service';
 
 @Component({
     selector: 'app-fileupload',

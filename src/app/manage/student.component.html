@@ -927,7 +927,7 @@
               <mat-cell *matCellDef="let row">
                 <span matTooltip="Edit">
                   <!-- {{row | json}} -->
-                  <button mat-icon-button (click)="getDoc(row.ENROLLMENT_CODE._id, row._id)">
+                  <button mat-icon-button (click)="getDoc(currentEnrollment._id, row._id)">
                     <mat-icon color="primary" svgIcon="edit"></mat-icon>
                   </button>
                 </span>

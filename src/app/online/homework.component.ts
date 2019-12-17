@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { moveIn, fallIn } from '../shared/router.animation';
+import { moveIn, fallIn } from '@app/shared/router.animation';
 import { Observable } from 'rxjs';
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { BackendService } from '../services/backend.service';
+import { BackendService } from '@app/services/backend.service';
 
 @Component({
     selector: 'app-homework',
@@ -19,14 +19,14 @@ export class HomeworkComponent implements OnInit, OnDestroy {
     myDocData;
     data$;
     toggleField: string;
-    state: string = '';
+    state = '';
     savedChanges = false;
-    error: boolean = false;
-    errorMessage: String = "";
-    dataLoading: boolean = false;
+    error = false;
+    errorMessage = '';
+    dataLoading = false;
     private querySubscription;
-    showFileUpload: boolean = false;
-    showDocument: boolean = false;
+    showFileUpload = false;
+    showDocument = false;
     docId: string;
     docUrl: Observable<string | null>;
     fileName: string;
@@ -39,14 +39,14 @@ export class HomeworkComponent implements OnInit, OnDestroy {
     constructor(private _backendService: BackendService) { }
 
     ngOnInit() {
-        this.toggleField = "searchMode";
+        this.toggleField = 'searchMode';
         this.dataSource = new MatTableDataSource(this.members);
         this.getEnrollmentCDs();
     }
 
     toggle(filter?) {
-        if (!filter) { filter = "searchMode" }
-        else { filter = filter; }
+        if (!filter) { filter = 'searchMode';
+         } else { filter = filter; }
         this.toggleField = filter;
         this.dataLoading = false;
     }
@@ -68,7 +68,7 @@ export class HomeworkComponent implements OnInit, OnDestroy {
 
     getData(formData?) {
         this.dataLoading = true;
-        this.querySubscription = this._backendService.getDocs('HOMEWORK',formData).subscribe((res) => {
+        this.querySubscription = this._backendService.getDocs('HOMEWORK', formData).subscribe((res) => {
             this.dataSource = new MatTableDataSource(res);
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
@@ -85,11 +85,11 @@ export class HomeworkComponent implements OnInit, OnDestroy {
 
     setData(formData) {
         this.dataLoading = true;
-        this.querySubscription = this._backendService.setDoc('HOMEWORK',formData).then(res => {
+        this.querySubscription = this._backendService.setDoc('HOMEWORK', formData).then(res => {
             if (res) {
                 this.savedChanges = true;
                 this.error = false;
-                this.errorMessage = "";
+                this.errorMessage = '';
                 this.dataLoading = false;
             }
         }
@@ -99,17 +99,16 @@ export class HomeworkComponent implements OnInit, OnDestroy {
                 this.errorMessage = err.message;
                 this.dataLoading = false;
             }
-        }
-        );
+        });
     }
 
     updateData(formData) {
         this.dataLoading = true;
-        this.querySubscription = this._backendService.updateDoc('HOMEWORK',formData._id,formData).then(res => {
+        this.querySubscription = this._backendService.updateDoc('HOMEWORK', formData._id, formData).then(res => {
             if (res) {
                 this.savedChanges = true;
                 this.error = false;
-                this.errorMessage = "";
+                this.errorMessage = '';
                 this.dataLoading = false;
             }
         }
@@ -119,14 +118,13 @@ export class HomeworkComponent implements OnInit, OnDestroy {
                 this.errorMessage = err.message;
                 this.dataLoading = false;
             }
-        }
-        );
+        });
     }
 
     getDoc(docId) {
         this.docId = docId; // this is required to pass at file upload directive
         this.dataLoading = true;
-        this.data$ = this._backendService.getDoc('HOMEWORK',docId);
+        this.data$ = this._backendService.getDoc('HOMEWORK', docId);
         this.toggle('editMode');
         this.dataLoading = false;
     }
@@ -136,12 +134,12 @@ export class HomeworkComponent implements OnInit, OnDestroy {
     }
 
     deleteDoc(docId) {
-        if (confirm("Are you sure want to delete this record ?")) {
+        if (confirm('Are you sure want to delete this record ?')) {
             this.dataLoading = true;
-            this._backendService.deleteDoc('HOMEWORK',docId).then(res => {
+            this._backendService.deleteDoc('HOMEWORK', docId).then(res => {
                 if (res) {
                     this.error = false;
-                    this.errorMessage = "";
+                    this.errorMessage = '';
                     this.dataLoading = false;
                 }
             }
@@ -151,8 +149,7 @@ export class HomeworkComponent implements OnInit, OnDestroy {
                     this.errorMessage = err.message;
                     this.dataLoading = false;
                 }
-            }
-            );
+            });
         }
     }
 

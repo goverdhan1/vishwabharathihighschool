@@ -26,7 +26,7 @@ export class EmployeeComponent implements OnInit, AfterViewInit, OnDestroy {
   errorMessage = '';
   dataLoading = false;
   private querySubscription;
-  ENROLLMENT_CODE;
+  ENROLLMENT_CODE: any;
 
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: false}) sort: MatSort;
@@ -35,6 +35,7 @@ export class EmployeeComponent implements OnInit, AfterViewInit, OnDestroy {
   classCDs$;
   attendanceDays;
   feeMonths;
+  currentEnrollment;
   // file upload
   docId: string;
   fileName: string;
@@ -68,8 +69,11 @@ export class EmployeeComponent implements OnInit, AfterViewInit, OnDestroy {
   getActiveEnrollmentId() {
       this.dataLoading = true;
       this.querySubscription = this.employeeService.getActiveEnrollmentId().subscribe((res: any) => {
-          this.ENROLLMENT_CODE = res[0];
-          this.getData(this.ENROLLMENT_CODE._id);
+        res.sort((a, b) => a.orderBy - b.orderBy);
+        this.enrollmentCDs$ = res;
+        this.currentEnrollment = res.filter(item => item.orderBy === 0);
+        this.currentEnrollment = this.currentEnrollment[0];
+        this.getData(this.currentEnrollment._id);
       },
       (error) => {
           this.error = true;
@@ -99,7 +103,6 @@ export class EmployeeComponent implements OnInit, AfterViewInit, OnDestroy {
   getClassCDs() {
       this.dataLoading = true;
       this.querySubscription = this._backendService.getDocs('CLASSES').subscribe((res: any) => {
-          console.log(res);
           res.sort((a, b) => a.orderBy - b.orderBy);
           this.classCDs$ = res;
       },
@@ -133,11 +136,6 @@ export class EmployeeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   compareObjects(o1: any, o2: any): boolean {
       return o1._id === o2._id;
-  }
-
-  onEnrollmentCodeChange(data) {
-      this.attendanceDays = this.setDays(data);
-      this.feeMonths = this.setMonths(data);
   }
 
   setDays(data: any): any {
@@ -227,6 +225,13 @@ export class EmployeeComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       );
   }
+
+  changeCurrentEnrollment(e) {
+ //   this.attendanceDays = this.setDays(data);
+ //   this.feeMonths = this.setMonths(data);
+    this.currentEnrollment = e.value;
+    this.getData(this.currentEnrollment._id);
+}
 
   getDoc(enrollId, docId) {
       this.docId = docId; // this is required to pass at file upload directive

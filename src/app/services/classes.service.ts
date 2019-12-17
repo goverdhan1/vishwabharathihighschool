@@ -63,12 +63,15 @@ export class ClassesService {
   }
 
   getClasses(enrollId) {
-    return this.afs.collection('SMS_CONFIG_ENROLL_CD').doc(enrollId).collection('CLASSES').valueChanges();
+    return this.afs.collection('SMS_CONFIG_ENROLL_CD').doc(enrollId)
+    .collection('CLASSES', ref => ref.orderBy('orderBy', 'asc')).valueChanges();
   }
 
   getTeachers(enrollId: string) {
     return this.afs.collection('SMS_CONFIG_ENROLL_CD').doc(enrollId)
-    .collection('EMPLOYEES', ref => ref.where('empType', '>=', 'teacher')).valueChanges();
+    .collection('EMPLOYEES',
+      ref => ref.where('empType', '>=', 'teacher')
+    ).valueChanges();
   }
 
   deleteClass(docId: string, enrollId?: string) {
@@ -97,4 +100,3 @@ export class ClassesService {
 
 
 }
-

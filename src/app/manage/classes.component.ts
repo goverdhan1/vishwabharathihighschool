@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
-import { moveIn, fallIn } from '../shared/router.animation';
+import { moveIn, fallIn } from '@app/shared/router.animation';
 import { Observable } from 'rxjs';
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { BackendService } from '../services/backend.service';
-import { ClassesService } from '../services/classes.service';
+import { BackendService } from '@app/services/backend.service';
+import { ClassesService } from '@app/services/classes.service';
 
 @Component({
     selector: 'app-classes',
@@ -32,10 +32,15 @@ export class ClassesComponent implements OnInit, AfterViewInit, OnDestroy {
     docUrl: Observable<string | null>;
     fileName: string;
     subjects$;
-    periods$ = [{period: '', subj: ''},
-    {period: '', subj: ''},
-    {period: '', subj: ''},
-    {period: '', subj: ''}, {period: '', subj: ''}, {period: '', subj: ''}, {period: '', subj: ''}];
+    periods$ = {
+        period1: {teacher: {}, sub: ''},
+        period2: {teacher: {}, sub: ''},
+        period3: {teacher: {}, sub: ''},
+        period4: {teacher: {}, sub: ''},
+        period5: {teacher: {}, sub: ''},
+        period6: {teacher: {}, sub: ''},
+        period7: {teacher: {}, sub: ''}
+    };
     currentEnrollment: any;
     currentEnrollment$;
     enrollmentCDs$;

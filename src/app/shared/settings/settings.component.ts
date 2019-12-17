@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { BackendService } from '../../services/backend.service';
+import { BackendService } from '@app/services/backend.service';
 import { Observable } from 'rxjs';
 
 @Component({

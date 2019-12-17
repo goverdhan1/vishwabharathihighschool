@@ -8,7 +8,6 @@ import { Observable, combineLatest} from 'rxjs';
 import { switchMap, map} from 'rxjs/operators';
 import { firestore } from 'firebase/app';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -80,9 +79,12 @@ export class PeriodsService {
     // return firebase.firestore.FieldValue.serverTimestamp();
   }
 
-  assignTeacher(enrollId: string, docId: string, data: any) {
-    const docRef = this.afs.collection('SMS_CONFIG_ENROLL_CD').doc(enrollId).collection('PERIODS').doc(docId);
-    return docRef.update(data).then((res) => res);
+  assignTeacher(enrollId: string, docId: string, field: any, value: any) {
+    const docRef = this.afs.collection('SMS_CONFIG_ENROLL_CD')
+    .doc(enrollId).collection('PERIODS').doc(docId);
+
+
+    return docRef.update({[field]: value}).then((res) => res);
   }
 
   getEmployeeAttendanceList(enrollId: string) {

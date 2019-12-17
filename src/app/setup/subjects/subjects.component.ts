@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular
 import { Observable } from 'rxjs';
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { BackendService } from '../../services/backend.service';
+import { BackendService } from '@app/services/backend.service';
 
 @Component({
     selector: 'app-subjects',

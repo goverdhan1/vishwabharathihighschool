@@ -1,6 +1,6 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { BackendService } from '../services/backend.service';
+import { BackendService } from '@app/services/backend.service';
 
 @Component({
   selector: 'app-header-admin',

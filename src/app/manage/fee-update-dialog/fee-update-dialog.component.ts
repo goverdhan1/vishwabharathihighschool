@@ -1,6 +1,6 @@
 import { Component, OnDestroy, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FeeService } from '../../services/fee.service';
+import { FeeService } from '@app/services/fee.service';
 
 export interface DialogData {
   enrollId: string;

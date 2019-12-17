@@ -175,7 +175,8 @@ export class EmployeeService {
   }
 
   getEmployees(enrollId) {
-   return this._afs.collection('SMS_CONFIG_ENROLL_CD').doc(enrollId).collection('EMPLOYEES').valueChanges();
+   return this._afs.collection('SMS_CONFIG_ENROLL_CD').doc(enrollId)
+   .collection('EMPLOYEES', ref => ref.orderBy('code', 'asc')).valueChanges();
   }
 
   getParentDetails(enrollId) {

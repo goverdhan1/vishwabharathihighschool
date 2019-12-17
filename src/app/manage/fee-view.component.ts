@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
-import { moveIn, fallIn } from '../shared/router.animation';
+import { moveIn, fallIn } from '@app/shared/router.animation';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
-import { FeeUpdateDialogComponent } from './fee-update-dialog/fee-update-dialog.component';
-import { FeeService } from '../services/fee.service';
+import { FeeUpdateDialogComponent } from '@app/manage/fee-update-dialog/fee-update-dialog.component';
+import { FeeService } from '@app/services/fee.service';
 
 @Component({
   selector: 'app-fee-view',

@@ -1,22 +1,21 @@
 <mat-card>
-    <div>
+  <div>
 
-      <!-- <button mat-raised-button color="primary" (click)="previousDate()"> << </button>
+    <!-- <button mat-raised-button color="primary" (click)="previousDate()"> << </button>
       <span class="small-spacer"></span> -->
-      <mat-form-field>
-            <input matInput (dateChange)="dateChanged()" [matDatepicker]="picker1" 
-            placeholder="Date" [formControl]="specificDay" name="specificDay"
-            id="specificDay">
-            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-            <mat-datepicker #picker1></mat-datepicker>
-          </mat-form-field>
-          <!-- <span class="small-spacer"></span>
+    <mat-form-field>
+      <input matInput (dateChange)="dateChanged()" [matDatepicker]="picker1" placeholder="Date"
+        [formControl]="specificDay" name="specificDay" id="specificDay">
+      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+      <mat-datepicker #picker1></mat-datepicker>
+    </mat-form-field>
+    <!-- <span class="small-spacer"></span>
           <button mat-raised-button color="primary" (click)="nextDate()"> >> </button>     -->
-          
-        <!-- <mat-form-field>
+
+    <!-- <mat-form-field>
             <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search Recent Results">
         </mat-form-field> -->
-        <!-- <span class="fill-space"></span>
+    <!-- <span class="fill-space"></span>
         <button class="btn-right" mat-icon-button matTooltip="Settings" [matMenuTriggerFor]="menu">
             <mat-icon color="primary" svgIcon="settings">Settings</mat-icon>
 
@@ -27,250 +26,229 @@
             </mat-menu>
         </button> -->
 
-    </div>
-    <div class="example-container mat-elevation-z8">
-        <mat-table [dataSource]="dataSource" matSort>
-            <ng-container matColumnDef="code">
-                <mat-header-cell class='fixed-column' *matHeaderCellDef mat-sort-header>Classes</mat-header-cell>
-                <mat-cell class='fixed-column' *matCellDef="let row"> {{row.code}} </mat-cell>
-            </ng-container>
-            <ng-container  matColumnDef="period1">
-                <mat-header-cell class='fixed-column' *matHeaderCellDef mat-sort-header>Period 1</mat-header-cell>
-                <mat-cell class='fixed-column' *matCellDef="let row"> 
-                  <editable class="editable">
-                        <ng-template viewMode>
-                          <div class="editable"> {{row.days[0].period}}</div>
-                        </ng-template>
-                        <ng-template editMode>
-                          <div *ngIf="row.days =='H'">
-                            H
-                          </div>
-                          <div *ngIf="row.days!='H'">
-                            <mat-select placeholder="Status" [ngModel]="row.days[0].period" class="period-status"
-                              (selectionChange)="assignTeacher($event, row._id, 0)">
-                              <mat-option *ngFor="let teacher of availableTeachers$" [value]="{_id: teacher._id, code:teacher.code, fName: teacher.fName}">
-                              {{teacher.code}} - {{ teacher.fName }}
-                              </mat-option>
-                            </mat-select>
-                          </div>
-                        </ng-template>
-                      </editable>
-            
-
-                </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="period2">
-                <mat-header-cell class='fixed-column' *matHeaderCellDef mat-sort-header>Period 2</mat-header-cell>
-                <mat-cell class='fixed-column' *matCellDef="let row"> 
-                
-                    <editable class="editable">
-                        <ng-template viewMode>
-                          <div class="editable"> {{row.days[1].period}}</div>
-                        </ng-template>
-                        <ng-template editMode>
-                          <div *ngIf="row.days =='H'">
-                            H
-                          </div>
-                          <div *ngIf="row.days!='H'">
-                            <mat-select placeholder="Status" [ngModel]="row.days[1].period" class="period-status"
-                              (selectionChange)="submitAttendance($event, row._id)">
-                              <mat-option *ngFor="let teacher of availableTeachers$" [value]="teacher">
-                              {{teacher.code}} - {{ teacher.fName }}
-                              </mat-option>
-                            </mat-select>
-                          </div>
-                        </ng-template>
-                      </editable>
-            
+  </div>
+  <div class="example-container mat-elevation-z8">
+    <mat-table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="code">
+        <mat-header-cell class='fixed-column' *matHeaderCellDef mat-sort-header>Classes</mat-header-cell>
+        <mat-cell class='fixed-column' *matCellDef="let row"> {{row.code}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="period1">
+        <mat-header-cell class='fixed-column' *matHeaderCellDef mat-sort-header>
+          Period 1
+        </mat-header-cell>
+        <mat-cell class='fixed-column' *matCellDef="let row">
+          <editable class="editable">
+            <ng-template viewMode>
+              <div class="editable" *ngIf="row.days!='H'">
+                {{row.days.period1.teacher.code}} -
+                {{row.days.period1.teacher.fName}}
+              </div>
+            </ng-template>
+            <ng-template editMode>
+              <div *ngIf="row.days =='H'">
+                H
+              </div>
+              <div *ngIf="row.days!='H'">
+                <mat-select placeholder="Status" id="period1" name="period1" [ngModel]="row.days.period1" class="period-status"
+                  (selectionChange)="assignTeacher($event, row._id, 'period1')">
+                  <mat-option value="null">Choose...</mat-option>
+                  <mat-option *ngFor="let teacher of period1AvailableTeachers$"
+                    [value]="{_id: teacher._id, code:teacher.code, fName: teacher.fName}">
+                    {{teacher.code}} - {{ teacher.fName }}
+                  </mat-option>
+                </mat-select>
+              </div>
+            </ng-template>
+          </editable>
 
 
-                </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="period3">
-                <mat-header-cell class='fixed-column' *matHeaderCellDef mat-sort-header>Period 3</mat-header-cell>
-                <mat-cell class='fixed-column' *matCellDef="let row">
-                
-                    <editable class="editable">
-                        <ng-template viewMode>
-                          <div class="editable"> {{row.days[2].period}}</div>
-                        </ng-template>
-                        <ng-template editMode>
-                          <div *ngIf="row.days =='H'">
-                            H
-                          </div>
-                          <div *ngIf="row.days!='H'">
-                            <mat-select placeholder="Status" [ngModel]="row.days[2].period" class="period-status"
-                              (selectionChange)="submitAttendance($event, row._id)">
-                              <mat-option *ngFor="let teacher of availableTeachers$" [value]="teacher">
-                              {{teacher.code}} - {{ teacher.fName }}
-                              </mat-option>
-                            </mat-select>
-                          </div>
-                        </ng-template>
-                      </editable>
-            
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="period2">
+        <mat-header-cell class='fixed-column' *matHeaderCellDef mat-sort-header>Period 2</mat-header-cell>
+        <mat-cell class='fixed-column' *matCellDef="let row">
 
-                </mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="period4">
-                <mat-header-cell class='fixed-column' *matHeaderCellDef mat-sort-header>Period 4</mat-header-cell>
-                <mat-cell class='fixed-column' *matCellDef="let row">
-                
-                    <editable class="editable">
-                        <ng-template viewMode>
-                          <div class="editable"> {{row.days[3].period}}</div>
-                        </ng-template>
-                        <ng-template editMode>
-                          <div *ngIf="row.days =='H'">
-                            H
-                          </div>
-                          <div *ngIf="row.days!='H'">
-                            <mat-select placeholder="Status" [ngModel]="row.days[3].period" class="period-status"
-                              (selectionChange)="submitAttendance($event, row._id)">
-                              <mat-option *ngFor="let teacher of availableTeachers$" [value]="teacher">
-                              {{teacher.code}} - {{ teacher.fName }}
-                              </mat-option>
-                            </mat-select>
-                          </div>
-                        </ng-template>
-                      </editable>
-            
-
-                </mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="period5">
-                <mat-header-cell class='fixed-column' *matHeaderCellDef mat-sort-header>Period 5</mat-header-cell>
-                <mat-cell class='fixed-column' *matCellDef="let row">
-                
-                    <editable class="editable">
-                        <ng-template viewMode>
-                          <div class="editable"> {{row.days[4].period}}</div>
-                        </ng-template>
-                        <ng-template editMode>
-                          <div *ngIf="row.days =='H'">
-                            H
-                          </div>
-                          <div *ngIf="row.days!='H'">
-                            <mat-select placeholder="Status" [ngModel]="row.days[4].period" class="period-status"
-                              (selectionChange)="submitAttendance($event, row._id)">
-                              <mat-option *ngFor="let teacher of availableTeachers$" [value]="teacher">
-                              {{teacher.code}} - {{ teacher.fName }}
-                              </mat-option>
-                            </mat-select>
-                          </div>
-                        </ng-template>
-                      </editable>
-            
-
-                </mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="period6">
-                <mat-header-cell class='fixed-column' *matHeaderCellDef mat-sort-header>Period 6</mat-header-cell>
-                <mat-cell class='fixed-column' *matCellDef="let row">
-                
-                    <editable class="editable">
-                        <ng-template viewMode>
-                          <div class="editable"> {{row.days[5].period}}</div>
-                        </ng-template>
-                        <ng-template editMode>
-                          <div *ngIf="row.days =='H'">
-                            H
-                          </div>
-                          <div *ngIf="row.days!='H'">
-                            <mat-select placeholder="Status" [ngModel]="row.days[5].period" class="period-status"
-                              (selectionChange)="submitAttendance($event, row._id)">
-                              <mat-option *ngFor="let teacher of availableTeachers$" [value]="teacher">
-                              {{teacher.code}} - {{ teacher.fName }}
-                              </mat-option>
-                            </mat-select>
-                          </div>
-                        </ng-template>
-                      </editable>
-            
-
-                  
-                </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="period7">
-                <mat-header-cell class='fixed-column' *matHeaderCellDef mat-sort-header>Period 7</mat-header-cell>
-                <mat-cell class='fixed-column' *matCellDef="let row">
-                
-                    <editable class="editable">
-                        <ng-template viewMode>
-                          <div class="editable"> {{row.days[6].period}}</div>
-                        </ng-template>
-                        <ng-template editMode>
-                          <div *ngIf="row.days =='H'">
-                            H
-                          </div>
-                          <div *ngIf="row.days!='H'">
-                            <mat-select placeholder="Status" [ngModel]="row.days[6].period" class="period-status"
-                              (selectionChange)="submitAttendance($event, row._id)">
-                              <mat-option *ngFor="let teacher of availableTeachers$" [value]="teacher">
-                              {{teacher.code}} - {{ teacher.fName }}
-                              </mat-option>
-                            </mat-select>
-                          </div>
-                        </ng-template>
-                      </editable>
-            
-
-                </mat-cell>
-            </ng-container>
+          <editable class="editable">
+            <ng-template viewMode >
+              <div class="editable" *ngIf="row.days!='H'"> 
+                  {{row.days.period2.teacher.code}} -
+                  {{row.days.period2.teacher.fName}}
+              </div>
+            </ng-template>
+            <ng-template editMode>
+              <div *ngIf="row.days =='H'">
+                H
+              </div>
+              <div *ngIf="row.days!='H'">
+                <mat-select placeholder="Status" id="period2" name="period2" [ngModel]="row.days.period2" class="period-status"
+                  (selectionChange)="assignTeacher($event, row._id, 'period2')">
+                  <mat-option value="null">Choose...</mat-option>
+                  <mat-option *ngFor="let teacher of period2AvailableTeachers$" [value]="{_id: teacher._id, code:teacher.code, fName: teacher.fName}">
+                    {{teacher.code}} - {{ teacher.fName }}
+                  </mat-option>
+                </mat-select>
+              </div>
+            </ng-template>
+          </editable>
 
 
 
-            <!-- <ng-container matColumnDef="{{disCol.label}}" *ngFor="let disCol of days; let i = index; trackBy: customTrackBy">
-          <mat-header-cell [ngClass]="{'hide-column': !disCol.show}" *matHeaderCellDef>
-            {{disCol.label | replace:'_':'/'}}
-          </mat-header-cell>
-          <mat-cell [ngClass]="{'hide-column': !disCol.show, 
-              'present': row.days[disCol.label]=='P', 
-              'absent': row.days[disCol.label]=='A', 
-              'leave': row.days[disCol.label]=='L',
-              'late': row.days[disCol.label]=='LA',
-              'holiday': row.days[disCol.label]=='H'}" *matCellDef="let row">
-    
-    
-            <div *ngIf="todayDate != disCol.label">
-    
-              <editable class="editable">
-                <ng-template viewMode>
-                  <div class="editable"> {{row.days[disCol.label]}}</div>
-                </ng-template>
-                <ng-template editMode>
-                  <div *ngIf="row.days[disCol.label]=='H'">
-                    {{row.days[disCol.label]}}
-                  </div>
-                  <div *ngIf="row.days[disCol.label]!='H'">
-                    <mat-select placeholder="Status" [ngModel]="row.days[disCol.label]" class="attendence-status"
-                      (selectionChange)="submitAttendance($event, row._id, disCol.label)">
-                      <mat-option *ngFor="let CD of attendanceStatus" [value]="CD">
-                        {{ CD }}
-                      </mat-option>
-                    </mat-select>
-                  </div>
-                </ng-template>
-              </editable>
-    
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="period3">
+        <mat-header-cell class='fixed-column' *matHeaderCellDef mat-sort-header>Period 3</mat-header-cell>
+        <mat-cell class='fixed-column' *matCellDef="let row">
+
+          <editable class="editable">
+            <ng-template viewMode>
+              <div class="editable" *ngIf="row.days!='H'"> 
+                  {{row.days.period3.teacher.code}} -
+                  {{row.days.period3.teacher.fName}}
+
+
+              </div>
+            </ng-template>
+            <ng-template editMode>
+              <div *ngIf="row.days =='H'">
+                H
+              </div>
+              <div *ngIf="row.days!='H'">
+                <mat-select placeholder="Status" id="period3" name="period3" [ngModel]="row.days.period3" class="period-status"
+                  (selectionChange)="assignTeacher($event, row._id, 'period3')">
+                  <mat-option value="null">Choose...</mat-option>
+                  <mat-option *ngFor="let teacher of period3AvailableTeachers$" [value]="{_id: teacher._id, code:teacher.code, fName: teacher.fName}">
+                    {{teacher.code}} - {{ teacher.fName }}
+                  </mat-option>
+                </mat-select>
+              </div>
+            </ng-template>
+          </editable>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="period4">
+        <mat-header-cell class='fixed-column' *matHeaderCellDef mat-sort-header>Period 4</mat-header-cell>
+        <mat-cell class='fixed-column' *matCellDef="let row">
+
+          <editable class="editable">
+            <ng-template viewMode>
+              <div class="editable" *ngIf="row.days!='H'"> 
+                  {{row.days.period4.teacher.code}} -
+                  {{row.days.period4.teacher.fName}}
             </div>
-            <div *ngIf="todayDate == disCol.label">
-              <mat-select placeholder="Status" [ngModel]="row.days[disCol.label]" class="attendence-status"
-                (selectionChange)="submitAttendance($event, row._id, disCol.label)">
-                <mat-option *ngFor="let CD of attendanceStatus" [value]="CD">
-                  {{ CD }}
-                </mat-option>
-              </mat-select>
-            </div>
-          </mat-cell>
-        </ng-container> -->
-            <mat-header-row *matHeaderRowDef="displayedColumns" sticky></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-        </mat-table>
-        <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="500"
-            [pageSizeOptions]="[5, 10, 25, 100, 500]"></mat-paginator>
-    </div>
+            </ng-template>
+            <ng-template editMode>
+              <div *ngIf="row.days =='H'">
+                H
+              </div>
+              <div *ngIf="row.days!='H'">
+                <mat-select placeholder="Status" id="period4" name="period4" [ngModel]="row.days.period4" class="period-status"
+                  (selectionChange)="assignTeacher($event, row._id, 'period4')">
+                  <mat-option value="null">Choose...</mat-option>
+                  <mat-option *ngFor="let teacher of period4AvailableTeachers$" [value]="{_id: teacher._id, code:teacher.code, fName: teacher.fName}">
+                    {{teacher.code}} - {{ teacher.fName }}
+                  </mat-option>
+                </mat-select>
+              </div>
+            </ng-template>
+          </editable>
+
+
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="period5">
+        <mat-header-cell class='fixed-column' *matHeaderCellDef mat-sort-header>Period 5</mat-header-cell>
+        <mat-cell class='fixed-column' *matCellDef="let row">
+
+          <editable class="editable">
+            <ng-template viewMode>
+              <div class="editable" *ngIf="row.days!='H'"> 
+                {{row.days.period5.teacher.code}} -
+                {{row.days.period5.teacher.fName}}
+
+              </div>
+            </ng-template>
+            <ng-template editMode>
+              <div *ngIf="row.days =='H'">
+                H
+              </div>
+              <div *ngIf="row.days!='H'">
+                <mat-select placeholder="Status" id="period5" name="period5" [ngModel]="row.days.period5" class="period-status"
+                  (selectionChange)="assignTeacher($event, row._id, 'period5')">
+                  <mat-option value="null">Choose...</mat-option>
+                  <mat-option *ngFor="let teacher of period5AvailableTeachers$" [value]="{_id: teacher._id, code:teacher.code, fName: teacher.fName}">
+                    {{teacher.code}} - {{ teacher.fName }}
+                  </mat-option>
+                </mat-select>
+              </div>
+            </ng-template>
+          </editable>
+
+
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="period6">
+        <mat-header-cell class='fixed-column' *matHeaderCellDef mat-sort-header>Period 6</mat-header-cell>
+        <mat-cell class='fixed-column' *matCellDef="let row">
+
+          <editable class="editable">
+            <ng-template viewMode>
+              <div class="editable" *ngIf="row.days!='H'"> 
+                  {{row.days.period6.teacher.code}} -
+                  {{row.days.period6.teacher.fName}}
+              </div>
+            </ng-template>
+            <ng-template editMode>
+              <div *ngIf="row.days =='H'">
+                H
+              </div>
+              <div *ngIf="row.days!='H'">
+                <mat-select placeholder="Status" id="period6" name="period6" [ngModel]="row.days.period6" class="period-status"
+                  (selectionChange)="assignTeacher($event, row._id, 'period6')">
+                  <mat-option value="null">Choose...</mat-option>
+                  <mat-option *ngFor="let teacher of period6AvailableTeachers$" [value]="{_id: teacher._id, code:teacher.code, fName: teacher.fName}">
+                    {{teacher.code}} - {{ teacher.fName }}
+                  </mat-option>
+                </mat-select>
+              </div>
+            </ng-template>
+          </editable>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="period7">
+        <mat-header-cell class='fixed-column' *matHeaderCellDef mat-sort-header>Period 7</mat-header-cell>
+        <mat-cell class='fixed-column' *matCellDef="let row">
+          <editable class="editable">
+            <ng-template viewMode>
+              <div class="editable" *ngIf="row.days!='H'"> 
+                  {{row.days.period7.teacher.code}} -
+                {{row.days.period7.teacher.fName}}
+              </div>
+            </ng-template>
+            <ng-template editMode>
+              <div *ngIf="row.days =='H'">
+                H
+              </div>
+              <div *ngIf="row.days!='H'">
+                <mat-select placeholder="Status" id="period7" name="period7" [ngModel]="row.days.period7" class="period-status"
+                  (selectionChange)="assignTeacher($event, row._id, 'period7')">
+                  <mat-option value="null">Choose...</mat-option>
+                  <mat-option *ngFor="let teacher of period7AvailableTeachers$" [value]="{_id: teacher._id, code:teacher.code, fName: teacher.fName}">
+                    {{teacher.code}} - {{ teacher.fName }}
+                  </mat-option>
+                </mat-select>
+              </div>
+            </ng-template>
+          </editable>
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns" sticky></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <!-- <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="500"
+      [pageSizeOptions]="[5, 10, 25, 100, 500]"></mat-paginator> -->
+  </div>
 </mat-card>

@@ -8,7 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class HelpdeskComponent implements OnInit {
   showHelp = false;
   @Input() helpType: string;
-  
+
   constructor() { }
 
   ngOnInit() {

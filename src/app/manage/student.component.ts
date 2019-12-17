@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
-import { moveIn, fallIn } from '../shared/router.animation';
+import { moveIn, fallIn } from '@app/shared/router.animation';
 import { Observable } from 'rxjs';
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { BackendService } from '../services/backend.service';
-import { StudentService } from '../services/student.service';
-import { ClassesService } from '../services/classes.service';
+import { BackendService } from '@app/services/backend.service';
+import { StudentService } from '@app/services/student.service';
+import { ClassesService } from '@app/services/classes.service';
 
 @Component({
     selector: 'app-student',

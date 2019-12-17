@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { moveIn, fallIn } from '../shared/router.animation';
+import { moveIn, fallIn } from '@app/shared/router.animation';
 import { Observable } from 'rxjs';
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { BackendService } from '../services/backend.service';
+import { BackendService } from '@app/services/backend.service';
 
 @Component({
     selector: 'app-homework-view',
@@ -19,14 +19,14 @@ export class HomeworkViewComponent implements OnInit, OnDestroy {
     myDocData;
     data$;
     toggleField: string;
-    state: string = '';
+    state = '';
     savedChanges = false;
-    error: boolean = false;
-    errorMessage: String = "";
-    dataLoading: boolean = false;
+    error = false;
+    errorMessage = '';
+    dataLoading = false;
     private querySubscription;
-    showFileUpload: boolean = false;
-    showDocument: boolean = false;
+    showFileUpload = false;
+    showDocument = false;
     docId: string;
     docUrl: Observable<string | null>;
     fileName: string;
@@ -39,14 +39,15 @@ export class HomeworkViewComponent implements OnInit, OnDestroy {
     constructor(private _backendService: BackendService) { }
 
     ngOnInit() {
-        this.toggleField = "resMode";
+        this.toggleField = 'resMode';
         this.dataSource = new MatTableDataSource(this.members);
         this.getData();
     }
 
     toggle(filter?) {
-        if (!filter) { filter = "searchMode" }
-        else { filter = filter; }
+        if (!filter) {
+            filter = 'searchMode';
+         } else { filter = filter; }
         this.toggleField = filter;
         this.dataLoading = false;
     }

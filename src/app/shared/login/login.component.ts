@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { environment } from '../../../environments/environment';
-import { BackendService } from '../../services/backend.service';
+import { BackendService } from '@app/services/backend.service';
 
 @Component({
   selector: 'app-login',

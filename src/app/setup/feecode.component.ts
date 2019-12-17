@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { moveIn, fallIn } from '../shared/router.animation';
+import { moveIn, fallIn } from '@app/shared/router.animation';
 import { Observable } from 'rxjs';
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { BackendService } from '../services/backend.service';
+import { BackendService } from '@app/services/backend.service';
 import { FormBuilder, FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
 
 @Component({
@@ -20,11 +20,11 @@ export class FeecodeComponent implements OnInit, OnDestroy {
     myDocData;
     data$;
     toggleField: string;
-    state: string = '';
+    state = '';
     savedChanges = false;
-    error: boolean = false;
-    errorMessage: String = "";
-    dataLoading: boolean = false;
+    error = false;
+    errorMessage = '';
+    dataLoading = false;
     private querySubscription;
 
     pCDs = ['Paid Amount', 'Discount'];
@@ -41,9 +41,9 @@ export class FeecodeComponent implements OnInit, OnDestroy {
     constructor(private _backendService: BackendService, private _fb: FormBuilder) { }
 
     ngOnInit() {
-        this.toggleField = "searchMode";
+        this.toggleField = 'searchMode';
         this.error = false;
-        this.errorMessage = "";
+        this.errorMessage = '';
         this.dataSource = new MatTableDataSource(this.members);
         this.addDataForm = this._fb.group({
             code: ['', Validators.required],
@@ -53,7 +53,7 @@ export class FeecodeComponent implements OnInit, OnDestroy {
                 frequency: ['', Validators.required],
                 ptype: ['', Validators.required],
                 payval: ['', Validators.required],
-                amount: ['', [Validators.pattern("^[0-9]*$")]]
+                amount: ['', [Validators.pattern('^[0-9]*$')]]
             })]),
             gamount: ''
         });
@@ -75,12 +75,12 @@ export class FeecodeComponent implements OnInit, OnDestroy {
             frequency: ['', Validators.required],
             ptype: ['', Validators.required],
             payval: ['', Validators.required],
-            amount: ['', [Validators.pattern("^[0-9]*$")]]
+            amount: ['', [Validators.pattern('^[0-9]*$')]]
 
         }));
         this.calculateTotal(formName);
     }
-    deleteLINES(index,formName) {
+    deleteLINES(index, formName) {
         this.LINES(formName).removeAt(index);
         this.calculateTotal(formName);
     }
@@ -88,7 +88,7 @@ export class FeecodeComponent implements OnInit, OnDestroy {
         this.total_amount = 0;
         for (let i = 0; i <= this[formName].value.line.length; i++) {
             if (this[formName].value.line[i]) {
-                if (this[formName].value.line[i].ptype == 'Paid Amount') {
+                if (this[formName].value.line[i].ptype === 'Paid Amount') {
                     this.total_amount += +this[formName].value.line[i].amount;
                 } else {
                     this.total_amount -= +this[formName].value.line[i].amount;
@@ -100,15 +100,15 @@ export class FeecodeComponent implements OnInit, OnDestroy {
     }
 
     toggle(filter?) {
-        if (!filter) { filter = "searchMode" }
-        else { filter = filter; }
+        if (!filter) { filter = 'searchMode';
+        } else { filter = filter; }
         this.toggleField = filter;
         this.dataLoading = false;
     }
-    
+
     getData(formData?) {
         this.dataLoading = true;
-        this.querySubscription = this._backendService.getDocs('FEE_CD',formData).subscribe((res) => {
+        this.querySubscription = this._backendService.getDocs('FEE_CD', formData).subscribe((res) => {
             this.dataSource = new MatTableDataSource(res);
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
@@ -125,31 +125,11 @@ export class FeecodeComponent implements OnInit, OnDestroy {
 
     setData(formData) {
         this.dataLoading = true;
-        this.querySubscription = this._backendService.setDoc('FEE_CD',formData).then(res => {
+        this.querySubscription = this._backendService.setDoc('FEE_CD', formData).then(res => {
             if (res) {
                 this.savedChanges = true;
                 this.error = false;
-                this.errorMessage = "";
-                this.dataLoading = false;
-            }
-        }
-        ).catch(err => {
-            if (err) {
-                this.error = true;
-                this.errorMessage = err.message;
-                this.dataLoading = false;
-            }
-        }
-        );
-    }
-
-    updateData(formData) {
-        this.dataLoading = true;
-        this.querySubscription = this._backendService.updateDoc('FEE_CD',formData._id,formData).then(res => {
-            if (res) {
-                this.savedChanges = true;
-                this.error = false;
-                this.errorMessage = "";
+                this.errorMessage = '';
                 this.dataLoading = false;
             }
         }
@@ -162,12 +142,30 @@ export class FeecodeComponent implements OnInit, OnDestroy {
         });
     }
 
+    updateData(formData) {
+        this.dataLoading = true;
+        this.querySubscription = this._backendService.updateDoc('FEE_CD', formData._id, formData).then(res => {
+            if (res) {
+                this.savedChanges = true;
+                this.error = false;
+                this.errorMessage = '';
+                this.dataLoading = false;
+            }
+        }).catch(err => {
+            if (err) {
+                this.error = true;
+                this.errorMessage = err.message;
+                this.dataLoading = false;
+            }
+        });
+    }
+
     getDoc(docId) {
         this.dataLoading = true;
-        this.data$ = this._backendService.getDoc('FEE_CD',docId).subscribe(res => {
-            if(res) {
+        this.data$ = this._backendService.getDoc('FEE_CD', docId).subscribe(res => {
+            if (res) {
                 this.data$ = res;
-                            this.editDataForm = this._fb.group({
+                this.editDataForm = this._fb.group({
                                 _id: ['', Validators.required],
                                 code: ['', Validators.required],
                                 descr: ['', Validators.required],
@@ -176,14 +174,13 @@ export class FeecodeComponent implements OnInit, OnDestroy {
                                 ),
                                 gamount: ''
                             });
-                            this.editDataForm.patchValue(this.data$);
-        
-                            for (let i = 0; i < this.data$["line"].length; i++) {
-                                this.LINES('editDataForm').push(this._fb.group(this.data$["line"][i]));
-                            }
-                            this.calculateTotal(('editDataForm'));
-                            this.toggle('editMode');
-                            this.dataLoading = false;
+                this.editDataForm.patchValue(this.data$);
+                for (let i = 0; i < this.data$["line"].length; i++) {
+                    this.LINES('editDataForm').push(this._fb.group(this.data$["line"][i]));
+                }
+                this.calculateTotal(('editDataForm'));
+                this.toggle('editMode');
+                this.dataLoading = false;
             }},
                 (error) => {
                     this.error = true;
@@ -196,23 +193,21 @@ export class FeecodeComponent implements OnInit, OnDestroy {
     }
 
     deleteDoc(docId) {
-        if (confirm("Are you sure want to delete this record ?")) {
+        if (confirm('Are you sure want to delete this record ?')) {
             this.dataLoading = true;
-            this._backendService.deleteDoc('FEE_CD',docId).then(res => {
+            this._backendService.deleteDoc('FEE_CD', docId).then(res => {
                 if (res) {
                     this.error = false;
-                    this.errorMessage = "";
+                    this.errorMessage = '';
                     this.dataLoading = false;
                 }
-            }
-            ).catch(err => {
+            }).catch(err => {
                 if (err) {
                     this.error = true;
                     this.errorMessage = err.message;
                     this.dataLoading = false;
                 }
-            }
-            );
+            });
         }
     }
 

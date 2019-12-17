@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { moveIn, fallIn } from '../shared/router.animation';
+import { moveIn, fallIn } from '@app/shared/router.animation';
 import { Observable } from 'rxjs';
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { BackendService } from '../services/backend.service';
+import { BackendService } from '@app/services/backend.service';
 import { FormBuilder, FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
@@ -21,11 +21,11 @@ export class MarksComponent implements OnInit, OnDestroy {
     myDocData;
     data$;
     toggleField: string;
-    state: string = '';
+    state = '';
     savedChanges = false;
-    error: boolean = false;
-    errorMessage: String = "";
-    dataLoading: boolean = false;
+    error = false;
+    errorMessage = '';
+    dataLoading = false;
     private querySubscription;
 
     total_amount = 0;

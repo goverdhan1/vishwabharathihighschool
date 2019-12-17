@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FeeUpdateDialogComponent } from './fee-update-dialog.component';
+import { FeeUpdateDialogComponent } from '@app/manage/fee-update-dialog/fee-update-dialog.component';
 
 describe('FeeUpdateDialogComponent', () => {
   let component: FeeUpdateDialogComponent;

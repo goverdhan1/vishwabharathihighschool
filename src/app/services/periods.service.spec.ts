@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { PeriodsService } from './periods.service';
+import { PeriodsService } from '@app/services/periods.service';
 
 describe('PeriodsService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));

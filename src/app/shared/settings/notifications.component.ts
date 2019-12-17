@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { moveIn, fallIn } from '../../shared/router.animation';
-import { BackendService } from '../../services/backend.service';
-import { StudentService } from '../../services/student.service';
+import { moveIn, fallIn } from '@app/shared/router.animation';
+import { BackendService } from '@app/services/backend.service';
+import { StudentService } from '@app/services/student.service';
 
 @Component({
   selector: 'app-notifications',

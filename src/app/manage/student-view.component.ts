@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { moveIn, fallIn } from '../shared/router.animation';
+import { moveIn, fallIn } from '@app/shared/router.animation';
 import { Observable } from 'rxjs';
-import { BackendService } from '../services/backend.service';
+import { BackendService } from '@app/services/backend.service';
 import { switchMap } from 'rxjs/operators';
 
 @Component({
