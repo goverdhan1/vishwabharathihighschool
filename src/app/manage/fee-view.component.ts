@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { moveIn, fallIn } from '@app/shared/router.animation';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { FeeUpdateDialogComponent } from '@app/manage/fee-update-dialog/fee-update-dialog.component';
 import { FeeService } from '@app/services/fee.service';

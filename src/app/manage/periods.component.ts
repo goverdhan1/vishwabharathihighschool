@@ -9,7 +9,9 @@ import {
   HostListener,
   HostBinding
 } from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { AttendanceService } from '@app/services/attendance.service';
 import { ClassesService } from '@app/services/classes.service';
 import { PeriodsService} from '@app/services/periods.service';

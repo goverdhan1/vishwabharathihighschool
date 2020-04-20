@@ -2,7 +2,10 @@ import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild } from '@angular
 import { moveIn, fallIn } from '@app/shared/router.animation';
 import { Observable } from 'rxjs';
 import { DataSource } from '@angular/cdk/collections';
-import { MatPaginator, MatSort, MatTableDataSource, MatDatepicker } from '@angular/material';
+import { MatDatepicker } from '@angular/material/datepicker';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { BackendService } from '@app/services/backend.service';
 import { FormBuilder, FormGroup, FormArray, FormControl, Validators, FormArrayName } from '@angular/forms';
 // import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';

@@ -10,9 +10,8 @@
     <button type="button" routerLink="/settings" mat-raised-button color="primary">Update Profile</button>
   </div>
   <ng-template #showLogin>
-  <mat-card-content class="">
-    <mat-divider></mat-divider>
-    <form #formData="ngForm" (ngSubmit)="login('email',formData.value)"  class="example-form p-3 w-25">
+  <mat-card-content >
+    <form #formData="ngForm" (ngSubmit)="login('email',formData.value)"  class="example-form p-3 m-auto w-25">
         <mat-card-actions *ngIf="error">
           <mat-error>Login credentials are not verified. Here is the error: {{ error }}</mat-error>
         </mat-card-actions>
@@ -39,7 +38,7 @@
 
       </form>
   </mat-card-content>
-  <mat-card-content *ngIf="socialAuth">
+  <!-- <mat-card-content *ngIf="socialAuth">
     <mat-chip-list class="mat-chip-list-stacked" style="margin-left: 170px;">
       <mat-chip color="primary" selected="true" (click)="login('FB')">
         Login With Facebook
@@ -48,12 +47,12 @@
         Login With Google
       </mat-chip>
     </mat-chip-list>
-  </mat-card-content>
-  <mat-card-actions>
-    <mat-divider></mat-divider>
-    <button mat-button routerLink="/signup" class="small-headline">No account?
+  </mat-card-content> -->
+  <mat-card-actions class="">
+    No account?
+    <a routerLink="/signup" class="">
         <strong>Create one with your email here</strong>
-    </button>
+    </a>
   </mat-card-actions>
   </ng-template>
 </mat-card>

@@ -1,5 +1,5 @@
 <!-- <app-header-admin pageTitle="Sign Up" imageUrl="fiber_new" helpType="homepage"></app-header-admin> -->
-<mat-card *ngIf="!savedChanges else showSavedChangesCard">
+<mat-card class="w-50 m-2" *ngIf="!savedChanges else showSavedChangesCard">
   <form #formData='ngForm' (ngSubmit)="onSubmit(formData)">
     <mat-card-content>
       <mat-card-title>
@@ -16,9 +16,6 @@
         <mat-progress-spinner mode="indeterminate" [attr.color]="primary" [value]="15"></mat-progress-spinner>
       </div>
       <div *ngIf="brokenNetwork" class="label-error">Network connection error.</div>
-      <mat-card-actions align="start">
-        <button type="submit" [disabled]="!formData.valid" mat-raised-button color="primary">Sign up</button>
-      </mat-card-actions>
       <mat-form-field class="example-full-width">
         <input matInput placeholder="email" name="email" #email="ngModel" ngModel required email>
       </mat-form-field>
@@ -32,6 +29,10 @@
         <mat-error *ngIf="password.errors['minlength']">Password can't be less than 5 characters.</mat-error>
         <mat-error *ngIf="password.errors['maxlength']">Password can't be more than 30 characters.</mat-error>
       </span>
+      <mat-card-actions align="end">
+        <button type="submit" [disabled]="!formData.valid" mat-raised-button color="primary">Sign up</button>
+      </mat-card-actions>
+
     </mat-card-content>
   </form>
 </mat-card>
