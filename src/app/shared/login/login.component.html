@@ -1,10 +1,5 @@
 <!-- <app-header-admin pageTitle="Login" imageUrl="dashboard" helpType="homepage"></app-header-admin> -->
 <mat-card>
-  <mat-card-header>
-    <mat-card-title>
-      <mat-icon>dashboard</mat-icon></mat-card-title>
-    <mat-card-subtitle>School Management App</mat-card-subtitle>
-  </mat-card-header>
   <div *ngIf="afAuth.user | async as user; else showLogin">
     Welcome {{ user.displayName }} !!!
     <span class="small-spacer"></span>
@@ -15,9 +10,9 @@
     <button type="button" routerLink="/settings" mat-raised-button color="primary">Update Profile</button>
   </div>
   <ng-template #showLogin>
-  <mat-card-content>
+  <mat-card-content class="">
     <mat-divider></mat-divider>
-    <form #formData="ngForm" (ngSubmit)="login('email',formData.value)"  class="example-form">
+    <form #formData="ngForm" (ngSubmit)="login('email',formData.value)"  class="example-form p-3 w-25">
         <mat-card-actions *ngIf="error">
           <mat-error>Login credentials are not verified. Here is the error: {{ error }}</mat-error>
         </mat-card-actions>
@@ -25,9 +20,6 @@
           <mat-progress-spinner mode="indeterminate" [attr.color]="primary" [value]="15"></mat-progress-spinner>
         </mat-error>
         <mat-error *ngIf="brokenNetwork" class="label-error">Network Connection Error.</mat-error>
-        <mat-card-actions align="start">
-          <button type="submit" [disabled]="!formData.valid" mat-raised-button color="primary">Log in</button>
-        </mat-card-actions>
         <mat-form-field class="example-full-width">
           <input matInput placeholder="email" name="email" #email="ngModel" ngModel required email>
         </mat-form-field>
@@ -41,6 +33,10 @@
           <mat-error *ngIf="password.errors['minlength']">Password can't be less than 5 characters.</mat-error>
           <mat-error *ngIf="password.errors['maxlength']">Password can't be more than 30 characters.</mat-error>
         </span>
+        <mat-card-actions align="end">
+          <button type="submit" [disabled]="!formData.valid" mat-raised-button color="primary">Log in</button>
+        </mat-card-actions>
+
       </form>
   </mat-card-content>
   <mat-card-content *ngIf="socialAuth">

@@ -23,7 +23,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/assets/css/styles.css"
+              "src/assets/css/styles.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
             "scripts": [],
             "es5BrowserSupport": true
@@ -132,5 +133,8 @@
       }
     }
   },
-  "defaultProject": "SMS"
+  "defaultProject": "SMS",
+  "cli": {
+    "analytics": "ac13ee11-7f0b-40da-940d-d00d7da66824"
+  }
 }
