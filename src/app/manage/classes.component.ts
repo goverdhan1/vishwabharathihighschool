@@ -50,8 +50,8 @@ export class ClassesComponent implements OnInit, AfterViewInit, OnDestroy {
     ctStartDate: any;
     ctEndDate: any;
 
-    @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
-    @ViewChild(MatSort, {static: false}) sort: MatSort;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
+    @ViewChild(MatSort) sort: MatSort;
     displayedColumns = ['orderBy', 'code', 'section', 'classTeacher', 'subjects', '_id'];
 
     constructor(private backendService: BackendService, private classService: ClassesService) { }

@@ -41,8 +41,8 @@ export class PeriodsComponent implements OnInit, AfterViewInit, OnDestroy {
   days: Array<any> = [];
   todayDate;
   attendanceStatus = ['P', 'A', 'L', 'LA', 'H'];
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: false}) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
   displayedColumns: Array<any> = ['code', 'period1', 'period2', 'period3', 'period4', 'period5', 'period6', 'period7'];
   editable = false;
   period1AvailableTeachers$;

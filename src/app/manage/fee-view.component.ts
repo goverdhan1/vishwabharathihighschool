@@ -25,8 +25,8 @@ export class FeeViewComponent implements OnInit, AfterViewInit, OnDestroy {
   enrollId;
   months;
 
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: false}) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
   displayedColumns: Array<any> = ['code', 'lName', 'fName', 'class'];
   monthName = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
   feeStatus = ['Paid', 'Due', 'Partial Paid'];

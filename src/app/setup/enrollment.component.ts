@@ -30,8 +30,8 @@ export class EnrollmentComponent implements OnInit, AfterViewInit, OnDestroy {
     orderBy;
     orderByMax;
 
-    @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
-    @ViewChild(MatSort, {static: false}) sort: MatSort;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
+    @ViewChild(MatSort) sort: MatSort;
     displayedColumns = ['orderBy', 'code', 'descr', 'status', '_id'];
 
     constructor(private backendService: BackendService) { }

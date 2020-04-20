@@ -32,8 +32,8 @@ export class ExpensesComponent implements OnInit, OnDestroy {
   addDataForm: FormGroup;
   editDataForm: FormGroup;
 
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: false}) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
   displayedColumns = ['code', 'descr', '_id'];
 
 

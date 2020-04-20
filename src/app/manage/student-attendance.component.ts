@@ -37,8 +37,8 @@ export class StudentAttendanceComponent implements OnInit, OnDestroy, AfterViewI
   days: Array<any> = [];
   todayDate;
   attendanceStatus = ['P', 'A', 'L', 'LA', 'H'];
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: false}) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
   displayedColumns: Array<any> = ['code', 'lName', 'fName', 'class'];
   editable = false;
 

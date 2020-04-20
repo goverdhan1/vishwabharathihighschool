@@ -30,8 +30,8 @@ export class StudentComponent implements OnInit, AfterViewInit, OnDestroy {
     ENROLLMENT_CODE;
     currentEnrollment;
 
-    @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
-    @ViewChild(MatSort, {static: false}) sort: MatSort;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
+    @ViewChild(MatSort) sort: MatSort;
     displayedColumns = ['code', 'fName', 'class', 'parent', 'status', '_id'];
     // feeCDs$;
     // marksCDs$;

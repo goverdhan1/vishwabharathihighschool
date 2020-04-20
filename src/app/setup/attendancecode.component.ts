@@ -46,8 +46,8 @@ export class AttendancecodeComponent implements OnInit, AfterViewInit, OnDestroy
     editDataForm: FormGroup;
     enrollmentCDs$;
 
-    @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
-    @ViewChild(MatSort, {static: false}) sort: MatSort;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
+    @ViewChild(MatSort) sort: MatSort;
     displayedColumns = ['code', 'descr', '_id'];
 
     constructor(private _backendService: BackendService, private _fb: FormBuilder) { }

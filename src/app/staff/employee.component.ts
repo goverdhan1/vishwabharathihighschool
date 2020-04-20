@@ -28,8 +28,8 @@ export class EmployeeComponent implements OnInit, AfterViewInit, OnDestroy {
   private querySubscription;
   ENROLLMENT_CODE: any;
 
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: false}) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
   displayedColumns = ['code', 'fName', 'class', 'status', '_id'];
   enrollmentCDs$;
   classCDs$;
